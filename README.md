@@ -3,6 +3,8 @@
 **Calculadora gratuita de orçamento para designers e freelancers brasileiros.**
 Em vez de planilha ou preço no improviso, você informa valor por hora, horas de trabalho, revisões, prazo e custos, e chega a uma **referência de cobrança explicável**. Depois, transforma o resultado numa **proposta** pronta para enviar ao cliente.
 
+**▶ Testar agora:** https://clleytonbraga.github.io/quanto-cobro-calculadora/
+
 Sem login, sem cadastro, sem backend: tudo roda no navegador. O produto é gratuito e monetizado por publicidade, sempre fora da tarefa principal.
 
 <p align="center">
