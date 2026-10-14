@@ -143,6 +143,7 @@ label.value:focus-within { border-bottom-color: var(--action); }
 .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; }
 .danger { background: var(--error); color: var(--on-error); }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.split > :only-child { grid-column: 1 / -1; }
 .secondary.sm { min-height: 44px; border-radius: 22px; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: var(--text-primary); }
 .secondary.sm svg { width: 18px; height: 18px; }
 a.secondary.sm svg { color: #25D366; } /* verde oficial do WhatsApp só no ícone */

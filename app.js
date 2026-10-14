@@ -21,17 +21,17 @@ const FIELDS = { // centésimos; revisionCount é inteiro simples no estado
 const FIELD_META = { // rótulo, unidade, dica (modais de edição do resultado)
   hourlyRate: ['Valor por hora', 'R$', 'Fica salvo neste dispositivo ao aplicar.'],
   executionHours: ['Horas de execução', 'h', 'Sem revisões.'],
-  revisionCount: ['Rodadas de revisão', 'rodadas', 'Incluídas na proposta.'],
-  revisionHoursPerRound: ['Horas por rodada', 'h', 'Tempo de cada rodada.'],
-  deadlineImpactHours: ['Horas extras pelo prazo', 'h', 'Só se o prazo exigir trabalho a mais.'],
-  reserveHours: ['Reserva para incerteza', 'h', 'Horas para imprevistos.'],
+  revisionCount: ['Rodadas de revisão', 'rodadas', 'Quantas rodadas o cliente poderá solicitar.'],
+  revisionHoursPerRound: ['Horas por rodada', 'h', 'Tempo estimado para cada rodada.'],
+  deadlineImpactHours: ['Horas a mais pelo prazo', 'h', 'Inclua apenas o trabalho adicional necessário para cumprir o prazo.'],
+  reserveHours: ['Horas para imprevistos', 'h', 'Tempo adicional para situações não previstas.'],
 }
 const num = cents => C.money(cents ?? 0).replace(/^R\$\s*/, '') // "1.234,56" para campos editáveis
 const fieldRaw = f => f === 'revisionCount' ? String(st.s[f]) : f === 'hourlyRate' ? num(st.s[f]) : C.plain(st.s[f])
 const STEPS = ['step1', 'step2', 'step3', 'step4', 'step5']
 const STEP_NAMES = ['Valor por hora', 'Execução', 'Prazo e revisões', 'Ajustes', 'Resultado']
 const STEP_OF = { a1: 0, a2: 0, a3: 0, proposalForm: 4, preview: 4 }
-const coarse = matchMedia('(pointer: coarse)').matches
+const coarse = matchMedia('(pointer: coarse)').matches, canShare = !!navigator.share
 
 const savedRate = () => Number(store('local', s => s.getItem(KEY.rate))) || null
 function fresh() {
@@ -83,53 +83,53 @@ const today = () => new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 's
 // ---------- telas ----------
 const DISPLAY_FIELD = { step1: ['hourlyRate', 'R$', ''], step2: ['executionHours', '', 'h'], a1: ['goal', 'R$', ''], a2: ['week', '', 'h'], a3: ['rate', 'R$', '/h'] }
 const V = {
-  step1: () => ({ title: 'Quanto vale sua hora?', support: 'Digite seu valor ou descubra um ponto de partida.', body: `
-    <div class="segmented" role="group" aria-label="Como informar o valor por hora"><button type="button" aria-pressed="true">Já sei</button><button type="button" aria-pressed="false" data-act="discover">Descobrir</button></div>
+  step1: () => ({ title: 'Quanto você cobra por hora?', support: 'Informe seu valor por hora ou calcule uma estimativa.', body: `
+    <div class="segmented" role="group" aria-label="Como informar o valor por hora"><button type="button" aria-pressed="true">Já sei</button><button type="button" aria-pressed="false" data-act="discover">Estimar</button></div>
     <p class="saved" data-out="saved" hidden><button type="button" data-act="forget">Apagar valor salvo</button></p>
     ${keypad('next')}` }),
-  step2: () => ({ title: 'Quantas horas de trabalho?', support: 'Só execução. Revisões entram na próxima etapa.', body: `
+  step2: () => ({ title: 'Quantas horas para executar?', support: 'Conte apenas as horas de execução. As revisões vêm depois.', body: `
     ${keypad('next')}
-    <div class="scope"><details class="acc"><summary><span class="txt"><small>Quão definido está o escopo? (opcional)</small><b data-out="scopeVal"></b></span>${ICON.chev}</summary>
+    <div class="scope"><details class="acc"><summary><span class="txt"><small>O escopo já está definido? (opcional)</small><b data-out="scopeVal"></b></span>${ICON.chev}</summary>
       <div class="opts" role="radiogroup" aria-label="Nível de definição do escopo">${Object.entries(SCOPE).map(([k, [l, d]]) =>
         `<label class="opt"><input type="radio" name="scope" value="${k}" ${st.s.scopeDefinition === k ? 'checked' : ''}><span class="txt"><b>${l}</b><small>${d}</small></span></label>`).join('')}</div></details>
     <p class="hint" data-out="scopeHint"></p></div>` }),
-  step3: () => ({ title: 'Prazo e revisões', support: 'Some só o tempo que realmente vai existir.', body: `
-    <div class="card"><button type="button" class="row row-btn" data-act="calendar"><span class="txt">Data de entrega<small>opcional · sozinha não muda o preço</small></span><span class="val" data-out="dateVal"></span></button>
+  step3: () => ({ title: 'Prazo e revisões', support: 'Inclua as revisões e horas extras que ainda não foram consideradas.', body: `
+    <div class="card"><button type="button" class="row row-btn" data-act="calendar"><span class="txt">Data de entrega<small>opcional · sozinha não altera o valor</small></span><span class="val" data-out="dateVal"></span></button>
       <p class="warn err" data-out="dateWarn" hidden></p></div>
-    <div class="card">${stepperRow('revisionCount', 'Rodadas de revisão', 'incluídas na proposta')}${stepperRow('revisionHoursPerRound', 'Horas por rodada', 'tempo de cada rodada')}
+    <div class="card">${stepperRow('revisionCount', 'Rodadas de revisão', 'quantas o cliente pode pedir')}${stepperRow('revisionHoursPerRound', 'Horas por rodada', 'tempo estimado de cada uma')}
       <div class="foot"><span>Total em revisões</span><b data-out="revTotal"></b></div></div>
-    <div class="card">${stepperRow('deadlineImpactHours', 'Horas extras pelo prazo', 'só se o prazo exigir trabalho a mais')}</div>
+    <div class="card">${stepperRow('deadlineImpactHours', 'Horas a mais pelo prazo', 'só o trabalho adicional do prazo')}</div>
     <div class="bottom">${cta('next', st.fromResult ? 'Ver resultado' : 'Continuar')}</div>` }),
-  step4: () => ({ title: 'Tem algo fora da estimativa?', support: 'Nada extra por padrão. Reserva e custos só entram se você adicionar.', body: `
-    <div class="card">${stepperRow('reserveHours', 'Reserva para incerteza', 'horas para imprevistos (opcional)')}</div>
-    <div class="card"><div class="row"><span class="txt">Custos diretos<small>somados ao valor, fora das horas (opcional)</small></span>
+  step4: () => ({ title: 'Faltou algum custo ou tempo?', support: 'Inclua horas para imprevistos e custos que ainda não entraram no cálculo.', body: `
+    <div class="card">${stepperRow('reserveHours', 'Horas para imprevistos', 'tempo extra para o não previsto (opcional)')}</div>
+    <div class="card"><div class="row"><span class="txt">Custos do projeto<small>ex.: fontes, licenças, impressão · somados ao valor</small></span>
       ${st.s.directCosts.length < L.costs ? '<button type="button" class="link accent add" data-act="costModal">+ Adicionar</button>' : ''}</div>
       ${st.s.directCosts.length ? `<ul class="costs">${st.s.directCosts.map((c, i) => `<li><span class="d ${c.description.trim() ? '' : 'none'}">${esc(c.description.trim() || 'Sem descrição')}</span><span class="v">${C.money(c.amount)}</span>
         <button type="button" class="emoji" data-act="costModal" data-i="${i}" aria-label="Editar custo ${esc(c.description || i + 1)}">${ICON.edit}</button></li>`).join('')}</ul>` : ''}
       <div class="foot"><span>Total de custos</span><b data-out="costTotal"></b></div></div>
     <div class="bottom">${cta('next', st.fromResult ? 'Ver resultado' : 'Calcular')}</div>` }),
-  step5: () => ({ wide: true, title: 'Sua referência está pronta', support: 'Ajuste o valor comercial; a referência continua a mesma.', body: `
+  step5: () => ({ wide: true, title: 'Sua estimativa está pronta', support: 'Veja o valor calculado e ajuste quanto deseja cobrar.', body: `
     ${resultTicket()}
     <div class="bottom">${cta('createProposal', 'Criar proposta')}
     <div class="actions"><button type="button" class="link" data-act="resetModal">Novo orçamento</button></div></div>`, adTop: true }),
-  a1: () => ({ title: 'Qual faturamento mensal você quer alcançar?', support: 'Valor bruto, antes de impostos e despesas.', body: `
+  a1: () => ({ title: 'Quanto você quer faturar por mês?', support: 'Valor antes de descontar impostos e despesas.', body: `
     <div class="actions"><button type="button" class="link" data-act="cancelMini">Cancelar</button></div>${keypad('mini')}` }),
-  a2: () => ({ title: 'Quantas horas por semana você consegue faturar?', support: 'Não conte estudo, prospecção ou administração se não forem cobrados.', body: `
+  a2: () => ({ title: 'Quantas horas por semana você consegue cobrar?', support: 'Conte apenas as horas que você consegue cobrar de clientes.', body: `
     <div class="actions"><button type="button" class="link" data-act="cancelMini">Cancelar</button></div>${keypad('mini')}` }),
-  a3: () => ({ title: 'Use como ponto de partida', support: 'Não inclui impostos, férias, ferramentas, inadimplência ou margem. Clique no valor para ajustar.', body: `
+  a3: () => ({ title: 'Sua estimativa de valor por hora', support: 'Este valor ainda não considera seus custos, impostos, férias ou margem. Você pode ajustá-lo.', body: `
     <div class="card"><div class="row"><span class="txt">Meta mensal</span><b>${C.money(st.mini.goal)}</b></div><div class="row"><span class="txt">Horas faturáveis/semana</span><b>${C.hours(st.mini.week)}</b></div><div class="row"><span class="txt">Semanas por mês</span><b>4,33</b></div></div>
     <p class="hint">Arredondado para centavos. Fica salvo quando você confirmar.</p>
-    <div class="bottom">${cta('useMini', 'Usar na calculadora')}<div class="actions"><button type="button" class="link" data-act="cancelMini">Cancelar</button></div></div>` }),
-  proposalForm: () => ({ wide: true, title: 'Dados da proposta', support: 'Prazo, revisões, custos e valor vêm do cálculo.', body: `
+    <div class="bottom">${cta('useMini', 'Usar este valor')}<div class="actions"><button type="button" class="link" data-act="cancelMini">Cancelar</button></div></div>` }),
+  proposalForm: () => ({ wide: true, title: 'Prepare sua proposta', support: 'O valor escolhido, a data de entrega, as revisões e os custos informados entram automaticamente.', body: `
     <div class="field"><label for="f-projectName">Nome do projeto (obrigatório)</label><input class="input" id="f-projectName" data-p="projectName" maxlength="${L.projectName}" value="${esc(st.p.projectName)}" placeholder="Ex.: Landing page institucional" aria-describedby="e-projectName">${errP('projectName')}</div>
-    <div class="field"><label for="f-scopeSummary">Resumo do escopo (obrigatório)</label><textarea id="f-scopeSummary" data-p="scopeSummary" maxlength="${L.longText}" placeholder="Ex.: página institucional responsiva" aria-describedby="e-scopeSummary">${esc(st.p.scopeSummary)}</textarea>${errP('scopeSummary')}</div>
-    <div class="field"><label for="f-notes">Observações (opcional)</label><textarea id="f-notes" data-p="notes" maxlength="${L.longText}" placeholder="Ex.: materiais fornecidos pelo cliente">${esc(st.p.notes)}</textarea></div>
+    <div class="field"><label for="f-scopeSummary">O que será entregue (obrigatório)</label><textarea id="f-scopeSummary" data-p="scopeSummary" maxlength="${L.longText}" placeholder="Ex.: criação de uma página responsiva com 3 seções" aria-describedby="e-scopeSummary">${esc(st.p.scopeSummary)}</textarea>${errP('scopeSummary')}</div>
+    <div class="field"><label for="f-notes">Condições e observações (opcional)</label><textarea id="f-notes" data-p="notes" maxlength="${L.longText}" placeholder="Ex.: materiais enviados pelo cliente ou condições de pagamento">${esc(st.p.notes)}</textarea></div>
     <p class="error" data-out="costDescErr" hidden>Há custo sem descrição. <button type="button" class="link accent" data-act="costsModal">Descrever custos</button></p>
-    <div class="bottom">${cta('preview', 'Gerar proposta')}<div class="actions"><button type="button" class="link" data-act="go" data-to="step5">Voltar ao resultado</button></div></div>` }),
-  preview: () => ({ wide: true, title: 'Proposta pronta', support: 'Seu cliente vê o valor final, sem a conta.', body: `
+    <div class="bottom">${cta('preview', 'Ver proposta')}<div class="actions"><button type="button" class="link" data-act="go" data-to="step5">Voltar ao resultado</button></div></div>` }),
+  preview: () => ({ wide: true, title: 'Confira sua proposta', support: 'Revise o conteúdo antes de compartilhar com o cliente.', body: `
     ${proposalTicket()}
-    <div class="bottom"><div class="split">${cta('share', 'Compartilhar')}<button type="button" class="secondary" data-act="print">Salvar PDF</button></div>
-    <div class="split"><a class="secondary sm" href="https://wa.me/?text=${encodeURIComponent(C.proposal(st.s, st.p).text)}" target="_blank" rel="noopener">${ICON.whatsapp}WhatsApp</a><button type="button" class="secondary sm" data-act="copy">${ICON.copy}Copiar texto</button></div>
+    <div class="bottom"><div class="split">${canShare ? cta('share', 'Compartilhar') : cta('copy', 'Copiar proposta')}<button type="button" class="secondary" data-act="print" aria-label="Imprimir ou salvar PDF">Imprimir / PDF</button></div>
+    <div class="split"><a class="secondary sm" href="https://wa.me/?text=${encodeURIComponent(C.proposal(st.s, st.p).text)}" target="_blank" rel="noopener">${ICON.whatsapp}WhatsApp</a>${canShare ? `<button type="button" class="secondary sm" data-act="copy">${ICON.copy}Copiar proposta</button>` : ''}</div>
     <p class="status" role="status" data-out="status"></p>
     <div class="actions"><button type="button" class="link accent" data-act="resetModal">Novo orçamento</button></div></div>`, adTop: true }),
 }
@@ -141,15 +141,15 @@ function resultTicket() {
   return `<article class="ticket" aria-label="Orçamento detalhado"><h2>Quanto Cobro? · Orçamento</h2><p class="meta">${today()}</p><hr>
     ${ln('Execução', C.hours(s.executionHours), { edit: fm('executionHours', 'execução') })}
     ${ln(`Revisões (${s.revisionCount} × ${C.hours(s.revisionHoursPerRound)})`, C.hours(c.revisionHours), { edit: fm('revisionCount revisionHoursPerRound', 'revisões') })}
-    ${ln('Extra pelo prazo', C.hours(s.deadlineImpactHours), { edit: fm('deadlineImpactHours', 'horas extras pelo prazo') })}
-    ${ln('Reserva', C.hours(s.reserveHours), { edit: fm('reserveHours', 'reserva') })}
+    ${ln('A mais pelo prazo', C.hours(s.deadlineImpactHours), { edit: fm('deadlineImpactHours', 'horas a mais pelo prazo') })}
+    ${ln('Imprevistos', C.hours(s.reserveHours), { edit: fm('reserveHours', 'horas para imprevistos') })}
     ${ln('Total de horas', C.hours(c.totalHours), { cls: 'bold', slot: true })}
-    ${ln('× Valor/hora', C.money(s.hourlyRate), { edit: fm('hourlyRate', 'valor por hora') })}
+    ${ln('× Valor por hora', C.money(s.hourlyRate), { edit: fm('hourlyRate', 'valor por hora') })}
     ${ln('Mão de obra', C.money(c.laborCents), { slot: true })}
-    ${ln(`Custos diretos (${n})`, C.money(c.costs), { edit: { act: 'costsModal', label: 'custos diretos' } })}<hr>
-    ${ln('Referência', C.money(ref), { cls: 'total', slot: true })}
-    ${ln('Valor comercial', C.money(com), { cls: 'bold', edit: { act: 'commercialModal', label: 'valor comercial' } })}
-    ${changed ? `<p class="note">A referência mudou para ${C.money(ref)}; seu valor foi mantido. <button type="button" data-act="useRef">Usar a referência</button></p>` : ''}
+    ${ln(`Custos do projeto (${n})`, C.money(c.costs), { edit: { act: 'costsModal', label: 'custos do projeto' } })}<hr>
+    ${ln('Valor calculado', C.money(ref), { cls: 'total', slot: true })}
+    ${ln('Valor da proposta', C.money(com), { cls: 'bold', edit: { act: 'commercialModal', label: 'valor da proposta' } })}
+    ${changed ? `<p class="note">O valor calculado mudou, mas o valor da proposta foi mantido. <button type="button" data-act="useRef">Usar valor calculado</button></p>` : ''}
     <p class="sub">Escopo: ${sc ? sc[0] : 'não informado'} (não altera o valor)</p></article>`
 }
 function proposalTicket() {
@@ -167,8 +167,8 @@ function liveTicket() { // orçamento impresso ao vivo (desktop, etapas 1–4 e 
   const row = (k, label, v) => ln(`${reached(k) && k < i ? '✓ ' : k === i ? '● ' : ''}${label}`, reached(k) ? v : '—', { cls: k === i ? 'cur' : reached(k) ? '' : 'dim' })
   return `<article class="ticket" aria-label="Seu orçamento até agora"><h2>Seu orçamento</h2><p class="meta">atualiza a cada etapa</p><hr>
     ${row(0, 'Valor por hora', C.money(s.hourlyRate ?? 0))}${row(1, 'Execução', C.hours(s.executionHours ?? 0))}
-    ${row(2, 'Revisões', `${s.revisionCount} × ${C.hours(s.revisionHoursPerRound)}`)}${row(2, 'Extra pelo prazo', C.hours(s.deadlineImpactHours))}
-    ${row(3, 'Reserva', C.hours(s.reserveHours))}${row(3, 'Custos diretos', C.money(c.costs))}<hr>
+    ${row(2, 'Revisões', `${s.revisionCount} × ${C.hours(s.revisionHoursPerRound)}`)}${row(2, 'A mais pelo prazo', C.hours(s.deadlineImpactHours))}
+    ${row(3, 'Imprevistos', C.hours(s.reserveHours))}${row(3, 'Custos do projeto', C.money(c.costs))}<hr>
     ${ln('Subtotal parcial', C.money(c.referenceCents), { cls: 'bold' })}${sc ? `<p class="sub">Escopo: ${sc[0]}</p>` : ''}</article>`
 }
 const railSums = () => { const s = st.s, c = calc()
@@ -186,7 +186,7 @@ function rail() {
 // ---------- render ----------
 function header() {
   const i = idx(), mini = st.view[0] === 'a', prop = st.view === 'proposalForm' || st.view === 'preview'
-  const [label, n, total] = mini ? ['Descobrir valor por hora', +st.view[1], 3] : prop ? ['Proposta', st.view === 'preview' ? 2 : 1, 2] : [`Etapa ${i + 1} de 5 · ${STEP_NAMES[i]}`, i + 1, 5]
+  const [label, n, total] = mini ? ['Estimar valor por hora', +st.view[1], 3] : prop ? ['Proposta', st.view === 'preview' ? 2 : 1, 2] : [`Etapa ${i + 1} de 5 · ${STEP_NAMES[i]}`, i + 1, 5]
   return `<header class="top"><div class="lead">${st.view !== 'step1' ? `<button type="button" class="icon-btn back" data-act="back" aria-label="Voltar">${ICON.back}</button>` : ''}<span class="logo" role="img" aria-label="Quanto Cobro?">VH</span><span class="brand">Quanto Cobro?</span></div>
     <div class="progress"><span>${label}</span><div class="bar" aria-hidden="true">${Array.from({ length: total }, (_, k) => `<i class="${k < n ? 'on' : ''}"></i>`).join('')}</div></div>
     <button type="button" class="icon-btn theme" data-act="theme" aria-label="Alternar tema claro/escuro">${ICON.theme}</button></header>`
@@ -199,7 +199,7 @@ function render(focus = true) {
   const showLive = !v.wide && st.view !== 'a3'
   app.className = 'calc' + (v.wide ? ' wide' : '')
   app.innerHTML = `${header()}
-    <section class="band"><div class="q"><span class="eyebrow">${STEPS.includes(st.view) ? `Etapa ${i + 1} de 5` : st.view[0] === 'a' ? 'Descobrir valor por hora' : 'Proposta'}</span><h1 tabindex="-1">${v.title}</h1><p class="support">${v.support}</p></div>
+    <section class="band"><div class="q"><span class="eyebrow">${STEPS.includes(st.view) ? `Etapa ${i + 1} de 5` : st.view[0] === 'a' ? 'Estimar valor por hora' : 'Proposta'}</span><h1 tabindex="-1">${v.title}</h1><p class="support">${v.support}</p></div>
       ${v.adTop ? '<aside class="ad-slot mob ad-top" aria-label="Publicidade">Publicidade</aside>' : ''}<!-- ponytail: espaço reservado; rede de anúncios entra quando escolhida --><div class="display" aria-live="off"><span class="label" data-out="dLabel"></span>${value}<span class="formula" data-out="dFormula"></span><span class="accent" data-out="dAccent"></span></div></section>
     <div class="cols">${rail()}<div class="device">${v.body}</div><aside class="receipt desk" aria-label="${showLive ? 'Orçamento ao vivo' : 'Publicidade'}">${showLive ? liveTicket() : v.wide ? '<div class="ad-slot rail-ad">Publicidade</div>' : ''}</aside></div>`
   refresh()
@@ -219,11 +219,11 @@ function display() {
     step1: ['Valor por hora', '', '', savedRate() && savedRate() === s.hourlyRate ? 'salvo neste dispositivo' : ''],
     step2: ['Horas de execução', '', `${C.hours(exec)} × ${ms(rate)}/h`, `${ms(C.roundDiv(exec * rate, 100))} até aqui`],
     step3: ['Tempo previsto', C.hours(so), `${C.hours(exec)} execução + ${C.hours(c.revisionHours)} revisão${s.deadlineImpactHours ? ` + ${C.hours(s.deadlineImpactHours)} prazo` : ''}`, `${ms(C.roundDiv(so * rate, 100))} até aqui`],
-    step4: ['Subtotal parcial', ms(c.referenceCents), allHours, c.costs ? 'com custos diretos' : 'sem custos diretos'],
-    step5: ['Referência de cobrança', ms(c.referenceCents), allHours, `${C.hours(c.totalHours)} previstas`],
+    step4: ['Subtotal parcial', ms(c.referenceCents), allHours, c.costs ? 'com custos do projeto' : 'sem custos do projeto'],
+    step5: ['Valor calculado', ms(c.referenceCents), allHours, `${C.hours(c.totalHours)} previstas`],
     a1: ['Meta mensal', '', 'faturamento bruto desejado', 'impostos não são descontados'],
     a2: ['Horas faturáveis / semana', '', `${C.hours(wk)} × 4,33 = ${C.hours(C.roundDiv(wk * 433, 100))}/mês`, '52 ÷ 12 ≈ 4,33 semanas/mês'],
-    a3: ['Valor por hora sugerido', '', `${ms(st.mini.goal ?? 0)} ÷ (${C.hours(wk)} × 4,33)`, 'base inicial — não é preço de mercado'],
+    a3: ['Valor por hora estimado', '', `${ms(st.mini.goal ?? 0)} ÷ (${C.hours(wk)} × 4,33)`, 'base inicial — não é preço de mercado'],
     proposalForm: ['Valor da proposta', ms(com), prop, s.revisionCount ? `${s.revisionCount} ${s.revisionCount === 1 ? 'rodada' : 'rodadas'} de revisão` : ''],
   }
 }
@@ -245,7 +245,7 @@ function refresh() {
   const saved = $('[data-out="saved"]'); if (saved) saved.hidden = !(savedRate() && savedRate() === s.hourlyRate)
   const sc = SCOPE[s.scopeDefinition]
   const sv = out('scopeVal', sc ? sc[0] : 'Não informado'); sv?.classList.toggle('none', !sc)
-  out('scopeHint', sc ? `${sc[1]} Não muda o valor.` : 'Mostra o quanto a estimativa é incerta. Não muda o valor.')
+  out('scopeHint', sc ? `${sc[1]} Não altera o cálculo.` : 'Essa informação ajuda a revisar o orçamento, mas não altera o cálculo.')
   const dvl = out('dateVal', C.validDate(s.deliveryDate) ? C.formatDate(s.deliveryDate) : 'Escolher'); dvl?.classList.toggle('empty', !C.validDate(s.deliveryDate))
   const dw = out('dateWarn', C.dateWarning(s.deliveryDate) ?? ''); if (dw) dw.hidden = !dw.textContent
   out('revTotal', `${s.revisionCount} × ${C.hours(s.revisionHoursPerRound)} = ${C.hours(calc().revisionHours)}`)
@@ -295,7 +295,7 @@ const closeModal = () => { dlg.close(); modalCtx = null }
 const modalErr = (msg, input) => { const p = dlg.querySelector('.error'); p.textContent = msg; p.hidden = false; input?.setAttribute('aria-invalid', 'true'); input?.focus() }
 const MODALS = {
   cost: ({ i }) => { const c = st.s.directCosts[i] ?? { description: '', amount: null }; return `
-    <h2 id="modal-title">${i == null ? 'Novo custo' : 'Editar custo'}</h2>
+    <h2 id="modal-title">${i == null ? 'Adicionar custo' : 'Editar custo'}</h2><p class="hint">A descrição será necessária para incluir este custo na proposta.</p>
     <div class="field"><label for="m-desc">Descrição</label><input class="input" id="m-desc" maxlength="${L.description}" value="${esc(c.description)}" placeholder="Ex.: licença de imagens" autofocus></div>
     <div class="field"><label for="m-amount">Valor (R$)</label><input class="input" id="m-amount" inputmode="decimal" autocomplete="off" value="${c.amount == null ? '' : num(c.amount)}" placeholder="0,00"></div>
     <p class="error" role="alert" hidden></p>
@@ -306,13 +306,13 @@ const MODALS = {
       <input class="input" id="m-${f}" data-mf="${f}" inputmode="decimal" autocomplete="off" value="${esc(fieldRaw(f))}" ${k ? '' : 'autofocus'}><small class="hint">${FIELD_META[f][2]}</small></div>`).join('')}
     <p class="error" role="alert" hidden></p>
     <div class="split"><button type="button" class="secondary" data-m="close">Cancelar</button><button type="button" class="cta" data-m="applyFields">Aplicar</button></div>`,
-  costs: () => `<h2 id="modal-title">Custos diretos</h2><p class="hint">Somados ao valor, fora das horas de trabalho.</p>
+  costs: () => `<h2 id="modal-title">Custos do projeto</h2><p class="hint">Somados ao valor, fora das horas de trabalho.</p>
     ${st.s.directCosts.length ? `<ul class="costs">${st.s.directCosts.map((c, i) => `<li><span class="d ${c.description.trim() ? '' : 'none'}">${esc(c.description.trim() || 'Sem descrição')}</span><span class="v">${C.money(c.amount)}</span>
       <button type="button" class="emoji" data-ret data-m="costFromList" data-i="${i}" aria-label="Editar custo ${esc(c.description || i + 1)}">${ICON.edit}</button></li>`).join('')}</ul>` : '<p class="hint">Nenhum custo adicionado.</p>'}
     <div class="foot"><span>Total de custos</span><b>${C.money(calc().costs)}</b></div>
     <div class="split">${st.s.directCosts.length < L.costs ? '<button type="button" class="secondary" data-ret data-m="costFromList">+ Adicionar</button>' : '<span></span>'}<button type="button" class="cta" data-m="close" autofocus>Concluir</button></div>`,
   commercial: () => { const ref = calc().referenceCents, com = C.commercialValue(st.s, ref); return `
-    <h2 id="modal-title">Valor comercial</h2><p class="hint">O valor que vai para a proposta. Deixe em branco para usar a referência (${C.money(ref)}).</p>
+    <h2 id="modal-title">Valor da proposta</h2><p class="hint">Este é o valor que seu cliente verá. Se deixar em branco, usamos o valor calculado (${C.money(ref)}).</p>
     <div class="field"><label for="m-com">Valor (R$)</label><input class="input" id="m-com" inputmode="decimal" autocomplete="off" value="${st.s.commercialEdited ? num(com) : ''}" placeholder="${num(ref)}" autofocus></div>
     <p class="error" role="alert" hidden></p>
     <div class="split"><button type="button" class="secondary" data-m="close">Cancelar</button><button type="button" class="cta" data-m="applyCom">Aplicar</button></div>` },
@@ -329,7 +329,7 @@ const MODALS = {
       ${days.map(d => d.getMonth() !== m ? '<span></span>' : `<button type="button" data-m="day" data-v="${iso(d)}" aria-label="${fmt.format(d)}" aria-pressed="${st.s.deliveryDate === iso(d)}" class="${+d === +t ? 'today' : d < t ? 'past' : ''}">${d.getDate()}</button>`).join('')}</div>
     <div class="actions"><button type="button" class="link" data-m="day" data-v="">Limpar</button><button type="button" class="link accent" data-m="day" data-v="${iso(t)}">Hoje</button><button type="button" class="link" data-m="close">Fechar</button></div>` },
   reset: () => `<h2 id="modal-title">Começar um novo orçamento?</h2>
-    <p class="hint">Os dados deste orçamento e da proposta serão apagados. Seu valor/hora e tema continuam salvos.</p>
+    <p class="hint">Os dados deste orçamento e da proposta serão apagados. Seu valor por hora e o tema continuam salvos.</p>
     <div class="split"><button type="button" class="secondary" data-m="close" autofocus>Cancelar</button><button type="button" class="cta danger" data-m="resetYes">Apagar e recomeçar</button></div>`,
 }
 const MODAL_ACTS = {
@@ -406,7 +406,7 @@ const actions = {
     st.s.hourlyRate = st.mini.rate; st.s.raw.hourlyRate = st.mini.raw.rate; delete st.s.errors.hourlyRate
     go('step1')
   },
-  forget() { store('local', s => s.removeItem(KEY.rate)); refresh() },
+  forget() { store('local', s => s.removeItem(KEY.rate)); st.s.hourlyRate = null; st.s.raw.hourlyRate = ''; render(); save() }, // senão next() regrava o valor
   theme() {
     const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
     document.documentElement.dataset.theme = t; store('local', s => s.setItem(KEY.theme, t))
@@ -437,14 +437,13 @@ const actions = {
   async share() {
     const status = $('[data-out="status"]'), text = C.proposal(st.s, st.p).text
     try {
-      if (navigator.share) { await navigator.share({ title: st.p.projectName.trim(), text }); status.textContent = '' }
-      else { await navigator.clipboard.writeText(text); status.textContent = 'Proposta copiada. Cole onde quiser enviar.' }
-    } catch (e) { if (e.name !== 'AbortError') status.textContent = 'Não foi possível compartilhar. Use Salvar PDF.' }
+      await navigator.share({ title: st.p.projectName.trim(), text }); status.textContent = ''
+    } catch (e) { if (e.name !== 'AbortError') status.textContent = 'Não foi possível compartilhar. Tente copiar a proposta ou salvar em PDF.' }
   },
   async copy() {
     const status = $('[data-out="status"]')
-    try { await navigator.clipboard.writeText(C.proposal(st.s, st.p).text); status.textContent = 'Texto copiado. Cole no WhatsApp ou onde preferir.' }
-    catch { status.textContent = 'Não foi possível copiar. Use Compartilhar ou Salvar PDF.' }
+    try { await navigator.clipboard.writeText(C.proposal(st.s, st.p).text); status.textContent = 'Proposta copiada. Cole no aplicativo em que deseja enviar.' }
+    catch { status.textContent = `Não foi possível copiar. Tente ${canShare ? 'compartilhar ou ' : ''}salvar em PDF.` }
   },
   print: () => print(),
 }
