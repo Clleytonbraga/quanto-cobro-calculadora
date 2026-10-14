@@ -38,8 +38,11 @@ button, summary, label.opt { cursor: pointer; -webkit-tap-highlight-color: trans
 .top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; min-height: 48px; } /* progresso centrado de verdade */
 .top .lead { gap: 2px; }
 .top .lead .back { margin-right: -6px; }
-.logo { width: 30px; height: 30px; border-radius: 9px; background: var(--action); color: var(--on-action); display: grid; place-items: center; font-size: 12px; font-weight: 800; letter-spacing: -.02em; flex: none; } /* ponytail: selo provisório; trocar pelo SVG da marca */
-.top .brand { display: none; font-weight: 700; font-size: 17px; }
+.brand-mark { display: flex; align-items: center; flex: none; } /* marca: Figma 87RIlysRO3vHEDm7Ghdzf3 nó 125:72 */
+.brand-mark img { display: block; }
+.mark { width: 30px; height: 30px; }
+.brand-mark .wordmark { display: none; height: 22px; width: auto; }
+[data-theme="dark"] .th-light, [data-theme="light"] .th-dark { display: none !important; }
 .icon-btn { width: 44px; height: 44px; border: 0; background: none; color: var(--text-secondary); border-radius: 22px; display: grid; place-items: center; }
 .icon-btn svg { width: 22px; height: 22px; }
 .back { justify-items: start; margin-left: -6px; } /* chevron alinhado ao padding de 16px */
@@ -101,6 +104,8 @@ label.value:focus-within { border-bottom-color: var(--action); }
 .segmented button { min-height: 40px; border: 0; border-radius: 14px; background: none; font-size: 14px; font-weight: 600; color: var(--text-secondary); }
 .segmented button[aria-pressed="true"] { background: var(--action); color: var(--on-action); }
 .saved { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin: -6px 0 0; font-size: 12px; color: var(--text-muted); }
+.site-foot { max-width: 1040px; margin: 0 auto; padding: 16px var(--pad) max(20px, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); text-align: center; font-size: 13px; color: var(--text-muted); }
+.site-foot a { color: var(--text-secondary); text-underline-offset: 2px; display: inline-block; padding: 8px 4px; }
 .saved button { border: 0; background: none; padding: 6px 2px; color: var(--text-secondary); text-decoration: underline; font-size: 12px; min-height: 32px; }
 
 /* Acordeão (details nativo) */
@@ -239,7 +244,8 @@ dialog p { margin: 0; }
   .top { grid-template-columns: 1fr 44px; }
   .top .lead { gap: 12px; }
   .top .lead { display: flex; align-items: center; gap: 14px; }
-  .top .brand { display: block; }
+  .brand-mark .mark { display: none; }
+  .brand-mark .wordmark { display: block; }
   .top .progress { display: none; }
   .back { margin-left: -12px; }
   .band { flex-direction: row; justify-content: space-between; align-items: flex-start; /* eyebrow e rótulo do visor na mesma linha */ background: var(--bg-surface); border: 1px solid var(--border); border-radius: 28px; padding: 18px 36px; }
@@ -279,7 +285,7 @@ dialog p { margin: 0; }
 
 @media print {
   body { background: #fff; }
-  .calc > :not(.cols), .rail, .receipt, .device > :not(.print-area), dialog { display: none !important; }
+  .calc > :not(.cols), .rail, .receipt, .device > :not(.print-area), dialog, .site-foot { display: none !important; }
   .cols, .device { display: block !important; border: 0 !important; background: none !important; padding: 0 !important; }
   .print-area { -webkit-mask: none; mask: none; color: #000; background: #fff; max-width: 420px; margin: 0 auto; font-size: 12pt; }
 }

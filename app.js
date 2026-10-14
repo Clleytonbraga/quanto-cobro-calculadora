@@ -138,7 +138,7 @@ const fm = (f, label) => ({ act: 'fieldModal', attrs: `data-f="${f}"`, label })
 function resultTicket() {
   const s = st.s, c = calc(), n = s.directCosts.length, ref = c.referenceCents, com = C.commercialValue(s, ref), sc = SCOPE[s.scopeDefinition]
   const changed = s.commercialEdited && s.refAtEdit !== ref && com !== ref
-  return `<article class="ticket" aria-label="Orçamento detalhado"><h2>Quanto Cobro? · Orçamento</h2><p class="meta">${today()}</p><hr>
+  return `<article class="ticket" aria-label="Orçamento detalhado"><h2>Faz a Conta · Orçamento</h2><p class="meta">${today()}</p><hr>
     ${ln('Execução', C.hours(s.executionHours), { edit: fm('executionHours', 'execução') })}
     ${ln(`Revisões (${s.revisionCount} × ${C.hours(s.revisionHoursPerRound)})`, C.hours(c.revisionHours), { edit: fm('revisionCount revisionHoursPerRound', 'revisões') })}
     ${ln('A mais pelo prazo', C.hours(s.deadlineImpactHours), { edit: fm('deadlineImpactHours', 'horas a mais pelo prazo') })}
@@ -187,7 +187,7 @@ function rail() {
 function header() {
   const i = idx(), mini = st.view[0] === 'a', prop = st.view === 'proposalForm' || st.view === 'preview'
   const [label, n, total] = mini ? ['Estimar valor por hora', +st.view[1], 3] : prop ? ['Proposta', st.view === 'preview' ? 2 : 1, 2] : [`Etapa ${i + 1} de 5 · ${STEP_NAMES[i]}`, i + 1, 5]
-  return `<header class="top"><div class="lead">${st.view !== 'step1' ? `<button type="button" class="icon-btn back" data-act="back" aria-label="Voltar">${ICON.back}</button>` : ''}<span class="logo" role="img" aria-label="Quanto Cobro?">VH</span><span class="brand">Quanto Cobro?</span></div>
+  return `<header class="top"><div class="lead">${st.view !== 'step1' ? `<button type="button" class="icon-btn back" data-act="back" aria-label="Voltar">${ICON.back}</button>` : ''}<span class="brand-mark" role="img" aria-label="Faz a Conta"><img class="mark th-light" src="assets/icon-light.svg" alt=""><img class="mark th-dark" src="assets/icon-dark.svg" alt=""><img class="wordmark th-light" src="assets/logo-light.svg" alt=""><img class="wordmark th-dark" src="assets/logo-dark.svg" alt=""></span></div>
     <div class="progress"><span>${label}</span><div class="bar" aria-hidden="true">${Array.from({ length: total }, (_, k) => `<i class="${k < n ? 'on' : ''}"></i>`).join('')}</div></div>
     <button type="button" class="icon-btn theme" data-act="theme" aria-label="Alternar tema claro/escuro">${ICON.theme}</button></header>`
 }

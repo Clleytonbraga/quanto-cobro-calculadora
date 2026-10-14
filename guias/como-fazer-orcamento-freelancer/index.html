@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Como fazer um orçamento freelancer | Faz a Conta</title>
+  <meta name="description" content="Aprenda a montar um orçamento freelancer com horas, revisões, imprevistos e custos. Veja um exemplo e use uma calculadora gratuita.">
+  <link rel="canonical" href="https://clleytonbraga.github.io/quanto-cobro-calculadora/guias/como-fazer-orcamento-freelancer/">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Faz a Conta">
+  <meta property="og:url" content="https://clleytonbraga.github.io/quanto-cobro-calculadora/guias/como-fazer-orcamento-freelancer/">
+  <meta property="og:title" content="Como fazer um orçamento freelancer sem esquecer revisões e custos">
+  <meta property="og:description" content="Aprenda a montar um orçamento freelancer com horas, revisões, imprevistos e custos. Veja um exemplo e use uma calculadora gratuita.">
+  <link rel="icon" href="../../assets/icon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="../../assets/icon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+  <meta name="color-scheme" content="dark light">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Como fazer um orçamento freelancer sem esquecer revisões e custos","inLanguage":"pt-BR","author":{"@type":"Person","name":"Cleyton Braga"},"datePublished":"2026-10-14","dateModified":"2026-10-14","mainEntityOfPage":"https://clleytonbraga.github.io/quanto-cobro-calculadora/guias/como-fazer-orcamento-freelancer/"}</script>
+  <script>try { const t = localStorage.getItem('quantoCobro.theme'); if (t) document.documentElement.dataset.theme = t } catch {}</script>
+  <link rel="stylesheet" href="../../styles.css?v=24"><!-- ponytail: reaproveita tokens e base do app; layout do guia abaixo -->
+  <style>
+    .guide { max-width: 720px; margin: 0 auto; padding: max(8px, env(safe-area-inset-top)) var(--pad) 48px; line-height: 1.6; }
+    .guide header { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 56px; border-bottom: 1px solid var(--border); }
+    .guide header a { color: inherit; text-decoration: none; font-weight: 700; padding: 10px 0; }
+    .guide .wordmark { display: block; height: 24px; }
+    .guide header .nav a { color: var(--accent-text); font-weight: 600; }
+    .crumbs { margin: 20px 0 0; font-size: 13px; color: var(--text-muted); }
+    .crumbs a { color: var(--text-secondary); }
+    .eyebrow { margin: 16px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text); }
+    h1 { margin: 6px 0 12px; font-size: clamp(28px, 6vw, 40px); line-height: 1.15; letter-spacing: -.01em; }
+    h2 { margin: 40px 0 8px; font-size: 22px; line-height: 1.3; scroll-margin-top: 16px; }
+    h3 { margin: 24px 0 4px; font-size: 17px; }
+    p, li { color: var(--text-primary); }
+    .meta { margin: 0 0 20px; font-size: 13px; color: var(--text-muted); }
+    .guide a:not(.btn) { color: var(--accent-text); text-underline-offset: 2px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 12px 28px; border-radius: 26px; text-align: center; line-height: 1.3; background: var(--action); color: var(--on-action); font-weight: 700; text-decoration: none; }
+    .toc { margin: 24px 0; padding: 14px 16px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-surface); }
+    .toc b { font-size: 13px; color: var(--text-secondary); }
+    .toc ol { margin: 6px 0 0; padding-left: 22px; }
+    .toc li { padding: 2px 0; }
+    code { font-family: inherit; font-weight: 600; background: var(--bg-raised); padding: 2px 6px; border-radius: 6px; display: inline-block; max-width: 100%; }
+    .note { font-size: 14px; color: var(--text-secondary); }
+    .table-wrap { overflow-x: auto; margin: 12px 0; border: 1px solid var(--border); border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+    caption { text-align: left; padding: 10px 12px 0; font-size: 13px; color: var(--text-muted); }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+    th[scope="col"] { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+    th[scope="row"] { white-space: normal; font-weight: 400; }
+    td.n, th.n { text-align: right; }
+    @media (max-width: 400px) { th, td { padding: 10px 8px; } table { font-size: 14px; } }
+    tfoot td, tfoot th { font-weight: 700; border-bottom: 0; }
+    .cta-end { margin: 48px 0 0; padding: 24px; border-radius: 20px; background: var(--bg-surface); border: 1px solid var(--border); }
+    .cta-end h2 { margin-top: 0; }
+    footer { margin-top: 40px; font-size: 13px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+<div class="guide">
+  <header><a class="brand-mark" href="../../" aria-label="Faz a Conta, ir para a calculadora"><img class="wordmark th-light" src="../../assets/logo-light.svg" alt=""><img class="wordmark th-dark" src="../../assets/logo-dark.svg" alt=""></a><nav class="nav" aria-label="Principal"><a href="../../">Calculadora</a></nav></header>
+  <main>
+    <article>
+      <p class="crumbs"><a href="../../">Início</a> / Guias</p>
+      <p class="eyebrow">Guia para freelancers</p>
+      <h1>Como fazer um orçamento freelancer sem esquecer revisões e custos</h1>
+      <p class="meta">Por Cleyton Braga · Publicado em <time datetime="2026-10-14">14 de outubro de 2026</time></p>
+
+      <p>Um orçamento precisa responder a três perguntas: o que será entregue, quanto trabalho será necessário e qual valor será apresentado ao cliente. Quando só as horas de execução entram na conta, revisões, despesas e imprevistos ficam de fora.</p>
+      <p>A seguir, você vai montar uma estimativa de preço por etapas e conferir um exemplo. O resultado serve para orientar sua decisão, não para definir automaticamente o preço correto de mercado.</p>
+      <p><a class="btn" href="../../">Fazer meu orçamento na calculadora</a></p>
+
+      <nav class="toc" aria-label="Nesta página"><b>Nesta página</b>
+        <ol>
+          <li><a href="#entrega">Defina o que será entregue</a></li>
+          <li><a href="#execucao">Estime as horas de execução</a></li>
+          <li><a href="#revisoes">Considere as revisões</a></li>
+          <li><a href="#prazo">Verifique prazo e imprevistos</a></li>
+          <li><a href="#custos">Some os custos do projeto</a></li>
+          <li><a href="#estimativa">Confira a estimativa completa</a></li>
+          <li><a href="#proposta">Escolha o valor da proposta</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="entrega">1. Defina o que será entregue</h2>
+      <p>Antes de calcular, descreva o trabalho de forma objetiva. Se o pedido é criar uma landing page, por exemplo, confirme quantas seções serão produzidas, quem envia textos e imagens, se haverá versão mobile e o que não está incluído.</p>
+      <p>Sem esse limite, o cliente pode esperar entregas que você não considerou. Uma lista curta já ajuda:</p>
+      <ul>
+        <li><b>Entrega:</b> uma landing page responsiva.</li>
+        <li><b>Materiais:</b> textos e imagens fornecidos pelo cliente.</li>
+        <li><b>Revisões:</b> até duas rodadas de ajustes.</li>
+        <li><b>Fora do escopo:</b> criação de identidade visual e produção de fotos.</li>
+      </ul>
+      <p>Isso não substitui um contrato, mas evita que a estimativa comece sem um objeto claro.</p>
+
+      <h2 id="execucao">2. Estime as horas de execução</h2>
+      <p>Separe o trabalho em atividades que você realmente precisa executar: levantamento do briefing, estrutura, criação, ajustes técnicos e finalização. Some esse tempo sem incluir revisões, se elas serão calculadas em uma etapa separada.</p>
+      <p>Se você estima 12 horas de execução e usa R$ 80 por hora como base, o trabalho inicial representa R$ 960: <code>12 h × R$ 80 = R$ 960</code>.</p>
+      <p class="note">O valor de R$ 80 é <strong>hipotético</strong>, apenas para mostrar a fórmula. Não é uma indicação de preço de mercado.</p>
+
+      <h2 id="revisoes">3. Considere as revisões</h2>
+      <p>Uma revisão é uma rodada de ajustes sobre o que foi combinado. Uma alteração de escopo, como criar uma página adicional, não deveria ser tratada automaticamente como revisão incluída.</p>
+      <p>No exemplo, você prevê duas rodadas de 1,5 hora. São mais três horas de trabalho: <code>2 rodadas × 1,5 h = 3 h</code>.</p>
+      <p>Se as revisões já foram contadas nas 12 horas iniciais, não some esse tempo de novo. A mesma regra vale para reuniões e preparação de arquivos.</p>
+
+      <h2 id="prazo">4. Verifique prazo e imprevistos</h2>
+      <p>Uma data de entrega apertada não significa, por si só, que o preço precise aumentar. O que entra na conta são as horas a mais que você prevê para cumprir o prazo, caso existam.</p>
+      <p>Você também pode reservar horas para imprevistos que ainda não estejam contemplados. No exemplo, serão duas horas para imprevistos e nenhuma hora a mais pelo prazo.</p>
+      <p>Essas horas não garantem que o projeto ficará dentro do orçamento. São uma decisão de precificação que pode ser reduzida ou ajustada conforme a clareza do trabalho.</p>
+
+      <h2 id="custos">5. Some os custos do projeto</h2>
+      <p>Algumas despesas estão ligadas diretamente à entrega: licença de imagem, impressão, compra de um recurso ou contratação pontual. Elas não devem ser confundidas com horas de trabalho.</p>
+      <p>Neste exemplo, considere R$ 120 de custos do projeto. Evite somar novamente despesas que você já distribuiu dentro do seu valor por hora.</p>
+
+      <h2 id="estimativa">6. Confira a estimativa completa</h2>
+      <div class="table-wrap" role="region" aria-label="Tabela do exemplo" tabindex="0">
+        <table>
+          <caption>Exemplo com valor por hora hipotético de R$ 80</caption>
+          <thead><tr><th scope="col">Item</th><th scope="col" class="n">Quantidade</th><th scope="col" class="n">Valor</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Execução</th><td class="n">12 h</td><td class="n">R$ 960,00</td></tr>
+            <tr><th scope="row">Revisões</th><td class="n">3 h</td><td class="n">R$ 240,00</td></tr>
+            <tr><th scope="row">Horas para imprevistos</th><td class="n">2 h</td><td class="n">R$ 160,00</td></tr>
+            <tr><th scope="row">Horas a mais pelo prazo</th><td class="n">0 h</td><td class="n">R$ 0,00</td></tr>
+            <tr><th scope="row">Custos do projeto</th><td class="n">—</td><td class="n">R$ 120,00</td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">Valor calculado</th><td class="n">17 h</td><td class="n">R$ 1.480,00</td></tr></tfoot>
+        </table>
+      </div>
+      <p>A fórmula é <code>(12 + 3 + 2) h × R$ 80 + R$ 120 = R$ 1.480</code>.</p>
+      <p>Esse é um <strong>valor calculado com as informações do exemplo</strong>, não uma recomendação universal. Impostos, despesas gerais e margem não são adicionados automaticamente por esse cálculo. Você precisa considerá-los na definição do seu valor por hora ou ao escolher o preço final, conforme sua situação.</p>
+      <p><a class="btn" href="../../">Calcular meu orçamento</a></p>
+
+      <h2 id="proposta">7. Escolha o valor que vai para a proposta</h2>
+      <p>Depois de conferir a conta, decida quanto apresentar ao cliente. Você pode manter o valor calculado ou alterá-lo por motivos comerciais, desde que entenda o efeito da decisão sobre sua remuneração.</p>
+      <p>Uma proposta clara deve identificar o projeto, resumir o que será entregue, apresentar o valor e incluir prazos ou revisões quando tiverem sido combinados. Informações como condições de pagamento e itens fora do escopo também podem ser registradas nas observações.</p>
+      <p>No Faz a Conta, você preenche as horas, revisões e custos, confere o valor calculado e pode ajustar o valor da proposta antes de compartilhar. A ferramenta não calcula tributos automaticamente nem substitui aconselhamento contábil ou jurídico.</p>
+
+      <h2 id="checklist">O que conferir antes de enviar</h2>
+      <ul>
+        <li>O que o cliente receberá está descrito?</li>
+        <li>As horas de execução excluem revisões já calculadas à parte?</li>
+        <li>Você definiu quantas rodadas de revisão estão incluídas?</li>
+        <li>Existem horas a mais pelo prazo ou horas para imprevistos realmente necessárias?</li>
+        <li>Os custos do projeto entraram uma só vez?</li>
+        <li>O valor escolhido considera sua realidade de despesas, impostos e remuneração?</li>
+        <li>A proposta apresenta as condições essenciais acordadas com o cliente?</li>
+      </ul>
+
+      <h2 id="duvidas">Dúvidas frequentes</h2>
+      <h3>Devo cobrar por hora ou por projeto?</h3>
+      <p>Você pode usar as horas para construir sua estimativa e apresentar ao cliente um valor fechado pelo projeto. A escolha depende de quanto o escopo está definido e de como as mudanças serão tratadas.</p>
+      <h3>Revisão e mudança de escopo são a mesma coisa?</h3>
+      <p>Não necessariamente. Revisão costuma ajustar algo dentro da entrega combinada; uma nova entrega altera o que foi contratado e pode precisar de outro orçamento. Defina essa diferença antes de começar.</p>
+      <h3>Se eu entregar mais rápido, preciso cobrar menos?</h3>
+      <p>Não automaticamente. A estimativa por horas é uma referência interna. O preço apresentado pode considerar experiência, complexidade, responsabilidade e condições negociadas, sem confundir essas dimensões com uma média de mercado não verificada.</p>
+      <h3>A calculadora mostra lucro líquido?</h3>
+      <p>Não. O Faz a Conta soma as horas previstas e os custos do projeto informados. Impostos, despesas gerais e lucro líquido precisam ser avaliados separadamente.</p>
+      <h3>Preciso ter um valor por hora definido para usar a ferramenta?</h3>
+      <p>Não. Você pode começar com uma estimativa baseada na sua meta mensal e nas horas por semana que consegue cobrar de clientes. Esse resultado é um ponto de partida e não inclui automaticamente seus custos, impostos ou margem.</p>
+
+      <section class="cta-end" aria-labelledby="cta-final">
+        <h2 id="cta-final">Faça seu orçamento gratuito</h2>
+        <p>Informe suas horas, revisões e custos, confira o cálculo e prepare sua proposta.</p>
+        <p><a class="btn" href="../../">Fazer meu orçamento</a></p>
+      </section>
+    </article>
+  </main>
+  <footer><b>Faz a Conta</b> · Seu trabalho tem um preço. Calcule.<br>Calculadora gratuita de orçamento para freelancers. Os exemplos deste guia são hipotéticos.</footer>
+</div>
+</body>
+</html>
