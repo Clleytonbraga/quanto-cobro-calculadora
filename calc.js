@@ -9,16 +9,16 @@ export const LIMITS = { // ponytail: tetos técnicos §11 (QC-DEC-014), ajustáv
 
 export const MSG = { // Business Rules §13
   rate: 'Informe um valor por hora maior que zero.',
-  exec: 'Informe quantas horas de execução o trabalho leva.',
+  exec: 'Informe as horas de execução para continuar.',
   negative: 'Use zero ou um valor positivo.',
   integer: 'Use um número inteiro de rodadas.',
   decimals: 'Use no máximo 2 casas decimais.',
   invalid: 'Digite um número, por exemplo 12,5.',
   costValue: 'Informe o valor deste custo.',
-  costDesc: 'Descreva este custo para incluí-lo na proposta.',
+  costDesc: 'Adicione uma descrição para incluir este custo na proposta.',
   projectName: 'Informe o nome do projeto.',
   scopeSummary: 'Descreva o escopo em poucas palavras.',
-  week: 'Informe quantas horas por semana você consegue faturar.',
+  week: 'Informe quantas horas por semana você consegue cobrar de clientes.',
   max: 'Valor acima do limite aceito pela calculadora.',
   commercial: 'Informe um valor maior que zero.',
 }
