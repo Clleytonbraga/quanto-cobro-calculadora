@@ -1,4 +1,6 @@
-# Quanto Cobro?
+# Faz a Conta
+
+*Seu trabalho tem um preço. Calcule.*
 
 **Calculadora gratuita de orçamento para designers e freelancers brasileiros.**
 Em vez de planilha ou preço no improviso, você informa valor por hora, horas de trabalho, revisões, prazo e custos, e chega a uma **referência de cobrança explicável**. Depois, transforma o resultado numa **proposta** pronta para enviar ao cliente.
