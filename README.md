@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/og-image.png" alt="Faz a Conta — Seu trabalho tem um preço. Calcule. Calculadora gratuita de orçamento para freelancers.">
+  <img src="assets/og-image.png" alt="Fiz a Conta. Seu trabalho tem um preço. Calcule. Calculadora gratuita de orçamento para freelancers.">
 </p>
 
-# Faz a Conta
+# Fiz a Conta
 
 *Seu trabalho tem um preço. Calcule.*
 
@@ -163,7 +163,7 @@ Os arquivos do Figma são privados; o acesso depende de convite.
 
 **No ar**
 - ✅ MVP completo: cálculo, estimativa de valor por hora, resultado editável, proposta, dark/light, mobile e desktop.
-- ✅ Marca **Faz a Conta**: logo, favicon (claro/escuro), ícone para tela inicial e imagem de compartilhamento (Open Graph/X).
+- ✅ Marca **Fiz a Conta**: logo, favicon (claro/escuro), ícone para tela inicial e imagem de compartilhamento (Open Graph/X).
 - ✅ Revisão de UX writing: "valor calculado" × "valor da proposta", termos consistentes, mensagens de erro e de compartilhamento revisadas.
 - ✅ SEO: primeiro guia editorial, canonical, `sitemap.xml`, link para o guia no rodapé da calculadora.
 - ✅ Google Search Console verificado, sitemap enviado e indexação solicitada para a home e o guia.

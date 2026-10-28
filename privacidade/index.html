@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Privacidade · Fiz a Conta</title>
+  <meta name="description" content="Como o Fiz a Conta trata os seus dados: o que fica no seu aparelho, o que o Google Analytics mede e como funciona o aviso de lançamento por e-mail.">
+  <link rel="canonical" href="https://clleytonbraga.github.io/quanto-cobro-calculadora/privacidade/">
+  <link rel="icon" href="../assets/icon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="../assets/icon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="dark light">
+  <script>try { const t = localStorage.getItem('quantoCobro.theme'); if (t) document.documentElement.dataset.theme = t } catch {}</script>
+  <link rel="stylesheet" href="../styles.css?v=30">
+  <style>
+    .doc { max-width: 720px; margin: 0 auto; padding: max(8px, env(safe-area-inset-top)) var(--pad) 48px; line-height: 1.6; }
+    .doc header { display: flex; justify-content: space-between; align-items: center; min-height: 56px; border-bottom: 1px solid var(--border); }
+    .doc .wordmark { display: block; height: 24px; }
+    .doc header a { color: var(--accent-text); font-weight: 600; text-decoration: none; padding: 10px 0; }
+    .doc h1 { margin: 24px 0 4px; font-size: clamp(28px, 6vw, 36px); line-height: 1.2; }
+    .doc h2 { margin: 32px 0 6px; font-size: 20px; }
+    .doc .meta { margin: 0 0 16px; font-size: 13px; color: var(--text-muted); }
+    .doc a { color: var(--accent-text); text-underline-offset: 2px; }
+    .doc li { margin: 4px 0; }
+    .doc button { min-height: 44px; padding: 0 18px; border: 1px solid var(--border-strong); border-radius: 22px; background: var(--bg-raised); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="doc">
+  <header><a href="../" aria-label="Fiz a Conta, ir para a calculadora"><img class="wordmark th-light" src="../assets/logo-light.svg" alt=""><img class="wordmark th-dark" src="../assets/logo-dark.svg" alt=""></a><a href="../">Calculadora</a></header>
+  <main>
+    <h1>Privacidade</h1>
+    <p class="meta">Atualizado em 28 out 2026</p>
+    <p>O Fiz a Conta é uma calculadora de orçamento para freelancers. Ela funciona sem login e sem servidor próprio. Esta página explica quais dados o app usa e onde eles ficam.</p>
+
+    <h2>O que fica só no seu aparelho</h2>
+    <ul>
+      <li><b>Valor por hora:</b> fica salvo no navegador para a próxima visita. Para apagar, use "Apagar valor salvo" na etapa 1.</li>
+      <li><b>Orçamento em andamento:</b> fica no navegador enquanto a aba está aberta. "Novo orçamento" apaga tudo.</li>
+      <li><b>Tema e escolha de privacidade:</b> claro ou escuro, e se você aceitou ou recusou o Google Analytics.</li>
+    </ul>
+    <p>Esses dados não saem do seu aparelho. Nós não temos acesso a eles.</p>
+
+    <h2>Google Analytics (só com o seu aceite)</h2>
+    <p>Se você toca em "Aceitar" no aviso, o app usa o Google Analytics 4 para medir o uso: quais telas são abertas e quais botões são tocados (por exemplo, "proposta copiada"). Com isso, sabemos onde o app ajuda e onde precisa melhorar.</p>
+    <p><b>O app nunca envia</b> valores, horas, nomes de projeto, textos da proposta ou custos.</p>
+    <p>Se você toca em "Recusar", o Google Analytics não é carregado.</p>
+    <p><button type="button" id="reset-consent">Mudar minha escolha</button> <span id="reset-msg" role="status"></span></p>
+
+    <h2>Aviso de lançamento por e-mail (opcional)</h2>
+    <p>Na prévia da proposta, "Salvar no histórico" permite deixar o seu e-mail para receber 1 aviso quando o histórico de propostas lançar.</p>
+    <ul>
+      <li>O e-mail fica guardado no Brevo, um serviço de e-mail.</li>
+      <li>O e-mail só entra na lista se você marcar a caixa de aceite.</li>
+      <li>Todo e-mail tem um link para cancelar. Você pode cancelar quando quiser.</li>
+      <li>O e-mail serve só para esse aviso. Ele não é vendido nem passado para outras empresas.</li>
+    </ul>
+
+    <h2>Seus direitos (LGPD)</h2>
+    <p>Você pode pedir para ver, corrigir ou apagar o seu e-mail da lista de aviso. Para isso, escreva para <b>[E-MAIL DE CONTATO]</b>.</p>
+  </main>
+</div>
+<script>
+  document.getElementById('reset-consent').addEventListener('click', () => {
+    try { localStorage.removeItem('quantoCobro.consent') } catch {}
+    document.getElementById('reset-msg').textContent = 'Pronto. O aviso aparece de novo na calculadora.'
+  })
+</script>
+</body>
+</html>
