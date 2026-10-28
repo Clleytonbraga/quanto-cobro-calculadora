@@ -1,7 +1,7 @@
 # Quanto Cobro? — Decision Log
 
-**Versão:** 2.0 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 021 acrescentadas ao final)  
-**Atualizado em:** 12/10/2026  
+**Versão:** 2.2 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 037 acrescentadas ao final)  
+**Atualizado em:** 28/10/2026 (v2.1 preservada em `historico_apoio/versoes-anteriores/`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -314,3 +314,35 @@ Ajustes de implementação sobre a D: texto de apoio do escopo em 12 px (o frame
 | QC-DEC-021 | APROVADA | Revisão de textos aplicada (opção “c” do responsável): termos unificados — “Valor por hora” (cupom pode abreviar “Valor/hora”), “Extra pelo prazo” no cupom para as horas adicionais por impacto do prazo, “Valor por hora sugerido” no mini-fluxo (antes “referência base”; “referência” fica reservada ao total calculado), “Descobrir valor por hora” como nome do mini-fluxo; proposta compartilhada usa “Revisões incluídas: N rodadas”, igual à prévia. Títulos: “Quanto vale sua hora?”, “Quantas horas de trabalho?”. Cabeçalho ganha selo provisório “VH” à esquerda (substituir pelo SVG oficial da marca). |
 
 **Extensão de QC-DEC-020 (13/10/2026):** a pedido do responsável, a **prévia da proposta (mobile)** segue o mesmo padrão: anúncio entre o visor (valor da proposta) e o título “Proposta pronta”, acima do cupom e das ações.
+
+## Novo recurso: Briefing — v2.1 (15/10/2026)
+
+Aprovação explícita do responsável nesta conversa ("segue com as recomendações"). Contrato em `PRD-briefing.md` v1.0.
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-022 | APROVADA | Briefing **sem backend**: perguntas e respostas trafegam no fragmento do link (`#`); o cliente devolve o link de resposta por WhatsApp/cópia ou PDF. Backend leve (opção B) só será reavaliado se a taxa de devolução ficar baixa. |
+| QC-DEC-023 | APROVADA | Briefing é **recurso do Faz a Conta** (mesma marca, domínio e identidade), não produto separado. |
+| QC-DEC-024 | APROVADA | Lançamento com **4 tipos de trabalho de design**: logo e identidade visual; posts para redes sociais; site ou landing page; peça avulsa. |
+| QC-DEC-025 | APROVADA | **LGPD:** nenhuma resposta guardada em servidor; formulário do cliente exibe aviso de privacidade e **nunca exibe anúncio**. |
+
+## Marca Fiz a Conta, horas em minutos e telas aprovadas no canvas — v2.2 (28/10/2026)
+
+Aprovação explícita do responsável nesta conversa e nos comentários do canvas "Fiz a Conta · Telas" (Claude Design). Os registros novos superam os anteriores quando há conflito. Os registros anteriores ficam como histórico.
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-026 | APROVADA | O produto passa a se chamar **Fiz a Conta**. Motivo: o domínio "faz a conta" não está disponível. Wordmark novo no Figma 87RIlysRO3vHEDm7Ghdzf3, nó 125:72. O ícone "a" não muda. **Supera** o nome "Faz a Conta" (QC-DEC-023 continua válida com o nome novo). As chaves técnicas `quantoCobro.*` e o namespace `FazAConta` do DS não mudam. |
+| QC-DEC-027 | APROVADA | Horas do orçamento ficam em **minutos inteiros**. A entrada aceita "1h30", "1 h 30 min", "12" e "1,5". Sem "h", o número vale horas. A tela mostra "1 h 30 min". **Supera** QC-DEC-007 só para as horas (dinheiro continua em centavos; o Estimar continua em centésimos). |
+| QC-DEC-028 | APROVADA | Teclado com a tecla **h** no lugar da vírgula na etapa 2 e no modal "Horas por rodada". Depois do h, no máximo 2 dígitos de minutos (0 a 59). |
+| QC-DEC-029 | APROVADA | **Período de entrega:** "Data única" ou "Período". O período mostra a duração em dias corridos, contando os 2 dias ("3 nov a 14 nov · 12 dias corridos"). Não muda o valor. A proposta mostra "Período: 3 nov a 14 nov". |
+| QC-DEC-030 | APROVADA | Etapa 3: "Data de entrega" e "Horas por rodada" são **campos** que abrem os modais 3a e 3b. Ícone à esquerda, valor à direita. As horas por rodada não têm mais − e +. |
+| QC-DEC-031 | APROVADA | **Escopo, opção B:** o menu de escopo fica na etapa 2. Com escopo Parcial ou Aberto, a etapa 4 mostra uma dica para incluir horas para imprevistos. A dica não muda o cálculo. |
+| QC-DEC-032 | APROVADA | **Cupom do resultado V1:** bloco Tempo (barra com execução, revisões, prazo e imprevistos), bloco Dinheiro e valor da proposta em marca-texto com ícone de editar. Sem a linha "Valor calculado" no cupom (o visor já mostra esse valor). |
+| QC-DEC-033 | APROVADA | **Tecla do teclado:** quadrada, raio de 22 px, relevo sutil de 2 px. |
+| QC-DEC-034 | APROVADA | **Publicidade removida** por enquanto (sem rede de anúncios). **Supera** QC-DEC-020 e sua extensão. Lugar futuro: resultado e prévia da proposta, nunca na entrada de dados. |
+| QC-DEC-035 | APROVADA | **Sem travessão (—)** em nenhum texto: telas, documentos, títulos e comentários de código. Usar vírgula, dois-pontos, ponto ou "·". Valor vazio no cupom ao vivo: "…". |
+| QC-DEC-036 | APROVADA | **Freemium.** Fase 0: GA4 só depois do aceite (eventos sem valores do orçamento) e pesquisa de 5 estrelas (no máximo 1 vez a cada 30 dias; "Agora não" volta depois de 3 propostas; quem respondeu não vê mais). Fase 1: teste de interesse "Histórico" com e-mail (Brevo, lista #3), sem login. Fase 2: assinatura, só com demanda comprovada. A proposta mostra "Feito com Fiz a Conta". Contas GA4 e Brevo: só a conta pessoal do responsável. |
+| QC-DEC-037 | APROVADA | **Compartilhar V2** na prévia da proposta: botão "Enviar pelo WhatsApp" e barra com Histórico, Copiar, PDF e Mais. **Estimar:** seletor "Já sei / Estimar" nas 3 telas; a meta mensal não tem voltar; meta mensal e horas por semana não têm "Cancelar"; balão "Por que 4,33?". |
+
+**Pendente (não decidido):** domínio exato do Fiz a Conta; e-mail de contato LGPD na página de privacidade; destino do texto da pesquisa (recomendado Google Forms); cupom V1 também no resultado do desktop do canvas; dupla confirmação no Brevo (exige telefone verificado).
