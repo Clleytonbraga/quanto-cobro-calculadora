@@ -89,6 +89,15 @@ Atalhos no desktop: dígitos, `,` e `00` para digitar, `↑ ↓` somam/subtraem 
 
 ---
 
+## Instalar no celular
+
+O Fiz a Conta é um app instalável (PWA). Depois de instalado, ele abre em tela cheia e calcula sem internet.
+
+- **iPhone:** abra no Safari ▸ toque em Compartilhar ▸ Adicionar à Tela de Início.
+- **Android:** abra no Chrome ▸ toque no menu ▸ Instalar app.
+
+---
+
 ## Rodar localmente
 
 Não há build nem dependências. Basta servir a pasta:
@@ -98,7 +107,7 @@ python3 -m http.server 8790
 # abra http://localhost:8790
 ```
 
-Qualquer servidor estático serve (`npx serve`, GitHub Pages, Vercel, Netlify). Abrir o `index.html` direto do disco não funciona, porque módulos ES exigem HTTP. Ao mudar CSS/JS, incremente o `?v=N` no `index.html` (e no guia) para furar o cache do navegador.
+Qualquer servidor estático serve (`npx serve`, GitHub Pages, Vercel, Netlify). Abrir o `index.html` direto do disco não funciona, porque módulos ES exigem HTTP. Ao mudar CSS/JS, incremente o `?v=N` nos 3 HTML (app, privacidade e guia) e o `CACHE` do `sw.js` com o mesmo número, para furar o cache do navegador e do service worker.
 
 ### Testes
 
@@ -117,6 +126,8 @@ styles.css          tokens do Design System (dark/light) e layouts mobile/deskto
 calc.js             regras de negócio puras (sem DOM), testadas por test.mjs
 app.js              estado, telas, modais e eventos
 test.mjs            testes com node:assert, sem framework
+manifest.webmanifest  dados do app instalável (nome, cores, ícones)
+sw.js               service worker: guarda o app para abrir offline
 assets/             logo e ícones da marca (claro/escuro), apple-touch-icon e imagem de compartilhamento
 guias/              conteúdo editorial estático (SEO), sem depender de JavaScript
 sitemap.xml         páginas publicadas, enviado ao Google Search Console

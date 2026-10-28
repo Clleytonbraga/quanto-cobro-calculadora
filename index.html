@@ -21,6 +21,12 @@
   <link rel="icon" href="assets/icon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <meta name="color-scheme" content="dark light">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#111315">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fiz a Conta">
   <script>try { const t = localStorage.getItem('quantoCobro.theme'); if (t) document.documentElement.dataset.theme = t } catch {}</script>
   <link rel="stylesheet" href="styles.css?v=30">
 </head>
@@ -30,5 +36,6 @@
   <noscript><p class="calc">O Fiz a Conta precisa de JavaScript para calcular.</p></noscript>
   <footer class="site-foot">Não sabe como fazer seu orçamento? <a href="guias/como-fazer-orcamento-freelancer/">Guia: como fazer um orçamento freelancer</a> · <a href="privacidade/">Privacidade</a></footer>
   <script type="module" src="app.js?v=30"></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js')</script>
 </body>
 </html>
