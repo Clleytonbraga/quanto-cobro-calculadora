@@ -1,6 +1,6 @@
 # Fiz a Conta · Pacote de handoff
 
-Atualizado em 09/11/2026 (v2.0). Versão anterior: `historico/versoes-anteriores/LEIA_PRIMEIRO_v1.5.md`.
+Atualizado em 09/11/2026 (v2.1). Versões anteriores em `historico/versoes-anteriores/`.
 
 Nomes anteriores: "Quanto Cobro?" e "Faz a Conta". O nome atual é **Fiz a Conta** (QC-DEC-026).
 
@@ -8,14 +8,14 @@ Nomes anteriores: "Quanto Cobro?" e "Faz a Conta". O nome atual é **Fiz a Conta
 
 Leia nesta ordem:
 
-1. `decision-log.md` v2.2: decisões QC-DEC-001 a QC-DEC-037. Comece pelas seções finais (v2.1 e v2.2).
-2. `PRD.md` v2.0: produto atual, alinhado com o Decision Log v2.2 e com o código da branch `edicao` (commit `0e4c5c4`).
-3. `PRD-briefing.md` v1.0: recurso Briefing (aprovado, ainda não implementado).
-4. `business-rules.md` v1.1: validação, precisão, padrões e casos-teste.
-5. `architecture.md` v1.2, `design-system.md` v1.5, `handoff_tecnico.md` v1.3.
-6. `calc-reference.mjs`: implementação de referência dos números (`node calc-reference.mjs`). Usa horas em centésimos (regra antiga). O app usa minutos (QC-DEC-027).
+1. `decision-log.md` v2.3: decisões QC-DEC-001 a QC-DEC-038. Comece pelas seções finais (v2.2 e v2.3).
+2. `PRD.md` v2.1: produto atual, alinhado com o Decision Log v2.3 e com o código publicado.
+3. `PRD-briefing.md` v1.1: recurso Briefing (aprovado, ainda não implementado).
+4. `business-rules.md` v2.0: validação, precisão, padrões, casos-teste e pendências (§17).
+5. `architecture.md` v2.0, `design-system.md` v2.0, `handoff_tecnico.md` v2.0.
+6. `calc-reference.mjs`: implementação de referência dos números, em minutos (`node docs/calc-reference.mjs`).
 
-**Atenção:** os documentos dos itens 4 e 5 ainda não incluem QC-DEC-017 a QC-DEC-037. Em conflito, vale o Decision Log e depois o PRD v2.0.
+Todos os documentos estão alinhados com QC-DEC-001 a QC-DEC-038. Em conflito, vale o Decision Log.
 
 ## Situação do produto
 
@@ -23,8 +23,8 @@ Leia nesta ordem:
 - Modelo freemium em fases (QC-DEC-036). Fase 0 (GA4 e pesquisa) e Fase 1 (teste do Histórico) estão no código.
 - Sem publicidade por enquanto (QC-DEC-034).
 - Horas em minutos, período de entrega, cupom V1, Compartilhar V2 (QC-DEC-027 a QC-DEC-037).
-- App instalável (PWA) e offline na branch `edicao`. Não publicado.
-- A `main` ainda está na versão de 14/10/2026. Publicar só com aprovação explícita.
+- App instalável (PWA) e offline (QC-DEC-038).
+- Publicado na `main` (GitHub Pages) em 09/11/2026. O trabalho continua na `edicao`.
 
 ## Referências
 

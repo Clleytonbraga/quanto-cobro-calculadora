@@ -1,7 +1,7 @@
-# Quanto Cobro? — Decision Log
+# Fiz a Conta · Decision Log (antes "Quanto Cobro?")
 
-**Versão:** 2.2 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 037 acrescentadas ao final)  
-**Atualizado em:** 28/10/2026 (v2.1 preservada em `historico_apoio/versoes-anteriores/`)  
+**Versão:** 2.3 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 038 acrescentadas ao final)  
+**Atualizado em:** 09/11/2026 (v2.2 preservada em `historico/versoes-anteriores/decision-log_v2.2.md`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -346,3 +346,13 @@ Aprovação explícita do responsável nesta conversa e nos comentários do canv
 | QC-DEC-037 | APROVADA | **Compartilhar V2** na prévia da proposta: botão "Enviar pelo WhatsApp" e barra com Histórico, Copiar, PDF e Mais. **Estimar:** seletor "Já sei / Estimar" nas 3 telas; a meta mensal não tem voltar; meta mensal e horas por semana não têm "Cancelar"; balão "Por que 4,33?". |
 
 **Pendente (não decidido):** domínio exato do Fiz a Conta; e-mail de contato LGPD na página de privacidade; destino do texto da pesquisa (recomendado Google Forms); cupom V1 também no resultado do desktop do canvas; dupla confirmação no Brevo (exige telefone verificado).
+
+## App no celular e alinhamento dos documentos · v2.3 (09/11/2026)
+
+Aprovação explícita do responsável nesta conversa, em 09/11/2026 ("pode atualizar tudo isso").
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-038 | APROVADA | **App no celular.** O site é instalável (PWA: `manifest.webmanifest`, ícones 192, 512 e maskable) e funciona offline (`sw.js`). O nome do cache (`fiz-vN`) é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas. GA4 e Brevo usam só a rede. Existe um APK Android de teste (WebView, projeto local `fiz-a-conta-android`). O APK não é publicado em loja. Implementado em 28/10/2026 (commit `0e4c5c4`). |
+
+**Também aprovado em 09/11/2026:** publicar a branch `edicao` na `main`; atualizar `business-rules.md`, `architecture.md`, `design-system.md`, `handoff_tecnico.md` e `PRD-briefing.md` com QC-DEC-017 a QC-DEC-038.

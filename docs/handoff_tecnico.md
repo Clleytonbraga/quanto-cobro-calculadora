@@ -1,441 +1,453 @@
-# Quanto Cobro? — Handoff Técnico
+# Fiz a Conta · Handoff Técnico
 
-**Versão documental:** 1.3 · **Atualizado:** 12/10/2026 (v1.2 preservada em `historico_apoio/versoes-anteriores/`)  
-**Fontes funcionais:** PRD v1.2 + Architecture v1.2 + Business Rules v1.0 + Decision Log QC-DEC-001 a QC-DEC-014.  
-**Status:** especificação sincronizada; faixa Figma v1.4 aprovada como handoff (QC-DEC-016); FigJam v1.4 com anotações v1.5.
+**Versão documental:** 2.0 · **Atualizado:** 09/11/2026
+**Versão anterior:** v1.3 (12/10/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v1.3.md`.
+**Base:** QC-DEC-001 a QC-DEC-038 (`decision-log.md` v2.3) e `PRD.md` v2.0.
+**Regras de cálculo e validação:** `business-rules.md` v2.0 e `calc.js`. **Arquitetura:** `architecture.md` v2.0. **Visual:** `design-system.md` v2.0.
+**Código de referência:** branch `edicao`, cache `fiz-v30`.
+**Regra de conflito:** o Decision Log vence. Registros novos superam os antigos.
 
-## 1. Escopo de implementação
+Nomes anteriores do produto: "Quanto Cobro?" e "Faz a Conta". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` não mudam.
 
-Construir calculadora web responsiva, sem login, com cinco etapas, mini-fluxo opcional de valor/hora, resultado rastreável, valor comercial editável, proposta gerada após CTA, dark/light e publicidade fora da tarefa. A rota `/` **abre diretamente** a calculadora (QC-DEC-004). Sem home intermediária.
+## O que mudou da v1.3 para a v2.0
 
-O mesmo modelo de dados e as mesmas funções servem mobile e desktop. Custo direto admite vários itens (QC-DEC-001). Dados descritivos da proposta são solicitados somente após **Criar proposta** (QC-DEC-002). Valor/hora + tema persistem no dispositivo; rascunho do orçamento, na sessão (QC-DEC-003).
+| Tema | Antes (v1.3) | Agora (v2.0) | Decisão |
+| --- | --- | --- | --- |
+| Estado do app | Especificação, app não implementado | App implementado e publicado (GitHub Pages) | |
+| Unidade das horas | Centésimos de hora | Minutos inteiros. Entrada "1h30". Estimar segue em centésimos | QC-DEC-027 |
+| Teclado | Circular, com `CalculatorQuickAdjust` (+1/−1) | "Maquininha" com tecla h. ↑/↓ no teclado físico | QC-DEC-017, QC-DEC-028, QC-DEC-033 |
+| Data | Data única | Data única ou Período (`dateMode`, `deliveryEnd`) | QC-DEC-029 |
+| Etapa 3 | Steppers | Campos que abrem modais | QC-DEC-030 |
+| Resultado | Lista de composição | Cupom V1 com edição por modal | QC-DEC-019, QC-DEC-032 |
+| Desktop | Coluna estreita | Variante D, ponto de quebra 1024 px | QC-DEC-018 |
+| Publicidade | Slot após o resultado | Sem publicidade | QC-DEC-034 |
+| Analytics | Lista sugerida, sem ferramenta | GA4 `G-F2HS60LDV0`, só após aceite, 11 eventos | QC-DEC-036 |
+| E-mail | Não existia | Brevo, lista #3, formulário no `app.js` | QC-DEC-036 |
+| Proposta | Copiar e imprimir | WhatsApp, Histórico, Copiar, PDF, Mais | QC-DEC-037 |
+| Celular | Site responsivo | PWA offline + APK Android de teste | QC-DEC-038 |
+| Persistência | 3 chaves | 5 chaves (mais consentimento e pesquisa) | QC-DEC-036 |
+| Rascunho | Formato livre | Formato `v: 3` (horas em minutos). Outro formato é descartado | QC-DEC-027 |
+| Textos | Com travessão | Sem travessão, também em comentários de código | QC-DEC-035 |
 
-## 2. Ordem de implementação
+## 1. Escopo
 
-1. modelo de dados;
-2. função de cálculo;
-3. validações;
-4. wizard mobile;
-5. resultado;
-6. voltar/editar;
-7. persistência local;
-8. desktop responsivo;
-9. fluxo de valor/hora;
-10. proposta;
-11. dark/light;
-12. analytics;
-13. ads pós-tarefa;
-14. testes e acessibilidade.
+Calculadora web de orçamento para freelancers. Sem login e sem backend.
 
-## 3. Contrato de cálculo
+- 5 etapas: **Valor por hora**, **Execução**, **Prazo e revisões**, **Ajustes**, **Resultado**.
+- Mini-fluxo opcional **Estimar** (3 telas).
+- Proposta depois do CTA **"Criar proposta"** (QC-DEC-002).
+- Tema escuro (padrão) e claro.
+- A rota `/` abre a calculadora direto (QC-DEC-004).
+- Freemium Fase 0 e Fase 1 implementadas (QC-DEC-036). Fase 2 não iniciada.
 
-```text
-HORAS_REVISAO = QUANTIDADE_RODADAS × HORAS_POR_RODADA
-TOTAL_HORAS = EXECUCAO + HORAS_REVISAO + IMPACTO_PRAZO_HORAS + RESERVA_HORAS
-MAO_DE_OBRA = TOTAL_HORAS × VALOR_HORA
-CUSTOS_DIRETOS_TOTAL = soma(valor de cada item de custo)
-REFERENCIA_CALCULADA = MAO_DE_OBRA + CUSTOS_DIRETOS_TOTAL
+## 2. Arquitetura de arquivos
+
+Vanilla HTML, CSS e JS (módulos ES). Sem build, sem framework, sem dependência de npm.
+
+| Arquivo | Papel |
+| --- | --- |
+| `index.html` | Página do app. Aplica o tema salvo antes de pintar. Carrega `styles.css?v=N` e `app.js?v=N`. Registra `sw.js` |
+| `calc.js` | Domínio puro: `LIMITS`, `MSG`, `roundDiv`, `parseHundredths`, `parseDuration`, `calculate`, `hourlyReference`, `commercialValue`, `stepErrors`, `proposal`, formatação (`money`, `moneyShort`, `hours`, `plainDuration`, `plain`, `formatDate`, `period`, `periodDays`, `validDate`, `dateWarning`). Sem DOM |
+| `app.js` | Interface: estado, telas (`V`), modais (`MODALS`, `MODAL_ACTS`), teclado (`keypad`, `pressKey`, `bump`), eventos, pesquisa, formulário Brevo |
+| `analytics.js` | GA4 e aviso de consentimento: `consent(privacyHref)` e `track(name, params)` |
+| `styles.css` | Tokens dos 2 temas, layout mobile e desktop, teclado, cupom, modais, impressão |
+| `sw.js` | Service worker. Cache `fiz-vN` |
+| `manifest.webmanifest` | PWA: nome, cores `#111315`, ícones 192, 512 e maskable |
+| `privacidade/index.html` | Página de privacidade (LGPD). Botão para refazer a escolha de consentimento |
+| `guias/como-fazer-orcamento-freelancer/index.html` | Guia de SEO. Chama `consent()` |
+| `assets/` | Ícones e logos (claro e escuro), ícones PWA, `apple-touch-icon.png`, `og-image.png` |
+| `test.mjs` | Testes do domínio (`node:assert`) |
+| `package.json` | Só `{"type":"module"}` para o Node rodar `test.mjs` |
+| `sitemap.xml`, `google6c04e8926dd49506.html` | SEO e verificação do Search Console |
+| `docs/` | Documentação. Versões antigas em `docs/historico/versoes-anteriores/` |
+
+Regras:
+
+- Regra de negócio fica em `calc.js`. `app.js` não calcula.
+- Não adicione dependência, bundler ou framework.
+- Comentários de código sem travessão (QC-DEC-035).
+
+## 3. Como rodar
+
+1. Abra o terminal na pasta do repositório.
+2. Rode o servidor local:
+
+```bash
+python3 -m http.server 8000
 ```
 
-- Impacto do prazo e reserva são **horas reais informadas**, ambas iniciam em zero.
-- A data de entrega e a definição qualitativa do escopo **não** entram na fórmula.
-- Revisiões entram **uma vez** e nunca devem estar incluídas em execução.
-- Valor comercial é decisão separada e **não** recalcula a referência.
-- Não usar percentuais de urgência, reserva, experiência ou arredondamento silencioso.
-- Aritmética inteira: dinheiro em centavos, horas em centésimos; arredondamento único no final, metade para cima (QC-DEC-007). Referência executável: `calc-reference.mjs`.
+3. Abra `http://localhost:8000/`.
+4. Rode os testes:
 
-## 4. Contrato de dados
+```bash
+node test.mjs
+```
 
-Usar como fonte o `CalculatorState` e o `EstimateInput` documentados no `architecture.md` v1.1. Contrato resumido:
+O teste imprime `ok` quando todos os casos passam.
 
-```ts
-type CalculatorState = {
-  hourlyRate: number | null                   // centavos, obrigatório > 0
-  executionHours: number | null               // centésimos de hora, obrigatório > 0
-  scopeDefinition: 'well_defined' | 'partial' | 'open' | null  // opcional
-  deliveryDate: string | null                 // YYYY-MM-DD local, opcional
-  revisionCount: number                      // inicia em 0
-  revisionHoursPerRound: number              // centésimos, inicia em 0
-  deadlineImpactHours: number                // centésimos, inicia em 0
-  reserveHours: number                       // centésimos, inicia em 0
-  directCosts: { id: string; description: string; amount: number | null }[]
-  commercialValue: number | null             // centavos
-  commercialValueEdited: boolean             // QC-DEC-008
+Atenção:
+
+- O service worker guarda arquivos em cache. Ao testar uma mudança, use aba anônima ou "Update on reload" no DevTools.
+- Abrir `index.html` direto do disco (`file://`) não funciona: o app usa módulos ES.
+
+## 4. Branches e publicação
+
+| Item | Regra |
+| --- | --- |
+| Repositório | `github.com/Clleytonbraga/quanto-cobro-calculadora` |
+| Branch de trabalho | `edicao`. Toda edição acontece aqui |
+| Branch publicada | `main`. GitHub Pages publica a partir da `main` |
+| Site | `https://clleytonbraga.github.io/quanto-cobro-calculadora/` |
+| Publicar | Levar a `edicao` para a `main` só com aprovação explícita do responsável. Aprovado em 09/11/2026 (Decision Log v2.3) |
+
+## 5. Regra do cache: `fiz-vN` = `?v=N`
+
+O nome do cache no `sw.js` é igual ao `?v=` dos arquivos CSS e JS nas 3 páginas (QC-DEC-038).
+
+Ao mudar `styles.css`, `app.js`, `calc.js` ou `analytics.js`:
+
+1. Escolha o próximo número N.
+2. Em `sw.js`, mude `CACHE = 'fiz-vN'`.
+3. Em `sw.js`, mude os itens `?v=N` da lista `FILES`.
+4. Em `index.html`, mude `styles.css?v=N` e `app.js?v=N`.
+5. Em `privacidade/index.html`, mude `?v=N`.
+6. Em `guias/como-fazer-orcamento-freelancer/index.html`, mude `?v=N` (CSS e `analytics.js`).
+7. Confira com `grep -rn "?v=" --include=*.html .` e `grep -n "fiz-v" sw.js`.
+
+Comportamento do `sw.js`:
+
+- Instala e guarda as 3 páginas, CSS, JS, manifest e ícones.
+- Apaga caches com outro nome ao ativar.
+- Navegação: rede primeiro. Sem rede, usa a página guardada ou o app.
+- Outros arquivos: cache primeiro.
+- Pedidos para outro domínio (GA4, Brevo) **não** passam pelo cache: só rede.
+
+## 6. Contrato de cálculo
+
+```text
+HORAS_REVISAO = RODADAS × HORAS_POR_RODADA
+TOTAL_HORAS   = EXECUCAO + HORAS_REVISAO + HORAS_A_MAIS_PELO_PRAZO + HORAS_PARA_IMPREVISTOS
+MAO_DE_OBRA   = TOTAL_HORAS × VALOR_POR_HORA
+CUSTOS        = soma do valor de cada custo do projeto
+VALOR_CALCULADO = MAO_DE_OBRA + CUSTOS
+```
+
+| Grandeza | Unidade inteira | Decisão |
+| --- | --- | --- |
+| Dinheiro | Centavos | QC-DEC-007 |
+| Horas do orçamento | Minutos | QC-DEC-027 |
+| Horas por semana e meta do Estimar | Centésimos | QC-DEC-027 |
+
+Regras:
+
+- Arredonde **uma vez**, no fim, metade para cima (`roundDiv`). `calculate()` calcula `round((horas × valor + custos × 60) ÷ 60)`.
+- A data, o período e o escopo **não** entram na fórmula.
+- Revisões entram uma vez.
+- O valor da proposta não muda o valor calculado.
+- Sem percentual de urgência, reserva ou margem.
+- Estimar: `valor_hora = meta ÷ (horas_semana × 4,33)`, arredondado 1 vez para centavos (`hourlyReference`).
+- Entrada de horas (`parseDuration`): aceita "1h30", "1 h 30 min", "12" e "1,5". Sem "h", o número vale horas. Minutos de 0 a 59.
+- Tetos técnicos: `LIMITS` em `calc.js`. Mensagens: `MSG` em `calc.js` (`business-rules.md` §13).
+
+Exemplo do canvas (conferido com `calc.js`): R$ 103/h · 12 h de execução · 2 rodadas × 1 h 30 min · 2 h de imprevistos · 2 custos (R$ 180) = 17 h, mão de obra R$ 1.751,00, **valor calculado R$ 1.931,00**.
+
+## 7. Contrato de estado (`app.js`)
+
+```js
+st = {
+  view: 'step1',        // step1..step5, a1..a3, proposalForm, preview
+  maxStep: 0,           // maior etapa alcançada (trilha do desktop)
+  fromResult: false,    // veio do resultado para editar: CTA vira "Ver resultado"
+  shown: {},            // erros já mostrados por campo
+  s: {                  // orçamento
+    hourlyRate,               // centavos, obrigatório > 0
+    executionHours,           // minutos, obrigatório > 0
+    scopeDefinition,          // 'well_defined' | 'partial' | 'open' | null
+    dateMode,                 // 'single' | 'range'
+    deliveryDate, deliveryEnd, // 'YYYY-MM-DD' ou ''
+    revisionCount,            // inteiro, começa em 0
+    revisionHoursPerRound,    // minutos, começa em 0
+    deadlineImpactHours,      // minutos, começa em 0
+    reserveHours,             // minutos, começa em 0
+    directCosts: [{ description, amount }], // amount em centavos, até 50 itens
+    commercialValue, commercialEdited, refAtEdit, // valor da proposta (QC-DEC-008)
+    errors, raw,              // erros e texto digitado por campo
+  },
+  p: { projectName, scopeSummary, notes, errors }, // proposta
+  mini: { goal, week, rate, raw, errors },        // Estimar
 }
 ```
 
-`totalRevisionHours`, `totalHours`, `directCostsTotal`, `laborValue` e `calculatedValue` são **valores derivados**. Não persisti-los como entradas editáveis paralelas. Não usar os campos antigos `revisionHours` ou `urgencyHours`. Proposta utiliza `ProposalDraft` e `ProposalViewModel` separados, com origem de dados documentada na Architecture.
+- Valores derivados (`revisionHours`, `totalHours`, `costs`, `laborCents`, `referenceCents`) vêm de `calculate()`. Não os guarde como entrada.
+- O rascunho vai para `sessionStorage` como `{ v: 3, st }`. Outro `v` é descartado.
 
-## 5. Fluxo de telas
+## 8. Telas e modais
 
-A rota `/` inicia a **calculadora**, não landing page. A proposta é uma ramificação posterior, e o mini-fluxo de valor/hora é opcional.
+| View | Tela | Próxima |
+| --- | --- | --- |
+| `step1` | Valor por hora | `step2` (grava o valor por hora) |
+| `step2` | Execução + escopo | `step3` |
+| `step3` | Prazo e revisões | `step4` |
+| `step4` | Ajustes | `step5` |
+| `step5` | Resultado (cupom V1) | `proposalForm` |
+| `a1`, `a2`, `a3` | Estimar: meta, horas por semana, resultado | `step1` com o valor sugerido |
+| `proposalForm` | Prepare sua proposta | `preview` |
+| `preview` | Confira sua proposta (Compartilhar V2) | |
 
-### 1 — Valor/hora
-- entrada de moeda, recuperando `hourlyRate` salvo de modo editável;
-- link **Descobrir referência** para mini-fluxo `meta mensal / (horas faturáveis por semana × 4,33)`;
-- permitir ajustar o valor sugerido e voltar à etapa 1, sem confundir meta de faturamento com custo/hora completo.
+Modais (`MODALS` em `app.js`): `calendar`, `hours`, `cost`, `costs`, `field`, `commercial`, `reset`, `survey`, `history`, `historyDone`. Todos usam o `<dialog id="modal">` nativo. Detalhes visuais: `design-system.md` §13.
 
-### 2 — Execução e escopo
-- horas de execução sem revisões;
-- nível escolhido pelo usuário: Bem definido, Parcialmente definido ou Aberto (não calcular score).
+Navegação:
 
-### 3 — Prazo e revisões
-- data de entrega (não altera valor sozinha);
-- quantidade de rodadas e horas **por rodada**; apresentar total derivado;
-- impacto do prazo: se houver horas adicionais reais, informá-las, sem percentual automático.
+- Voltar: botão do cabeçalho ou `Esc`. `step1` e `a1` não têm Voltar.
+- Com o resultado já alcançado, a trilha do desktop e as edições voltam ao resultado.
+- Edição no resultado abre modal. Não leva a pessoa de volta para a etapa.
+- "Novo orçamento" pede confirmação. Recomeçar apaga o rascunho e mantém valor por hora e tema (QC-DEC-010).
 
-### 4 — Reserva e custos
-- inicial: **Nada extra**;
-- horas opcionais de reserva;
-- `directCosts[]`: adicionar/editar/remover múltiplos itens de **descrição + valor**.
+## 9. Teclado (QC-DEC-017, QC-DEC-028)
 
-### 5 — Resultado
-- referência calculada com maior destaque;
-- breakdown consistente com a fórmula;
-- valor comercial independente e editável;
-- nível de definição escolhido + explicação;
-- voltar/editar, criar proposta, reiniciar.
+- `keypad(ok, hrs)` gera a grade. Com `hrs`, a vírgula vira a tecla `h`.
+- `pressKey()` edita o campo do visor (`#dv`) ou do modal (`#mdv`):
+  - `del` apaga o último caractere; `clear` limpa;
+  - `,` e `h` entram uma vez só;
+  - depois do `h`, no máximo 2 dígitos.
+- `bump()`: ↑ e ↓ no teclado físico somam ou subtraem 1 (nas horas, 60 minutos).
+- `Enter` confirma. Em toque (`pointer: coarse`), o campo usa `inputmode="none"`.
+- O campo continua um `<input>` real: aceita teclado físico e tecnologias assistivas.
 
-### Depois de “Criar proposta”
-Coletar **nome do projeto**, **resumo do escopo** e **observações opcionais**, somente depois do CTA. A prévia usa textos digitados e dados do orçamento (prazo, revisões, custos, **valor comercial**), nunca exemplos fictícios.
+## 10. Persistência (PRD §15)
 
-## 6. Comportamento de navegação
+| Dado | Onde | Chave |
+| --- | --- | --- |
+| Valor por hora | `localStorage` | `quantoCobro.hourlyRate` |
+| Tema | `localStorage` | `quantoCobro.theme` |
+| Escolha de privacidade (GA4) | `localStorage` | `quantoCobro.consent` (`granted` ou `denied`) |
+| Estado da pesquisa de 5 estrelas | `localStorage` | `quantoCobro.survey` (`done`, `last`, `skipped`, `since`) |
+| Orçamento em andamento | `sessionStorage` | `quantoCobro.currentEstimate.v1` (formato `v: 3`) |
 
-- Manter estado ao voltar, editar ou avançar na mesma sessão.
-- Não transformar uma entrada inválida em `NaN` no visor; bloqueios conforme `business-rules.md` §2 e §7.
-- Permitir editar qualquer etapa pelo Resultado e recomputar ao confirmar alteração.
-- Ação **Criar proposta** não substitui o resultado nem exige os dados da proposta antecipadamente.
-- Reiniciar pede confirmação em linha e apaga cálculo + textos da proposta da sessão, mantendo valor/hora e tema (QC-DEC-010).
-- Se o mini-fluxo de valor/hora for cancelado, voltar à calculadora sem valores inventados.
+Regras:
 
-## 7. Formatação pt-BR
+- Não grave em definitivo orçamento, histórico ou dados do cliente.
+- O valor por hora é gravado ao confirmar a etapa 1 e ao aplicar no modal. "Apagar valor salvo" remove só essa chave (QC-DEC-009).
+- "salvo neste dispositivo" aparece só depois da gravação real.
+- Todo acesso a storage passa por `try/catch`. Sem storage, o app funciona na aba, em memória.
+- O tema é aplicado por um script no `<head>`, antes do CSS, para não piscar.
 
-### Moeda
-Usar `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`.
+## 11. GA4 (QC-DEC-036)
 
-### Decimal
-Aceitar entrada com vírgula ou ponto, até 2 casas; mais casas é erro de campo (sem arredondar).
+| Item | Valor |
+| --- | --- |
+| ID | `G-F2HS60LDV0` |
+| Conta | Só a conta pessoal do responsável |
+| Carga | Só depois de "Aceitar" no aviso de privacidade |
+| Sem aceite | `track()` não envia nada |
+| Dados | Nunca valores, horas ou textos do orçamento |
 
-### Horas
-Armazenar como inteiro em centésimos de hora; exibir até 2 casas sem zeros à direita.
+Eventos (PRD §21):
 
-Exemplos:
-- 1,5 h;
-- 2 h;
-- 0,5 h.
+| Evento | Quando | Onde no código |
+| --- | --- | --- |
+| `step_viewed` | A pessoa vê uma tela (parâmetro `step`) | `go()` |
+| `proposal_started` | Toca em "Criar proposta" | `TRACK.createProposal` |
+| `proposal_whatsapp` | Toca em "Enviar pelo WhatsApp" | `data-track` |
+| `proposal_shared` | Toca em "Mais" | `TRACK.share` |
+| `proposal_copied` | Copia a proposta | `TRACK.copy` |
+| `proposal_printed` | Salva o PDF | `TRACK.print`, `pdfReset` |
+| `new_budget_started` | Confirma "Novo orçamento" | `resetYes` |
+| `rating_submitted` | Envia a nota (parâmetro `rating`) | `surveySend` |
+| `rating_skipped` | "Agora não" na pesquisa | `surveySkip` |
+| `history_interest_clicked` | Toca em "Histórico" | `TRACK.historyModal` |
+| `history_signup_submitted` | Envia o e-mail do Histórico | `historySend` |
 
-## 8. Persistência do MVP (QC-DEC-003)
+Para adicionar um evento: registre no PRD §21 antes. Não envie valor do orçamento.
 
-```text
-localStorage:
-  quantoCobro.hourlyRate
-  quantoCobro.theme
+## 12. Brevo (QC-DEC-036, Fase 1)
 
-sessionStorage:
-  quantoCobro.currentEstimate.v1
+| Item | Valor |
+| --- | --- |
+| Lista | #3 "Fiz a Conta · aviso de lançamento" |
+| Conta | Só a conta pessoal do responsável |
+| Formulário | URL `BREVO_FORM` em `app.js` (HTML simples do Brevo) |
+| Envio | `fetch` `POST`, `mode: 'no-cors'`, campos `EMAIL`, `email_address_check`, `locale`, `html_type` |
+| Resposta | Opaca (o Brevo não libera CORS). O app só detecta falha de rede |
+| Validação | E-mail com formato válido e caixa de aceite marcada |
+
+O histórico real não existe. O modal é um teste de interesse.
+
+**Pendente:** dupla confirmação no Brevo (exige telefone verificado).
+
+## 13. PWA e APK de teste (QC-DEC-038)
+
+### PWA
+
+- `manifest.webmanifest`: `display: standalone`, `start_url` e `scope` = `./`, cor `#111315`.
+- Ícones: `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`. iOS: `apple-touch-icon.png` e metas `apple-mobile-web-app-*`.
+- Offline: `sw.js` (§5).
+
+### APK Android de teste
+
+| Item | Valor |
+| --- | --- |
+| Projeto | `~/Developer/fiz-a-conta-android` (local, fora do repositório) |
+| Pacote | `com.cleyton.fizaconta`, `minSdk 33`, `targetSdk 37`, versão 0.1 |
+| Tipo | WebView com `WebViewAssetLoader` (`https://appassets.androidplatform.net/assets/index.html`) |
+| Conteúdo | A tarefa `syncWeb` copia o site de `~/Developer/quanto-cobro` para `app/src/main/assets` a cada build |
+| Ponte nativa | Substitui `navigator.share` e `window.print` e desliga o service worker dentro do APK. Botão Voltar do Android fecha o modal ou volta uma tela |
+| Saída | `app/build/outputs/apk/debug/app-debug.apk` |
+| Loja | Não publicado |
+
+Para gerar o APK:
+
+1. Confira que a branch `edicao` do site está como você quer.
+2. Use o JDK do Android Studio:
+
+```bash
+cd ~/Developer/fiz-a-conta-android
+JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" ./gradlew assembleDebug
 ```
 
-- `hourlyRate` e `theme` podem sobreviver a novas sessões no mesmo perfil de navegador.
-- O orçamento em andamento é rascunho de sessão, restaurável ao atualizar a mesma aba quando o armazenamento permitir; **não** é histórico.
-- Dados de proposta não são salvos permanentemente; ficam no rascunho da sessão até reiniciar (QC-DEC-010).
-- `hourlyRate` é gravado automaticamente ao confirmar a etapa 1; “Apagar valor salvo” remove só a chave local (QC-DEC-009).
-- Não implementar `lastEstimate` em `localStorage`.
-- Se o armazenamento estiver indisponível, usar estado em memória e não alegar que dados foram salvos.
-- Versões incompatíveis do rascunho não podem travar a calculadora.
+3. Instale `app-debug.apk` no aparelho (por exemplo, `adb install -r`).
 
-## 9. Tema
+O APK usa o código do disco no momento do build. Gere de novo depois de cada mudança no site.
 
-A fonte de verdade visual é a coleção Figma `Quanto Cobro / Theme`. Não criar paletas paralelas no código.
+## 14. Tema e tokens
 
-### Dark — principal
-- `bg/canvas`: `#111315`;
-- `bg/surface`: `#191C1F`;
-- `bg/raised`: `#23272B`;
-- `text/primary`: `#F5F5F2`;
-- `text/secondary`: `#A7ADB3`;
-- `border/default`: `#343A40`;
-- `action/primary`: `#FF9F0A`.
+- Fonte única dos valores: `styles.css` (`:root` = claro, `[data-theme="dark"]` = escuro).
+- Lista completa e uso: `design-system.md` §3.
+- Não crie paleta paralela. Use as variáveis CSS (`--bg-canvas`, `--action`, `--accent-text` e outras).
 
-### Light
-- `bg/canvas`: `#F7F7F5`;
-- `bg/surface`: `#FFFFFF`;
-- `bg/raised`: `#F0F1F2`;
-- `text/primary`: `#181A1D`;
-- `text/secondary`: `#626970`;
-- `border/default`: `#D7DADD`;
-- `action/primary`: `#FF9500`.
+## 15. Pontos de quebra
 
-Dark e light usam os mesmos componentes e a mesma hierarquia. Só os valores dos tokens mudam.
+| Faixa | Layout |
+| --- | --- |
+| < 1024 px | Mobile, coluna única, até 560 px, uma tela por dobra |
+| altura ≤ 720 px e largura < 1024 px | Mobile compacto |
+| ≥ 1024 px | Desktop, Variante D (220 + 452 + 288 px, até 1040 px) |
 
-## 10. Design tokens
+## 16. Publicidade (QC-DEC-034)
 
-Mapear os tokens do Figma diretamente para CSS variables ou para a camada de tema escolhida. Exemplo:
+Não implemente anúncio. Não existe rede de anúncios.
 
-```css
-:root {
-  --bg-canvas: #F7F7F5;
-  --bg-surface: #FFFFFF;
-  --bg-raised: #F0F1F2;
-  --text-primary: #181A1D;
-  --text-secondary: #626970;
-  --border-default: #D7DADD;
-  --action-primary: #FF9500;
-}
+Se a publicidade voltar, siga o PRD §17: só no resultado e na prévia, nunca na entrada de dados, espaço reservado, e o app funciona com bloqueador de anúncio.
 
-[data-theme='dark'] {
-  --bg-canvas: #111315;
-  --bg-surface: #191C1F;
-  --bg-raised: #23272B;
-  --text-primary: #F5F5F2;
-  --text-secondary: #A7ADB3;
-  --border-default: #343A40;
-  --action-primary: #FF9F0A;
-}
-```
+## 17. Acessibilidade
 
-Estados adicionais (`focus`, `error`, `success`, `warning`) estão definidos no `design-system.md` e na coleção de variables do Figma.
+- Navegação completa por teclado. `Esc` volta. `Enter` confirma.
+- Foco visível (3 px, cor `focus`).
+- Rótulo programático em todo campo. Teclas com `aria-label`.
+- Erro com `role="alert"` e `aria-invalid` no campo.
+- Status da proposta com `role="status"`.
+- Alvo de toque ≥ 44 px.
+- `prefers-reduced-motion` desliga as animações.
+- Não depender só de cor.
 
-## 11. Breakpoints
+## 18. Critérios de aceite
 
-Não há necessidade de muitos breakpoints.
+### Cálculo
 
-Sugestão:
+- Sem extras: valor calculado = valor por hora × execução.
+- 2 rodadas de 1 h 30 min = 3 h, somadas uma vez.
+- Data, período e escopo não mudam o valor calculado.
+- Custos: vários itens, somados em dinheiro, fora das horas.
+- Exemplo do canvas dá R$ 1.931,00 (§6).
 
-- mobile: < 768px;
-- desktop: ≥ 768px.
+### Entrada
 
-A calculadora continua estreita mesmo em telas grandes.
+- "1h30", "1 h 30 min", "12" e "1,5" são aceitos. A tela mostra "1 h 30 min" (QC-DEC-027).
+- Depois do h, só 0 a 59 minutos (QC-DEC-028).
+- Sem valor por hora > 0 ou execução > 0, o ✓ mostra erro e não avança.
+- Rodadas, horas por rodada, prazo e imprevistos começam em 0.
 
-## 12. Componentes e módulos
+### Telas
 
-```text
-AppShell / ThemeToggle / ProgressIndicator
-CalculatorDisplay / CalculatorKey / CalculatorKeypad
-CalculatorQuickAdjust / CalculatorWizard
-StepHourlyRate / HourlyRateReferenceFlow
-StepExecutionScope / StepDeadlineRevisions / StepExtras
-DateInput / QuantityControl / HoursInput / MoneyInput
-DirectCostList / CostRow / AddDirectCost
-ResultView / CalculationBreakdown / EstimateDefinitionBadge
-CommercialValueEditor
-ProposalForm / ProposalPreview / ProposalPrintView
-AdSlot / InlineError
-```
+- Teclado sem +1/−1. Tecla quadrada, raio 22 px. Só o ✓ é laranja (QC-DEC-017, QC-DEC-033).
+- Etapa 3: data e horas por rodada abrem modais. Ícone à esquerda, valor à direita (QC-DEC-030).
+- Período mostra "3 nov a 14 nov · 12 dias corridos" (QC-DEC-029).
+- Escopo Parcial ou Aberto mostra a dica na etapa 4 (QC-DEC-031).
+- Resultado mostra o cupom V1 sem a linha "Valor calculado" (QC-DEC-032).
+- Valor da proposta acompanha o valor calculado até ser editado. Depois, aviso + "Usar valor calculado" (QC-DEC-008).
+- Estimar: 3 telas com "Já sei / Estimar", balão "Por que 4,33?", sem Voltar na meta, sem "Cancelar" na meta e nas horas (QC-DEC-037).
+- Prévia: "Enviar pelo WhatsApp" + Histórico, Copiar, PDF, Mais (QC-DEC-037).
+- Proposta mostra "Feito com Fiz a Conta" (QC-DEC-036).
+- Cupom ao vivo do desktop mostra "…" para valor não alcançado (QC-DEC-035).
+- Nenhum texto com travessão (QC-DEC-035).
+- Nenhum anúncio (QC-DEC-034).
 
-O componente de revisões mostra `revisionCount` e `revisionHoursPerRound`, com total calculado apenas para leitura. Custos diretos formam uma lista; descrição e valor são entradas distintas. `ProposalForm` não integra o wizard inicial.
+### Proposta
 
-## 13. Resultado e composição
+- Campos da proposta só depois de "Criar proposta".
+- Nome e "O que será entregue" são obrigatórios. Custo sem descrição bloqueia (QC-DEC-011).
+- A prévia usa o valor da proposta, não o valor calculado por engano.
 
-Ordem aprovada do Resultado: **referência calculada dominante → composição → valor comercial editável → escopo informado → CTAs**. Não inverter para mostrar valor comercial como o maior número.
+### Medição e e-mail
 
-Exemplo puramente hipotético, não hardcodar:
+- Sem "Aceitar", nenhum pedido vai para o Google.
+- Nenhum evento leva valor, hora ou texto do orçamento.
+- Pesquisa: no máximo 1 vez a cada 30 dias. "Agora não" volta depois de 3 propostas. Quem respondeu não vê mais.
+- Histórico: e-mail inválido ou caixa desmarcada mostra erro e não envia.
 
-```text
-Referência calculada: R$ 1.550,00
-Execução:            10 h
-Revisões:              2 rodadas x 2 h = 4 h
-Impacto do prazo:       1 h
-Reserva:                0 h
-Mão de obra:           15 h x R$ 100 = R$ 1.500,00
-Custos diretos:         R$ 30 + R$ 20 = R$ 50,00
-Valor comercial:        editável (independente da referência)
-Definição do escopo:  opção informada pela pessoa
-```
+### Persistência e app
 
-Uma edição em qualquer etapa refaz o mesmo cálculo para visor, detalhamento e proposta. Valor comercial começa igual à referência e a acompanha até ser editado; depois fica fixo, com aviso e ação “Usar a referência” quando a referência mudar (QC-DEC-008).
+- Nova sessão recupera valor por hora e tema.
+- Atualizar a aba restaura o rascunho. Rascunho de formato antigo é descartado.
+- Storage bloqueado não quebra o app.
+- O app abre offline depois da primeira visita.
+- O site pode ser instalado na tela inicial.
+- `fiz-vN` igual ao `?v=N` nas 3 páginas.
 
-## 14. Nível de definição
+## 19. Testes antes de publicar
 
-Não derivar automaticamente de condições, risco ou prazo. O sistema exibe **exatamente a opção escolhida pelo usuário** (Bem definido, Parcialmente definido ou Aberto) e uma explicação fixa da categoria. Não atribuir “confiança” numérica, pontos ou coeficientes.
+1. `node test.mjs` imprime `ok`.
+2. Fluxo completo no mobile (360 px) e no desktop (1440 px), nos 2 temas.
+3. Tela baixa (iPhone SE): cada etapa cabe em uma dobra.
+4. Estimar: ida, "Já sei", balão e volta para a etapa 1.
+5. Modais: data única, período, horas por rodada, custo, custos, campo, valor da proposta, novo orçamento.
+6. Prévia: WhatsApp, Copiar, PDF, Mais, Histórico.
+7. Recusar e aceitar o aviso de privacidade. Conferir no DevTools que o GA4 só carrega depois do aceite.
+8. Offline: desligar a rede e recarregar.
+9. Teclado físico: números, h, ↑/↓, Enter, Esc, Backspace.
+10. Busca por travessão nos textos: `grep -rn "$(printf '\342\200\224')" index.html app.js calc.js analytics.js styles.css privacidade guias` (busca o travessão, U+2014) não retorna nada.
 
-## 15. Proposta (QC-DEC-002)
+## 20. Bugs bloqueadores
 
-**Gatilho:** o usuário conclui o resultado e clica em **Criar proposta**. Somente agora solicitar `projectName`, `scopeSummary` e `notes` (opcional).
+Não publique se existir:
 
-**Origem da prévia:**
-- nome/escopo/observações vindos do `ProposalDraft` digitado;
-- data `deliveryDate`, revisões `revisionCount` e custos `directCosts[]` do orçamento;
-- **valor comercial escolhido**, não `calculatedValue` por engano.
-
-**Ações:** copiar texto e imprimir / Salvar como PDF via navegador. Não expor cálculo interno ao cliente por padrão.
-
-Campo não preenchido não recebe nome/escopo fictício. Nome e resumo obrigatórios para copiar/imprimir; observações opcionais; edição após a prévia permitida (QC-DEC-013); custo sem descrição bloqueia (QC-DEC-011). A proposta não precisa de PDF server-side.
-
-## 16. Ads
-
-### Implementar apenas depois da funcionalidade principal estar estável.
-
-Primeiro slot:
-
-```text
-Resultado
-→ ações principais
-→ explicação curta
-→ espaçamento
-→ ad slot
-```
-
-Nunca:
-
-```text
-campo
-→ ad
-→ botão Próximo
-```
-
-### Requisitos
-- slot com tamanho reservado;
-- falha do anúncio não muda o layout essencial;
-- calculadora funciona com ad blocker;
-- nenhum CTA depende de carregar anúncio.
-
-## 17. Analytics
-
-Instrumentar eventos sem acoplar regra de negócio:
-
-```text
-calculator_started
-calculator_step_viewed
-calculator_step_completed
-calculator_back_clicked
-calculator_completed
-hourly_rate_flow_started
-hourly_rate_saved_local
-commercial_value_edited
-proposal_opened
-proposal_copied
-proposal_printed
-ad_slot_viewable
-```
-
-Não enviar valores financeiros ou textos da proposta a analytics e provedores de ads por padrão. Não medir eventos dependentes de carregamento de publicidade para liberar a calculadora.
-
-## 18. Acessibilidade
-
-Checklist obrigatório:
-
-- navegação completa por teclado;
-- foco visível;
-- labels programáticas;
-- mensagens de erro associadas ao campo;
-- contraste AA;
-- target de toque ≥ 44px;
-- `aria-live` para mudança de resultado quando necessário;
-- ordem de leitura lógica;
-- não depender de cor para estados.
-
-## 19. Critérios de aceite por fluxo
-
-- **Sem extras:** referência = `hourlyRate × executionHours`; sem valores inventados.
-- **Revisões:** duas rodadas de 2h produzem **4h**; somadas apenas uma vez.
-- **Data e escopo:** alterar data ou definição não muda a referência; nível informado aparece no Resultado.
-- **Impacto do prazo:** somente horas adicionais informadas modificam mão de obra.
-- **Reserva:** começa em zero e somente entra se preenchida.
-- **Custos diretos:** vários itens com descrição/valor, adicionáveis, editáveis e removíveis; soma monetária fora de horas.
-- **Valor comercial:** editável sem alterar `calculatedValue`.
-- **Proposta:** coleta textos somente após o CTA e apresenta revisões, prazo, custos e **valor comercial** vindos da mesma origem.
-- **Persistência:** nova sessão recupera tema/valor-hora; rascunho não constitui histórico permanente.
-- **Navegação:** voltar/editar e atualizar a aba (onde permitido) não duplica entradas.
-- **Publicidade:** nunca entre resultado e CTA; falha de ad não interrompe tarefa.
-- **Obrigatórios:** sem valor/hora > 0 ou execução > 0, Próximo mostra erro no campo e não avança; demais campos nunca bloqueiam quando vazios.
-- **Padrões:** revisões, impacto, reserva começam em 0; nada pré-preenchido com exemplo.
-- **Valor comercial:** acompanha a referência até ser editado; depois fica fixo com aviso + “Usar a referência”.
-- **Reiniciar:** confirmação em linha; mantém valor/hora e tema.
-- **Data no passado:** aviso não bloqueante.
-
-## 20. Testes mínimos antes de release
-
-1. Unitário: cálculo sem extras e com todos os opcionais.
-2. Unitário: `2 × 2h = 4h` e `directCosts[]` com ao menos dois itens; sem dupla contagem.
-3. Unitário: mudar `deliveryDate`, `scopeDefinition` ou valor comercial **não** muda `calculatedValue`.
-4. Valores não inteiros, moeda e formatação pt-BR; casos C1–C6 de `business-rules.md` §14 (arredondamento único, metade para cima).
-5. Entradas inválidas, `NaN`, divisão por zero no fluxo de referência.
-6. Navegação, editar, voltar, reiniciar e retorno do mini-fluxo.
-7. `localStorage` para `hourlyRate` e `theme`; `sessionStorage` para rascunho; falha de storage.
-8. Proposta com dados digitados somente após o CTA; copiar e imprimir.
-9. Dark/light, mobile pequeno, desktop largo, teclado e leitor de tela.
-10. Ad indisponível, primeiro slot abaixo de resultado/CTAs e sem sobreposição.
-
-**Fixture contratual hipotética:** R$ 100/h × (10h execução + 2 × 2h revisão + 1h impacto + 0h reserva) + R$ 30 + R$ 20 = **R$ 1.550,00**. O teste da fórmula não substitui testes do aplicativo, que ainda não foi implementado nesta rodada.
-
-## 21. Bugs bloqueadores
-
-Não liberar se existir:
-
-- diferença entre breakdown e total;
-- duplicidade de horas;
+- diferença entre o cupom e o valor calculado;
+- hora contada 2 vezes;
 - perda de estado ao voltar;
-- anúncio sobrepondo CTA;
-- resultado sem rastreabilidade;
+- valor da proposta mudando o valor calculado;
 - campo obrigatório sem erro compreensível;
-- valor comercial alterando valor calculado;
-- incompatibilidade entre mobile e desktop na lógica.
+- GA4 carregando sem aceite;
+- evento com valor do orçamento;
+- cache `fiz-vN` diferente do `?v=N`;
+- lógica diferente entre mobile e desktop.
 
-## 22. Dependências visuais: definidas x pendentes
+## 21. Pendências (PRD §22)
 
-**Direção consolidada**, ainda sujeita à verificação dos frames reais:
-- coleção Figma `Quanto Cobro / Theme` para dark/light;
-- stack tipográfica de sistema, visor numérico dominante e alinhado à direita;
-- botões principais de referência 56px/raio 28px;
-- teclas circulares 72×72px quando apropriadas e alvo de toque não menor que 44px;
-- uma ação primária por estado, poucos cards;
-- cinco etapas de cálculo, mini-fluxo opcional e proposta posterior.
+| Pendência | Estado em 09/11/2026 |
+| --- | --- |
+| Domínio exato do Fiz a Conta (SITE em `app.js`, canonical, sitemap, Search Console) | **Pendente.** Hoje: `clleytonbraga.github.io/quanto-cobro-calculadora/` |
+| E-mail de contato LGPD | **Pendente.** `privacidade/index.html` ainda mostra `[E-MAIL DE CONTATO]` |
+| Destino do texto da pesquisa de 5 estrelas | **Pendente.** Recomendado: Google Forms. O canvas tem o campo; o app ainda não |
+| Cupom V1 no resultado desktop do canvas | **Pendente.** O app já usa o V1 |
+| Dupla confirmação no Brevo | **Pendente.** Exige telefone verificado |
+| Registrar o PWA e o APK no Decision Log | **Feito:** QC-DEC-038 |
+| Publicar a `edicao` na `main` | **Aprovado** em 09/11/2026 (Decision Log v2.3) |
+| Implementar o Briefing (`PRD-briefing.md`) | **Pendente.** Aprovado (QC-DEC-022 a QC-DEC-025), não implementado |
+| Destino da rota antiga `/calculadora` | **Pendente.** Depende do inventário de URLs |
+| Ressincronizar o DS do Claude Design com o código atual | **Pendente.** Ver `design-system.md` §20 |
+| Teste com leitor de tela e em aparelhos reais | **Pendente** |
 
-**Representado na faixa Figma v1.4** (mobile e desktop): data de entrega, nível do escopo, quantidade × horas por rodada, “Nada extra” + reserva + custos, resultado completo, formulário pós-CTA, prévia derivada, fluxo de valor/hora. **Pendente:** testes de acessibilidade/responsividade em dispositivos reais.
+## 22. Fontes de verdade
 
-## 23. Contrato da experiência “calculadora iOS”
+| Fonte | Papel |
+| --- | --- |
+| `decision-log.md` v2.3 | Decisões. Vence em conflito |
+| `business-rules.md` v2.0 | Validação, precisão, mensagens |
+| `PRD.md` v2.0 | Produto, persistência (§15), eventos (§21), pendências (§22) |
+| `architecture.md` v2.0 | Arquitetura e contrato de dados |
+| `design-system.md` v2.0 | Tokens, componentes e mapa DS → app → canvas |
+| Código (`edicao`) | Comportamento real |
+| Canvas Claude Design | https://claude.ai/artifact/NxxNQcMVCfY6TFb7d4DL5Y |
+| DS Claude Design | https://claude.ai/artifact/8sDrjN9VbUEgw3vRciSLCz |
 
-### Visor persistente
-- Etapa 1: valor/hora ou estado de entrada ainda vazio;
-- Etapa 2: subtotal da execução quando válido;
-- Etapa 3: subtotal com revisões e impacto do prazo **somente se informados**;
-- Etapa 4: subtotal com reserva e soma de custos, se existentes;
-- Etapa 5: referência final dominante + breakdown, valor comercial e nível escolhido.
-
-Antes da conclusão, exibir rótulo “parcial”/“subtotal”. Não fabricar um preço final enquanto faltarem dados.
-
-### Keypad custom e acessibilidade
-Keypad é apropriado apenas quando o campo dominante é numérico. Manter `input` semântico real para teclado físico, digitação nativa e acessibilidade; `inputmode` apropriado. Teclas circulares são `<button>` com nomes anunciáveis (`apagar`, `confirmar horas`, `adicionar uma hora`). Não forçar keypad em data, escopo, custos textuais e proposta.
-
-### Movimento
-Permitir microtransição sutil de número (referência 120–220ms) se não atrapalhar a entrada nem `prefers-reduced-motion`. Sem atraso para liberar avanço.
-
-### Fonte visual e conferência obrigatória
-Usar a faixa **v1.4** das páginas `01 — FINAL · Mobile` e `02 — FINAL · Desktop`, mais `03 — FINAL · Publicidade` e `04 — FINAL · Valor-hora`. A página antiga de Visual Mobile v1 foi removida; IDs `41:*`, `70:*` e as faixas v1.2/v1.3 são histórico.
-
-Figma FINAL é fonte visual; FigJam, fonte de jornadas/fluxo/sitemap; PRD, Architecture e Decision Log prevalecem para regras, estados e aprovações.
-
-## 24. CSS base recomendada
-
-```css
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
-  font-variant-numeric: tabular-nums;
-  --calc-key-size: 72px;
-  --control-radius: 22px;
-  --cta-height: 56px;
-  --cta-radius: 28px;
-}
-
-.calculator-display {
-  text-align: right;
-}
-
-.calculator-key {
-  width: var(--calc-key-size);
-  height: var(--calc-key-size);
-  border-radius: 50%;
-  touch-action: manipulation;
-}
-```
-
-Em viewports menores, reduzir gap antes de reduzir target. Não descer abaixo de 44px de área de toque.
-
-## 25. Regra de implementação e bloqueios antes de codificar
-
-Não transformar a ferramenta em dashboard, não adicionar campos que não sustentem o orçamento e não produzir multiplicadores invisíveis.
-
-**Business Rules:** concluído (`business-rules.md` v1.0, QC-DEC-005 a 014).
-
-**Antes de codificar UI:** nada bloqueante (v1.4 aprovada, QC-DEC-016). Dependência externa: destino de `/calculadora`, após inventário de URLs.
-
+Regra de trabalho: tela nova vai primeiro como prancheta no canvas para aprovação. Depois vai para o código.

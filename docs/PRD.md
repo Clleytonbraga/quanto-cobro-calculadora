@@ -1,10 +1,12 @@
 # Fiz a Conta · PRD
 
-**Versão documental:** 2.0 · **Atualizado:** 09/11/2026 (v1.3 preservada em `historico/versoes-anteriores/PRD_v1.3.md`)
-**Decisões aprovadas:** QC-DEC-001 a QC-DEC-037 (ver `decision-log.md` v2.2).
-**Código de referência:** branch `edicao`, commit `0e4c5c4` (28/10/2026), cache `fiz-v30`.
-**Regras de validação, precisão e estados:** `business-rules.md` v1.1. Quando houver conflito, vale o Decision Log (ver §23).
-**Recurso Briefing:** contrato separado em `PRD-briefing.md` v1.0.
+**Versão documental:** 2.1 · **Atualizado:** 09/11/2026 (v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
+**Decisões aprovadas:** QC-DEC-001 a QC-DEC-038 (ver `decision-log.md` v2.3).
+**Código de referência:** commit `0e4c5c4` (28/10/2026), cache `fiz-v30`. Publicado na `main` em 09/11/2026.
+**Regras de validação, precisão e estados:** `business-rules.md` v2.0. Quando houver conflito, vale o Decision Log (ver §23).
+**Recurso Briefing:** contrato separado em `PRD-briefing.md` v1.1.
+
+**v2.1:** registra a QC-DEC-038 (app no celular), a publicação na `main` e as versões 2.0 dos documentos técnicos.
 
 Nomes anteriores do produto: "Quanto Cobro?" (até 13/10/2026) e "Faz a Conta" (13/10 a 28/10/2026). O nome atual é **Fiz a Conta** (QC-DEC-026).
 
@@ -23,7 +25,7 @@ Nomes anteriores do produto: "Quanto Cobro?" (até 13/10/2026) e "Faz a Conta" (
 | Desktop | Faixa v1.4 | Variante D | QC-DEC-018 |
 | Proposta | Copiar e PDF | Compartilhar V2 (WhatsApp, Histórico, Copiar, PDF, Mais) | QC-DEC-037 |
 | Medição | Não definida | GA4 só após aceite. Pesquisa de 5 estrelas | QC-DEC-036 |
-| Celular | Site responsivo | Site responsivo + app instalável (PWA) e offline | Sem decisão registrada (ver §22) |
+| Celular | Site responsivo | Site responsivo + app instalável (PWA) e offline | QC-DEC-038 |
 | Textos | Com travessão | Sem travessão | QC-DEC-035 |
 
 ## 1. Visão do produto
@@ -431,7 +433,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 
 ## 20. App no celular
 
-**Estado:** implementado na branch `edicao` (commit `0e4c5c4`). Não publicado.
+**Estado:** implementado (commit `0e4c5c4`) e publicado no site em 09/11/2026 (QC-DEC-038). O APK não é publicado em loja.
 
 - **PWA:** o site é instalável na tela inicial (`manifest.webmanifest`, ícones 192, 512 e maskable).
 - **Offline:** o service worker (`sw.js`, cache `fiz-v30`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
@@ -484,8 +486,6 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 | Destino do texto da pesquisa de 5 estrelas | Google Forms |
 | Cupom V1 no resultado desktop do canvas | Aplicar no canvas |
 | Dupla confirmação no Brevo (exige telefone verificado) | Ativar depois de verificar o telefone |
-| Registrar o PWA e o APK no Decision Log | Registrar como QC-DEC-038 |
-| Publicar a branch `edicao` na `main` | Só com aprovação explícita do responsável |
 | Implementar o Briefing (`PRD-briefing.md`) | Aprovado (QC-DEC-022 a QC-DEC-025), ainda não implementado |
 | Destino da rota antiga `/calculadora` | Depende do inventário de URLs |
 
@@ -493,12 +493,12 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 
 Ordem de precedência em caso de conflito:
 
-1. `decision-log.md` v2.2;
-2. `business-rules.md` v1.1;
-3. este PRD v2.0;
-4. `architecture.md`, `design-system.md` e `handoff_tecnico.md`.
+1. `decision-log.md` v2.3;
+2. `business-rules.md` v2.0;
+3. este PRD v2.1;
+4. `architecture.md` v2.0, `design-system.md` v2.0 e `handoff_tecnico.md` v2.0.
 
-**Atenção:** `architecture.md` (v1.2), `design-system.md` (v1.5), `handoff_tecnico.md` (v1.3) e `business-rules.md` (v1.1) ainda não incluem QC-DEC-017 a QC-DEC-037. Nesses pontos, vale o Decision Log e este PRD.
+Todos os documentos acima incluem QC-DEC-001 a QC-DEC-038 (alinhados em 09/11/2026). Pontos em que o código e as regras divergem estão marcados como Pendente no `business-rules.md` §17 e no `design-system.md` §20.
 
 Referências visuais:
 
@@ -506,7 +506,7 @@ Referências visuais:
 - **Design System Claude Design** (https://claude.ai/artifact/8sDrjN9VbUEgw3vRciSLCz): componentes e tokens. O namespace `FazAConta` não muda.
 - **Figma** (`87RIlysRO3vHEDm7Ghdzf3`): wordmark no nó `125:72`; desktop Variante D no nó `115:2`; faixa v1.4 como histórico de conteúdo e regras.
 - **FigJam** (`LoGu3vG6gQtt9KEGnAJ9CA`): jornada, fluxo e sitemap (histórico v1.4 e v1.5).
-- **Notion** (conta pessoal): página "Fiz a Conta · calculadora de orçamento para freelancers".
+- **Notion** (conta pessoal): página "Fiz a Conta · calculadora de orçamento para freelancers", com as subpáginas do PRD e do Design (handoff do Claude Design, com as 22 telas e o pacote-fonte).
 
 ## 24. Decisão de produto
 
