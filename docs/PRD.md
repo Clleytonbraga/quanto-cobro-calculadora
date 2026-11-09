@@ -446,7 +446,8 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 | --- | --- |
 | `step_viewed` | A pessoa vê uma tela (parâmetro: nome da tela) |
 | `proposal_started` | Toca em "Criar proposta" |
-| `proposal_shared` | Compartilha a proposta |
+| `proposal_whatsapp` | Toca em "Enviar pelo WhatsApp" |
+| `proposal_shared` | Toca em "Mais" (compartilhamento nativo) |
 | `proposal_copied` | Copia a proposta |
 | `proposal_printed` | Salva o PDF |
 | `new_budget_started` | Confirma "Novo orçamento" |
