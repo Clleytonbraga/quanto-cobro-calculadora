@@ -1,7 +1,7 @@
 # Fiz a Conta · Decision Log (antes "Quanto Cobro?")
 
-**Versão:** 2.7 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 041 acrescentadas ao final)  
-**Atualizado em:** 09/11/2026 (v2.6 preservada em `historico/versoes-anteriores/decision-log_v2.6.md`)  
+**Versão:** 2.8 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 042 acrescentadas ao final)  
+**Atualizado em:** 09/11/2026 (v2.7 preservada em `historico/versoes-anteriores/decision-log_v2.7.md`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -382,3 +382,11 @@ Aprovação explícita do responsável nesta conversa, em 10/11/2026 ("pode come
 | ID | Status | Decisão |
 | --- | --- | --- |
 | QC-DEC-041 | APROVADA | **Guias de SEO 2 e 3 e índice `/guias/`**, conforme o plano de guias (§5, §8 e §11). Guia 2 "Como calcular seu valor por hora como freelancer" (`/guias/como-calcular-valor-hora-freelancer/`): meta mensal ÷ (horas faturáveis por semana × 4,33), a mesma conta do "Estimar" (exemplo hipotético R$ 6.000 e 30 h por semana = R$ 46,19, conferido com `calc.js`), e o que a conta não inclui. Guia 3 "Como cobrar revisões de um projeto" (`/guias/como-cobrar-revisoes-de-um-projeto/`): rodada, revisão × mudança de escopo, tempo por rodada e regras na proposta (exemplo hipotético R$ 80 por hora, 12 h e rodadas de 1 h 30 min, conferido com `calc.js`). Índice `/guias/` com os 3 guias. Estilo das páginas de guia em `guias/guia.css` (sai do `<style>` do guia 1). Sitemap e `sw.js` incluem as páginas novas. Cache `fiz-v35`. Sem preço de mercado, impostos ou dados inventados. |
+
+## Publicidade com AdSense · v2.8 (10/11/2026)
+
+Aprovação explícita do responsável nesta conversa, em 10/11/2026 (respostas às perguntas de decisão e "aprovado todos" para a proposta no canvas, fileira "Proposta · anúncios").
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-042 | APROVADA | **Publicidade volta com Google AdSense, depois da aprovação do Google.** Supera a QC-DEC-034 e o lugar "prévia da proposta" da QC-DEC-020. Lugar: só a tela de resultado (mobile: abaixo de "Novo orçamento", depois do fim da tela, 300×250 ou 320×100; desktop: coluna da direita, bloco responsivo × 250) e os guias (1 bloco 300×250 no meio do texto e 1 depois das dúvidas; no desktop a mesma coluna, sem laterais). Nunca: etapas 1 a 4, prévia da proposta, PDF, texto enviado ao cliente e formulário do Briefing (QC-DEC-025 continua). Cada bloco tem o rótulo "Publicidade", espaço fixo reservado e pelo menos 24 px de distância de botões. **Consentimento:** um aviso só; "Aceitar" libera GA4 e anúncios personalizados; "Recusar" bloqueia o GA4 e mostra anúncios não personalizados. Europa e Reino Unido: ferramenta certificada do Google (AdSense, Privacidade e mensagens). Textos do aviso e da privacidade prontos na `edicao` (commit `dfd4fb0`), publicados só junto com o pedido do AdSense. Ordem: indexação dos guias, pedido do AdSense, código dos blocos com o ID da conta. |

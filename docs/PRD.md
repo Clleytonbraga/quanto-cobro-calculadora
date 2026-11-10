@@ -1,9 +1,9 @@
 # Fiz a Conta · PRD
 
-**Versão documental:** 2.4 · **Atualizado:** 10/11/2026 (v2.3, v2.2, v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
-**Decisões aprovadas:** QC-DEC-001 a QC-DEC-041 (ver `decision-log.md` v2.7).
+**Versão documental:** 2.5 · **Atualizado:** 10/11/2026 (v2.4, v2.3, v2.2, v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
+**Decisões aprovadas:** QC-DEC-001 a QC-DEC-042 (ver `decision-log.md` v2.8).
 **Código de referência:** commit `859474f` (09/11/2026), cache `fiz-v35`. Publicado na `main` em 09/11/2026.
-**Regras de validação, precisão e estados:** `business-rules.md` v2.2. Quando houver conflito, vale o Decision Log (ver §23).
+**Regras de validação, precisão e estados:** `business-rules.md` v2.4. Quando houver conflito, vale o Decision Log (ver §23).
 **Recurso Briefing:** contrato separado em `PRD-briefing.md` v1.1.
 
 **v2.1:** registra a QC-DEC-038 (app no celular), a publicação na `main` e as versões 2.0 dos documentos técnicos.
@@ -15,7 +15,7 @@ Nomes anteriores do produto: "Quanto Cobro?" (até 13/10/2026) e "Faz a Conta" (
 | Tema | v1.3 (12/10) | v2.0 (atual) | Decisão |
 | --- | --- | --- | --- |
 | Nome | Quanto Cobro? | Fiz a Conta | QC-DEC-026 |
-| Monetização | 100% grátis, com publicidade | Freemium em fases. Publicidade removida por enquanto | QC-DEC-034, QC-DEC-036 |
+| Monetização | 100% grátis, com publicidade | Freemium em fases. Publicidade com AdSense depois da aprovação, só no resultado e nos guias | QC-DEC-036, QC-DEC-042 |
 | Unidade das horas | Centésimos de hora | Minutos inteiros. Entrada "1h30" | QC-DEC-027, QC-DEC-028 |
 | Teclado | Keypad circular com +1/−1 | Teclado "maquininha" com tecla h. Tecla quadrada, raio 22 px | QC-DEC-017, QC-DEC-028, QC-DEC-033 |
 | Data de entrega | Data única | Data única ou Período (dias corridos) | QC-DEC-029 |
@@ -126,7 +126,7 @@ O sistema calcula a referência. O freelancer decide quanto cobra.
 
 ### 7.6 Nada de anúncio na entrada de dados
 
-Hoje o app não tem anúncio (QC-DEC-034). Se voltar, o anúncio fica só no resultado e na prévia da proposta (ver §17).
+Anúncio só na tela de resultado e nos guias (QC-DEC-042, ver §17). Nunca nas etapas de entrada de dados.
 
 ### 7.7 Textos sem travessão
 
@@ -380,14 +380,13 @@ GA4 e Brevo usam **só a conta pessoal** do responsável. Nunca usar a conta da 
 
 ## 17. Publicidade
 
-**Estado atual:** sem publicidade (QC-DEC-034). Não existe rede de anúncios contratada. QC-DEC-034 supera QC-DEC-020 e a extensão dela.
+**Estado atual:** aprovada a volta com Google AdSense (QC-DEC-042, supera QC-DEC-034). Ainda sem código de anúncio: entra depois da aprovação da conta. Proposta visual no canvas, fileira "Proposta · anúncios".
 
-Se a publicidade voltar:
-
-- lugar permitido: resultado e prévia da proposta;
-- nunca na entrada de dados (campos, perguntas, teclado, Próximo, Voltar);
-- nunca em posição que gere clique acidental;
-- o produto é um site (GitHub Pages). A rede adequada é AdSense ou Ad Manager para web.
+- lugar permitido: **tela de resultado** (mobile: abaixo de "Novo orçamento", depois do fim da tela; desktop: coluna da direita) e **guias** (1 bloco no meio do texto e 1 depois das dúvidas);
+- nunca nas etapas 1 a 4, na prévia da proposta, no PDF ou no texto enviado ao cliente;
+- rótulo "Publicidade", espaço fixo reservado e pelo menos 24 px de distância de botões;
+- consentimento: um aviso; "Aceitar" libera GA4 e anúncios personalizados; "Recusar" bloqueia o GA4 e mostra só anúncios não personalizados; Europa e Reino Unido usam a ferramenta certificada do Google (AdSense, Privacidade e mensagens);
+- rede: Google AdSense (site). O app funciona com bloqueador de anúncio.
 
 O formulário do cliente do Briefing **nunca** mostra anúncio (QC-DEC-025).
 
@@ -493,7 +492,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 Ordem de precedência em caso de conflito:
 
 1. `decision-log.md` v2.3;
-2. `business-rules.md` v2.2;
+2. `business-rules.md` v2.4;
 3. este PRD v2.1;
 4. `architecture.md` v2.0, `design-system.md` v2.0 e `handoff_tecnico.md` v2.0.
 

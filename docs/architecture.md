@@ -1,8 +1,8 @@
 # Fiz a Conta · Architecture
 
-**Versão documental:** 2.3 · **Atualizado:** 10/11/2026
-**Versão anterior:** v2.2 (09/11/2026), em `historico/versoes-anteriores/architecture_v2.2.md`.
-**Base:** QC-DEC-001 a QC-DEC-041 (`decision-log.md` v2.7), `PRD.md` v2.4 e `business-rules.md` v2.2.
+**Versão documental:** 2.4 · **Atualizado:** 10/11/2026
+**Versão anterior:** v2.3 (10/11/2026), em `historico/versoes-anteriores/architecture_v2.3.md`.
+**Base:** QC-DEC-001 a QC-DEC-042 (`decision-log.md` v2.8), `PRD.md` v2.5 e `business-rules.md` v2.2.
 **Código de referência:** branch `edicao`, cache `fiz-v35`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
 
 Nome anterior do produto: "Quanto Cobro?". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` e o namespace `FazAConta` do design system não mudam.
@@ -18,7 +18,7 @@ Nome anterior do produto: "Quanto Cobro?". O nome atual é **Fiz a Conta** (QC-D
 | Etapa 3 e custos | Steppers e linhas | Campos que abrem modais (`<dialog>`) | QC-DEC-019, 030 |
 | Rascunho | Formato sem versão interna | `{ v: 3, st }` com horas em minutos | QC-DEC-027 |
 | Persistência | 3 chaves | 5 chaves (`consent` e `survey` novas) | QC-DEC-036 |
-| Publicidade | Componente `AdSlot` | Removida. Sem código de anúncio | QC-DEC-034 (supera 020) |
+| Publicidade | Componente `AdSlot` | AdSense aprovado (resultado e guias); código entra com o ID da conta | QC-DEC-042 (supera 034) |
 | Analytics | Eventos sugeridos | GA4 só após aceite. 11 eventos sem valores | QC-DEC-036 |
 | Freemium | Não previsto | Pesquisa de 5 estrelas e teste "Histórico" (Brevo) | QC-DEC-036 |
 | Proposta | Copiar e imprimir | Compartilhar V2: WhatsApp, Histórico, Copiar, PDF, Mais | QC-DEC-037 |
@@ -266,14 +266,14 @@ sessionStorage:
 
 ## 13. Publicidade
 
-**Estado atual: sem publicidade** (QC-DEC-034). Não existe código de anúncio. QC-DEC-034 supera QC-DEC-020 e a extensão dela.
+**Estado atual:** AdSense aprovado como decisão (QC-DEC-042, supera QC-DEC-034). Ainda sem código de anúncio: entra com o ID da conta.
 
-Se a publicidade voltar:
-
-- Lugar permitido: resultado e prévia da proposta.
-- Nunca na entrada de dados.
-- Reserve a altura do slot para evitar CLS.
-- A falha da rede de anúncios não pode bloquear o cálculo.
+- Lugar permitido: **tela de resultado** (mobile: abaixo de "Novo orçamento", depois do fim da tela; desktop: coluna da direita) e **guias** (1 bloco no meio do texto e 1 depois das dúvidas);
+- nunca nas etapas 1 a 4, na prévia da proposta, no PDF ou no texto enviado ao cliente;
+- rótulo "Publicidade", espaço fixo reservado e pelo menos 24 px de distância de botões;
+- consentimento: um aviso; "Aceitar" libera GA4 e anúncios personalizados; "Recusar" bloqueia o GA4 e mostra só anúncios não personalizados; Europa e Reino Unido usam a ferramenta certificada do Google (AdSense, Privacidade e mensagens);
+- rede: Google AdSense (site). O app funciona com bloqueador de anúncio.
+- Reserve a altura do slot para evitar CLS. A falha da rede de anúncios não pode bloquear o cálculo.
 - O formulário do cliente do Briefing nunca mostra anúncio (QC-DEC-025).
 
 ## 14. Analytics (GA4)

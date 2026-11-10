@@ -1,8 +1,8 @@
 # Fiz a Conta · Handoff Técnico
 
-**Versão documental:** 2.3 · **Atualizado:** 10/11/2026
-**Versão anterior:** v2.2 (09/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.2.md`.
-**Base:** QC-DEC-001 a QC-DEC-041 (`decision-log.md` v2.7) e `PRD.md` v2.4.
+**Versão documental:** 2.4 · **Atualizado:** 10/11/2026
+**Versão anterior:** v2.3 (10/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.3.md`.
+**Base:** QC-DEC-001 a QC-DEC-042 (`decision-log.md` v2.8) e `PRD.md` v2.5.
 **Regras de cálculo e validação:** `business-rules.md` v2.0 e `calc.js`. **Arquitetura:** `architecture.md` v2.0. **Visual:** `design-system.md` v2.0.
 **Código de referência:** branch `edicao`, cache `fiz-v35`.
 **Regra de conflito:** o Decision Log vence. Registros novos superam os antigos.
@@ -20,7 +20,7 @@ Nomes anteriores do produto: "Quanto Cobro?" e "Faz a Conta". O nome atual é **
 | Etapa 3 | Steppers | Campos que abrem modais | QC-DEC-030 |
 | Resultado | Lista de composição | Cupom V1 com edição por modal | QC-DEC-019, QC-DEC-032 |
 | Desktop | Coluna estreita | Variante D, ponto de quebra 1024 px | QC-DEC-018 |
-| Publicidade | Slot após o resultado | Sem publicidade | QC-DEC-034 |
+| Publicidade | Slot após o resultado | AdSense aprovado: resultado e guias; código depois do ID da conta | QC-DEC-042 |
 | Analytics | Lista sugerida, sem ferramenta | GA4 `G-F2HS60LDV0`, só após aceite, 11 eventos | QC-DEC-036 |
 | E-mail | Não existia | Brevo, lista #3, formulário no `app.js` | QC-DEC-036 |
 | Proposta | Copiar e imprimir | WhatsApp, Histórico, Copiar, PDF, Mais | QC-DEC-037 |
@@ -323,11 +323,15 @@ O APK usa o código do disco no momento do build. Gere de novo depois de cada mu
 | altura ≤ 720 px e largura < 1024 px | Mobile compacto |
 | ≥ 1024 px | Desktop, Variante D (220 + 452 + 288 px, até 1040 px) |
 
-## 16. Publicidade (QC-DEC-034)
+## 16. Publicidade (QC-DEC-042)
 
-Não implemente anúncio. Não existe rede de anúncios.
+Só implemente o anúncio depois da aprovação da conta AdSense e com o ID dela. Regras do PRD §17:
 
-Se a publicidade voltar, siga o PRD §17: só no resultado e na prévia, nunca na entrada de dados, espaço reservado, e o app funciona com bloqueador de anúncio.
+- lugar permitido: **tela de resultado** (mobile: abaixo de "Novo orçamento", depois do fim da tela; desktop: coluna da direita) e **guias** (1 bloco no meio do texto e 1 depois das dúvidas);
+- nunca nas etapas 1 a 4, na prévia da proposta, no PDF ou no texto enviado ao cliente;
+- rótulo "Publicidade", espaço fixo reservado e pelo menos 24 px de distância de botões;
+- consentimento: um aviso; "Aceitar" libera GA4 e anúncios personalizados; "Recusar" bloqueia o GA4 e mostra só anúncios não personalizados; Europa e Reino Unido usam a ferramenta certificada do Google (AdSense, Privacidade e mensagens);
+- rede: Google AdSense (site). O app funciona com bloqueador de anúncio.
 
 ## 17. Acessibilidade
 
@@ -370,7 +374,7 @@ Se a publicidade voltar, siga o PRD §17: só no resultado e na prévia, nunca n
 - Proposta mostra "Feito com Fiz a Conta" (QC-DEC-036).
 - Cupom ao vivo do desktop mostra "…" para valor não alcançado (QC-DEC-035).
 - Nenhum texto com travessão (QC-DEC-035).
-- Nenhum anúncio (QC-DEC-034).
+- Nenhum anúncio fora do resultado e dos guias (QC-DEC-042).
 
 ### Proposta
 
