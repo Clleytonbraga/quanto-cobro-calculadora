@@ -1,9 +1,9 @@
 # Fiz a Conta · Architecture
 
-**Versão documental:** 2.0 · **Atualizado:** 09/11/2026
-**Versão anterior:** v1.2 (12/10/2026), em `historico/versoes-anteriores/architecture_v1.2.md`.
-**Base:** QC-DEC-001 a QC-DEC-038 (`decision-log.md` v2.3), `PRD.md` v2.0 e `business-rules.md` v2.0.
-**Código de referência:** branch `edicao`, cache `fiz-v30`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
+**Versão documental:** 2.1 · **Atualizado:** 09/11/2026
+**Versão anterior:** v2.0 (09/11/2026), em `historico/versoes-anteriores/architecture_v2.0.md`.
+**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.4), `PRD.md` v2.2 e `business-rules.md` v2.0.
+**Código de referência:** branch `edicao`, cache `fiz-v31`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
 
 Nome anterior do produto: "Quanto Cobro?". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` e o namespace `FazAConta` do design system não mudam.
 
@@ -257,8 +257,7 @@ sessionStorage:
 | `/privacidade/` | Privacidade (LGPD) |
 | `/guias/como-fazer-orcamento-freelancer/` | Guia de SEO |
 
-- Site atual: `https://clleytonbraga.github.io/quanto-cobro-calculadora/`. Canonical, `og:image` 1200×630 e `sitemap.xml` usam esse endereço.
-- Domínio final: Pendente (§27).
+- Site: `https://fizaconta.com/` (QC-DEC-039). Canonical, `og:url`, `og:image` 1200×630, `sitemap.xml` e o arquivo `CNAME` usam esse endereço. O endereço antigo do GitHub Pages redireciona para ele.
 - Rota antiga `/calculadora`: Pendente. Depende do inventário de URLs.
 - Conteúdo de SEO não pode afastar a pessoa da calculadora.
 
@@ -321,7 +320,7 @@ Se a publicidade voltar:
 
 - `manifest.webmanifest`: nome "Fiz a Conta", `display: standalone`, ícones 192, 512 e maskable 512.
 - `index.html` registra `sw.js`.
-- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v30`.
+- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v31`.
 - Ao publicar CSS ou JS novo: suba o `?v=` nas 3 páginas e o `CACHE` em `sw.js` juntos.
 
 Estratégia do `sw.js`:
@@ -432,8 +431,8 @@ Sem testes automáticos de interface. Teste manual: fluxo completo, voltar e edi
 
 | # | Tema | Pergunta |
 | --- | --- | --- |
-| 1 | Domínio final | Qual domínio substitui `clleytonbraga.github.io/quanto-cobro-calculadora/` (SITE em `app.js`, canonical, `og:image`, sitemap)? |
-| 2 | Texto da pesquisa | Para onde vai o texto livre? Recomendado: Google Forms |
+| 1 | Domínio final | **Resolvido (QC-DEC-039):** `fizaconta.com`. |
+| 2 | Texto da pesquisa | **Decidido (QC-DEC-039):** Google Forms. Falta implementar |
 | 3 | Dupla confirmação no Brevo | Ativar depois de verificar o telefone? |
 | 4 | CSP | Adicionar Content-Security-Policy que permita GA4 e Brevo? |
 | 5 | Rota `/calculadora` | Qual destino, depois do inventário de URLs? |

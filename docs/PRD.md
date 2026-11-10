@@ -1,8 +1,8 @@
 # Fiz a Conta · PRD
 
-**Versão documental:** 2.1 · **Atualizado:** 09/11/2026 (v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
-**Decisões aprovadas:** QC-DEC-001 a QC-DEC-038 (ver `decision-log.md` v2.3).
-**Código de referência:** commit `0e4c5c4` (28/10/2026), cache `fiz-v30`. Publicado na `main` em 09/11/2026.
+**Versão documental:** 2.2 · **Atualizado:** 09/11/2026 (v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
+**Decisões aprovadas:** QC-DEC-001 a QC-DEC-039 (ver `decision-log.md` v2.4).
+**Código de referência:** commit `0e4c5c4` (28/10/2026), cache `fiz-v31`. Publicado na `main` em 09/11/2026.
 **Regras de validação, precisão e estados:** `business-rules.md` v2.0. Quando houver conflito, vale o Decision Log (ver §23).
 **Recurso Briefing:** contrato separado em `PRD-briefing.md` v1.1.
 
@@ -436,7 +436,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 **Estado:** implementado (commit `0e4c5c4`) e publicado no site em 09/11/2026 (QC-DEC-038). O APK não é publicado em loja.
 
 - **PWA:** o site é instalável na tela inicial (`manifest.webmanifest`, ícones 192, 512 e maskable).
-- **Offline:** o service worker (`sw.js`, cache `fiz-v30`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
+- **Offline:** o service worker (`sw.js`, cache `fiz-v31`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
 - O valor do cache segue o `?v=` dos arquivos CSS e JS nas 3 páginas.
 - **APK Android de teste:** projeto local `fiz-a-conta-android` (WebView). Não publicado em loja.
 
@@ -481,9 +481,9 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 
 | Pendência | Recomendação atual |
 | --- | --- |
-| Domínio exato do Fiz a Conta (SITE, canonical, sitemap, Search Console). Hoje o site usa `clleytonbraga.github.io/quanto-cobro-calculadora/` | Decidir antes do vídeo de apresentação |
-| E-mail de contato LGPD na página de privacidade | Usar um e-mail pessoal dedicado |
-| Destino do texto da pesquisa de 5 estrelas | Google Forms |
+| Domínio do Fiz a Conta | **Resolvido (QC-DEC-039):** `https://fizaconta.com/`. Falta a propriedade no Search Console |
+| E-mail de contato LGPD na página de privacidade | **Resolvido (QC-DEC-039):** `contato@fizaconta.com` |
+| Destino do texto da pesquisa de 5 estrelas | **Decidido (QC-DEC-039):** Google Forms. Falta implementar |
 | Cupom V1 no resultado desktop do canvas | Aplicar no canvas |
 | Dupla confirmação no Brevo (exige telefone verificado) | Ativar depois de verificar o telefone |
 | Implementar o Briefing (`PRD-briefing.md`) | Aprovado (QC-DEC-022 a QC-DEC-025), ainda não implementado |

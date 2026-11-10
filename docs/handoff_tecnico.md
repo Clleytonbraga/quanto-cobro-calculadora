@@ -1,10 +1,10 @@
 # Fiz a Conta · Handoff Técnico
 
-**Versão documental:** 2.0 · **Atualizado:** 09/11/2026
-**Versão anterior:** v1.3 (12/10/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v1.3.md`.
-**Base:** QC-DEC-001 a QC-DEC-038 (`decision-log.md` v2.3) e `PRD.md` v2.0.
+**Versão documental:** 2.1 · **Atualizado:** 09/11/2026
+**Versão anterior:** v2.0 (09/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.0.md`.
+**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.4) e `PRD.md` v2.2.
 **Regras de cálculo e validação:** `business-rules.md` v2.0 e `calc.js`. **Arquitetura:** `architecture.md` v2.0. **Visual:** `design-system.md` v2.0.
-**Código de referência:** branch `edicao`, cache `fiz-v30`.
+**Código de referência:** branch `edicao`, cache `fiz-v31`.
 **Regra de conflito:** o Decision Log vence. Registros novos superam os antigos.
 
 Nomes anteriores do produto: "Quanto Cobro?" e "Faz a Conta". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` não mudam.
@@ -97,7 +97,7 @@ Atenção:
 | Repositório | `github.com/Clleytonbraga/quanto-cobro-calculadora` |
 | Branch de trabalho | `edicao`. Toda edição acontece aqui |
 | Branch publicada | `main`. GitHub Pages publica a partir da `main` |
-| Site | `https://clleytonbraga.github.io/quanto-cobro-calculadora/` |
+| Site | `https://fizaconta.com/` (QC-DEC-039). DNS na Cloudflare; arquivo `CNAME` na raiz do repo (não apagar) |
 | Publicar | Levar a `edicao` para a `main` só com aprovação explícita do responsável. Aprovado em 09/11/2026 (Decision Log v2.3) |
 
 ## 5. Regra do cache: `fiz-vN` = `?v=N`
@@ -425,9 +425,9 @@ Não publique se existir:
 
 | Pendência | Estado em 09/11/2026 |
 | --- | --- |
-| Domínio exato do Fiz a Conta (SITE em `app.js`, canonical, sitemap, Search Console) | **Pendente.** Hoje: `clleytonbraga.github.io/quanto-cobro-calculadora/` |
-| E-mail de contato LGPD | **Pendente.** `privacidade/index.html` ainda mostra `[E-MAIL DE CONTATO]` |
-| Destino do texto da pesquisa de 5 estrelas | **Pendente.** Recomendado: Google Forms. O canvas tem o campo; o app ainda não |
+| Domínio do Fiz a Conta | **Resolvido (QC-DEC-039):** `fizaconta.com`. Falta a propriedade no Search Console |
+| E-mail de contato LGPD | **Resolvido (QC-DEC-039):** `contato@fizaconta.com` |
+| Destino do texto da pesquisa de 5 estrelas | **Decidido (QC-DEC-039):** Google Forms. O canvas tem o campo; o app ainda não |
 | Cupom V1 no resultado desktop do canvas | **Pendente.** O app já usa o V1 |
 | Dupla confirmação no Brevo | **Pendente.** Exige telefone verificado |
 | Registrar o PWA e o APK no Decision Log | **Feito:** QC-DEC-038 |

@@ -1,7 +1,7 @@
 # Fiz a Conta · Decision Log (antes "Quanto Cobro?")
 
-**Versão:** 2.3 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 038 acrescentadas ao final)  
-**Atualizado em:** 09/11/2026 (v2.2 preservada em `historico/versoes-anteriores/decision-log_v2.2.md`)  
+**Versão:** 2.4 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 039 acrescentadas ao final)  
+**Atualizado em:** 09/11/2026 (v2.3 preservada em `historico/versoes-anteriores/decision-log_v2.3.md`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -356,3 +356,11 @@ Aprovação explícita do responsável nesta conversa, em 09/11/2026 ("pode atua
 | QC-DEC-038 | APROVADA | **App no celular.** O site é instalável (PWA: `manifest.webmanifest`, ícones 192, 512 e maskable) e funciona offline (`sw.js`). O nome do cache (`fiz-vN`) é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas. GA4 e Brevo usam só a rede. Existe um APK Android de teste (WebView, projeto local `fiz-a-conta-android`). O APK não é publicado em loja. Implementado em 28/10/2026 (commit `0e4c5c4`). |
 
 **Também aprovado em 09/11/2026:** publicar a branch `edicao` na `main`; atualizar `business-rules.md`, `architecture.md`, `design-system.md`, `handoff_tecnico.md` e `PRD-briefing.md` com QC-DEC-017 a QC-DEC-038.
+
+## Domínio e contato · v2.4 (09/11/2026)
+
+Aprovação explícita do responsável nesta conversa, em 09/11/2026 ("quero o fizaconta.com", "pode publicar na main").
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-039 | APROVADA | **Domínio `fizaconta.com`.** Registrado na Cloudflare (conta pessoal do responsável, renovação automática). DNS aponta para o GitHub Pages (4 registros A e 4 AAAA no domínio raiz; `www` é CNAME para `clleytonbraga.github.io`; sem proxy). HTTPS obrigatório. O endereço antigo (`clleytonbraga.github.io/quanto-cobro-calculadora/`) e o `www` redirecionam para `https://fizaconta.com/`. `SITE` em `app.js`, canonical, `og:url`, `og:image`, `sitemap.xml` e arquivo `CNAME` usam o domínio novo. **Contato LGPD:** `contato@fizaconta.com` (Cloudflare Email Routing para o e-mail pessoal do responsável), na página `/privacidade/`. **Texto da pesquisa de 5 estrelas:** vai para um Google Forms (a implementar). Publicado em 09/11/2026 (commit `0b2b43f`). `fizaconta.com.br` está em processo de liberação no Registro.br e não foi registrado. |

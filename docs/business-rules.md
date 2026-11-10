@@ -1,8 +1,8 @@
 # Fiz a Conta · Business Rules
 
-**Versão:** 2.0 · **Data:** 09/11/2026
-**Versão anterior:** v1.1 (12/10/2026), em `historico/versoes-anteriores/business-rules_v1.1.md`.
-**Base:** QC-DEC-001 a QC-DEC-038 (`decision-log.md` v2.3) e `PRD.md` v2.0.
+**Versão:** 2.1 · **Data:** 09/11/2026
+**Versão anterior:** v2.0 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.0.md`.
+**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.4) e `PRD.md` v2.2.
 **Código de referência:** branch `edicao`, `calc.js` (regras puras) e `app.js` (telas e estado).
 **Precedência:** este documento detalha validação, precisão, valores iniciais e estados. Em conflito, vale o Decision Log. Depois, este documento. Depois, PRD, Architecture, Design System e Handoff.
 
@@ -454,9 +454,9 @@ Itens sem decisão no Decision Log. Cada um tem uma pergunta.
 | 3 | Mais de 2 dígitos depois do h no teclado físico | "1h300" vira 1300 h (o teclado do app impede) | Tratar como erro "Depois do h, use de 0 a 59 minutos."? |
 | 4 | Pesquisa fechada sem resposta | Não grava nada; pode voltar no próximo PDF | Fechar conta como "Agora não"? |
 | 5 | Data de fim no passado | Sem aviso | Avisar também pela data de fim? |
-| 6 | Domínio do Fiz a Conta | Site em `clleytonbraga.github.io/quanto-cobro-calculadora/` | Qual domínio final? (Decision Log v2.2) |
-| 7 | E-mail de contato LGPD | Página de privacidade mostra "[E-MAIL DE CONTATO]" | Qual e-mail? (Decision Log v2.2) |
-| 8 | Texto da pesquisa | Só a nota vai para o GA4 | Qual destino para o texto? Recomendado: Google Forms |
+| 6 | Domínio do Fiz a Conta | Site em `https://fizaconta.com/` | **Resolvido (QC-DEC-039)** |
+| 7 | E-mail de contato LGPD | Página de privacidade mostra `contato@fizaconta.com` | **Resolvido (QC-DEC-039)** |
+| 8 | Texto da pesquisa | Só a nota vai para o GA4 | **Decidido (QC-DEC-039):** Google Forms. Falta implementar |
 | 9 | Dupla confirmação no Brevo | Desligada | Ativar depois de verificar o telefone? |
 | 10 | Rota antiga `/calculadora` | Sem tratamento | Depende do inventário de URLs |
 
