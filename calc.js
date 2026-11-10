@@ -49,7 +49,7 @@ export function parseHundredths(raw, { max, integer = false } = {}) {
 // "1h30" | "1h" | "12" | "1,5" | "1 h 30 min" → minutos inteiros. Sem h, o número vale horas (1,33 h arredonda para 80 min).
 export function parseDuration(raw, { max } = {}) {
   const s = String(raw ?? '').replace(/\s/g, '')
-  const m = s.match(/^(\d+)h(\d{1,2})(?:min)?$/i)
+  const m = s.match(/^(\d+)h(\d+)(?:min)?$/i) // "1h300" cai no erro de minutos (> 59)
   if (m && +m[2] > 59) return { value: null, error: MSG.minutes }
   const r = m ? { value: +m[1] * 100 } : parseHundredths(s)
   if (r.error) return { value: null, error: r.error === MSG.invalid ? MSG.duration : r.error }

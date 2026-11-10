@@ -81,4 +81,6 @@ assert.equal(period(per), '3 nov a 14 nov')
 assert.equal(periodDays(per.deliveryDate, per.deliveryEnd), 12)
 assert.equal(ref({ ...c1, ...per }), 155000)
 assert.match(proposal({ ...c1, ...per }, { projectName: 'L', scopeSummary: 'P', notes: '' }).text, /Período: 3 nov a 14 nov/)
+assert.deepEqual(d('1h300'), { value: null, error: MSG.minutes }) // teclado físico: mais de 2 dígitos depois do h
+assert.deepEqual(d('1h05'), { value: 65 })
 console.log('ok')

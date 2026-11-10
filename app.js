@@ -328,7 +328,11 @@ function openModal(kind, ctx = {}) {
   if (!dlg.open) dlg.showModal() // troca de conteúdo com o modal aberto (lista → item, mês do calendário)
   dlg.querySelector('[autofocus]')?.focus()
 }
-const closeModal = () => { dlg.close(); modalCtx = null }
+const closeModal = () => { // pesquisa fechada sem resposta (fundo, Esc) conta como "Agora não"
+  if (modalCtx?.kind === 'survey' && !surveyGet().done) surveySet({ last: Date.now(), skipped: true, since: 0 })
+  dlg.close(); modalCtx = null
+}
+dlg.addEventListener('cancel', e => { e.preventDefault(); closeModal() }) // Esc passa pelo mesmo caminho
 const modalErr = (msg, input) => { const p = dlg.querySelector('.error'); p.textContent = msg; p.hidden = false; input?.setAttribute('aria-invalid', 'true'); input?.focus() }
 const MODALS = {
   cost: ({ i }) => { const c = st.s.directCosts[i] ?? { description: '', amount: null }; return `
@@ -472,7 +476,7 @@ const MODAL_ACTS = {
     fetch(FEEDBACK_FORM, { method: 'POST', mode: 'no-cors', body }).catch(() => {})
     track('rating_submitted', { rating: modalCtx.rating }); surveySet({ done: true }); closeModal()
   },
-  surveySkip() { surveySet({ last: Date.now(), skipped: true, since: 0 }); track('rating_skipped'); closeModal() },
+  surveySkip() { track('rating_skipped'); closeModal() }, // closeModal grava o "Agora não"
   async historySend() { // teste de interesse (Fase 1): e-mail vai para a lista do Brevo; o aceite fica na caixa marcada aqui
     const email = dlg.querySelector('#m-email'), optin = dlg.querySelector('#m-optin'), v = email.value.trim()
     for (const el of [email, optin]) el.removeAttribute('aria-invalid')
