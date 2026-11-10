@@ -1,7 +1,7 @@
 # Fiz a Conta · Decision Log (antes "Quanto Cobro?")
 
-**Versão:** 2.5 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 039 acrescentadas ao final)  
-**Atualizado em:** 09/11/2026 (v2.4 preservada em `historico/versoes-anteriores/decision-log_v2.4.md`)  
+**Versão:** 2.6 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 040 acrescentadas ao final)  
+**Atualizado em:** 09/11/2026 (v2.5 preservada em `historico/versoes-anteriores/decision-log_v2.5.md`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -366,3 +366,11 @@ Aprovação explícita do responsável nesta conversa, em 09/11/2026 ("quero o f
 | QC-DEC-039 | APROVADA | **Domínio `fizaconta.com`.** Registrado na Cloudflare (conta pessoal do responsável, renovação automática). DNS aponta para o GitHub Pages (4 registros A e 4 AAAA no domínio raiz; `www` é CNAME para `clleytonbraga.github.io`; sem proxy). HTTPS obrigatório. O endereço antigo (`clleytonbraga.github.io/quanto-cobro-calculadora/`) e o `www` redirecionam para `https://fizaconta.com/`. `SITE` em `app.js`, canonical, `og:url`, `og:image`, `sitemap.xml` e arquivo `CNAME` usam o domínio novo. **Contato LGPD:** `contato@fizaconta.com` (Cloudflare Email Routing para o e-mail pessoal do responsável), na página `/privacidade/`. **Texto da pesquisa de 5 estrelas:** vai para um Google Forms (a implementar). Publicado em 09/11/2026 (commit `0b2b43f`). `fizaconta.com.br` está em processo de liberação no Registro.br e não foi registrado. |
 
 **Atualização da QC-DEC-039 · v2.5 (09/11/2026):** o texto da pesquisa de 5 estrelas foi implementado (commit `859474f`). Depois da estrela, a pesquisa mostra "N de 5 · Ruim/Fraco/Ok/Bom/Ótimo", a pergunta "O que você mais gostou?" (nota 4 ou 5) ou "O que faltou para ser 5?" (nota 1 a 3) e o campo opcional "Escreva aqui (opcional)" com o aviso "Não inclua nomes nem dados de clientes." (texto do canvas aprovado). "Enviar" manda a nota e o texto para o Google Forms "Fiz a Conta · Feedback" (conta pessoal do responsável) e a nota para o GA4. A página `/privacidade/` descreve a pesquisa. Cache `fiz-v32`. Aprovação para publicar: "pode", em 09/11/2026.
+
+## Pendências de regra resolvidas e favicon · v2.6 (10/11/2026)
+
+Aprovação explícita do responsável nesta conversa, em 10/11/2026 (respostas às perguntas de decisão).
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-040 | APROVADA | **Pendências 1 a 5 da business-rules §17.** (1) Horas com vírgula em campo de horas viram minutos com arredondamento ("1,33" vira 1 h 20 min). É exceção à QC-DEC-007, porque o visor mostra o valor convertido na hora. (2) "Apagar valor salvo" apaga a chave do aparelho e limpa o campo (comportamento do código; substitui a regra v1.1). (3) No teclado físico, mais de 2 dígitos depois do h ("1h300") mostram o erro "Depois do h, use de 0 a 59 minutos.". (4) Fechar a pesquisa de 5 estrelas sem responder (fundo ou Esc) conta como "Agora não". (5) Período com data de fim no passado: já coberto pelo aviso da data de início, porque o app ordena o período (início ≤ fim); sem mudança de código. **Favicon:** ícone do Figma (frame 136:28 com a marca 136:44, seção "Marca · Fechô! (produto)"), em SVG e PNGs 180, 192, 512 e maskable; o mesmo ícone aparece no topo do app no celular (commit `311f492`, publicado em 10/11/2026). Limpezas: privacidade cita o botão "Histórico"; o botão "Recusar" do aviso perdeu a classe `sm` sem estilo. Cache `fiz-v34`. |

@@ -1,8 +1,8 @@
 # Fiz a Conta · Business Rules
 
-**Versão:** 2.2 · **Data:** 09/11/2026
-**Versão anterior:** v2.1 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.1.md`.
-**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.5) e `PRD.md` v2.3.
+**Versão:** 2.3 · **Data:** 09/11/2026
+**Versão anterior:** v2.2 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.2.md`.
+**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.6) e `PRD.md` v2.3.
 **Código de referência:** branch `edicao`, `calc.js` (regras puras) e `app.js` (telas e estado).
 **Precedência:** este documento detalha validação, precisão, valores iniciais e estados. Em conflito, vale o Decision Log. Depois, este documento. Depois, PRD, Architecture, Design System e Handoff.
 
@@ -450,11 +450,11 @@ Itens sem decisão no Decision Log. Cada um tem uma pergunta.
 
 | # | Tema | Situação no código | Pergunta |
 | --- | --- | --- | --- |
-| 1 | Horas decimais viram minutos | "1,33" vira 80 min (arredonda) | Aceitar este arredondamento na entrada como exceção à regra "sem arredondamento silencioso" (QC-DEC-007)? |
-| 2 | "Apagar valor salvo" | Apaga a chave e limpa o campo | Manter o campo limpo (código) ou manter o valor no orçamento atual (v1.1)? |
-| 3 | Mais de 2 dígitos depois do h no teclado físico | "1h300" vira 1300 h (o teclado do app impede) | Tratar como erro "Depois do h, use de 0 a 59 minutos."? |
-| 4 | Pesquisa fechada sem resposta | Não grava nada; pode voltar no próximo PDF | Fechar conta como "Agora não"? |
-| 5 | Data de fim no passado | Sem aviso | Avisar também pela data de fim? |
+| 1 | Horas decimais viram minutos | "1,33" vira 80 min (arredonda) | **Resolvido (QC-DEC-040):** aceito; o visor mostra o valor convertido |
+| 2 | "Apagar valor salvo" | Apaga a chave e limpa o campo | **Resolvido (QC-DEC-040):** apaga e limpa o campo |
+| 3 | Mais de 2 dígitos depois do h no teclado físico | "1h300" mostra o erro de minutos | **Resolvido (QC-DEC-040)** |
+| 4 | Pesquisa fechada sem resposta | Fechar (fundo ou Esc) grava como "Agora não" | **Resolvido (QC-DEC-040)** |
+| 5 | Data de fim no passado | Coberto pelo aviso da data de início (o período é ordenado) | **Resolvido (QC-DEC-040)** |
 | 6 | Domínio do Fiz a Conta | Site em `https://fizaconta.com/` | **Resolvido (QC-DEC-039)** |
 | 7 | E-mail de contato LGPD | Página de privacidade mostra `contato@fizaconta.com` | **Resolvido (QC-DEC-039)** |
 | 8 | Texto da pesquisa | Nota e comentário vão para o Google Forms | **Resolvido (QC-DEC-039)** |
