@@ -9,8 +9,8 @@
 **Calculadora gratuita de orçamento para designers e freelancers brasileiros.**
 Em vez de planilha ou preço no improviso, você informa valor por hora, horas de execução, revisões, prazo e custos, e chega a um **valor calculado** e explicável. Depois, escolhe o **valor da proposta** e transforma o resultado numa proposta pronta para enviar ao cliente.
 
-**▶ Testar agora:** https://clleytonbraga.github.io/quanto-cobro-calculadora/
-**📖 Guia:** [Como fazer um orçamento freelancer sem esquecer revisões e custos](https://clleytonbraga.github.io/quanto-cobro-calculadora/guias/como-fazer-orcamento-freelancer/)
+**▶ Testar agora:** https://fizaconta.com/
+**📖 Guia:** [Como fazer um orçamento freelancer sem esquecer revisões e custos](https://fizaconta.com/guias/como-fazer-orcamento-freelancer/)
 
 Sem login, sem cadastro, sem backend: tudo roda no navegador. O produto é gratuito e monetizado por publicidade, sempre fora da tarefa principal.
 

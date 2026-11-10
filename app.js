@@ -57,7 +57,7 @@ const $ = (sel, root = app) => root.querySelector(sel)
 const idx = () => STEPS.includes(st.view) ? STEPS.indexOf(st.view) : STEP_OF[st.view]
 const calc = () => C.calculate(st.s)
 const ms = C.moneyShort
-const SITE = 'https://clleytonbraga.github.io/quanto-cobro-calculadora/'
+const SITE = 'https://fizaconta.com/'
 const shareText = () => `${C.proposal(st.s, st.p).text}\n\nFeito com Fiz a Conta: ${SITE}` // marca na proposta (freemium, decisão C de 2026-10-28)
 const BREVO_FORM = 'https://98ff90b3.sibforms.com/serve/MUIFAKZJ0iqwhfxnwXQQwzDIoHjyQuTQ-fcfKwrwnUiUIFqVvcih4-EobB0PpAkJeCEtkue9cHIjkg9OrgtYlifp_w__PjwUHIKgKPKQuK6Pw-3Y28R5le7nY_kM4kzgMYh0xkT5LratyTY0m4cWO4jVTOJwmYlZgUc9xhCYVDFN3FCV4PIuvbLEDrsnQJyQu5wjTVZYmi2XyRTIAw==' // formulário Brevo "Fiz a Conta · aviso de lançamento" (lista #3)
 // Pesquisa 5 estrelas (Fase 0, regra aprovada em 2026-10-28): no máximo 1 vez a cada 30 dias por aparelho;
