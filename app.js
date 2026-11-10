@@ -4,7 +4,7 @@ import * as C from './calc.js'
 import { consent, track } from './analytics.js'
 
 const L = C.LIMITS
-const KEY = { rate: 'quantoCobro.hourlyRate', theme: 'quantoCobro.theme', draft: 'quantoCobro.currentEstimate.v1' }
+const KEY = { rate: 'quantoCobro.hourlyRate', theme: 'quantoCobro.theme', draft: 'quantoCobro.currentEstimate.v1', install: 'quantoCobro.installDismissed' }
 const store = (kind, fn) => { try { return fn(kind === 'local' ? localStorage : sessionStorage) } catch { return null } } // storage bloqueado → memória
 const SCOPE = {
   well_defined: ['Bem definido', 'Entregáveis e limites já estão claros.'],
@@ -35,6 +35,11 @@ const STEPS = ['step1', 'step2', 'step3', 'step4', 'step5']
 const STEP_NAMES = ['Valor por hora', 'Execução', 'Prazo e revisões', 'Ajustes', 'Resultado']
 const STEP_OF = { a1: 0, a2: 0, a3: 0, proposalForm: 4, preview: 4 }
 const coarse = matchMedia('(pointer: coarse)').matches, canShare = !!navigator.share
+// Instalar (faixa B, aprovada 2026-11-10): só celular, só etapa 1. Android = janela do Chrome; iPhone = instruções.
+let installEvt = null
+const IOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+const canInstall = () => (installEvt || IOS) && matchMedia('(max-width: 1023px)').matches && !matchMedia('(display-mode: standalone)').matches
+  && !navigator.standalone && !store('local', x => x.getItem(KEY.install))
 
 const savedRate = () => Number(store('local', s => s.getItem(KEY.rate))) || null
 function fresh() {
@@ -84,6 +89,10 @@ const ICON = {
   clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>',
   star: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>',
+  install: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
+  close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 12v8h14v-8"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>',
   del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M17 9l-5 6M12 9l5 6"/></svg>',
 }
 const errP = id => `<p class="error err" id="e-${id}" role="alert" hidden></p>`
@@ -221,6 +230,8 @@ function header() {
     <div class="progress"><span>${label}</span><div class="bar" aria-hidden="true">${Array.from({ length: total }, (_, k) => `<i class="${k < n ? 'on' : ''}"></i>`).join('')}</div></div>
     <button type="button" class="icon-btn theme" data-act="theme" aria-label="Alternar tema claro/escuro">${ICON.theme}</button></header>`
 }
+const installBar = () => st.view === 'step1' && canInstall() ? `<div class="install" role="region" aria-label="Instalar o app">${ICON.install}<p><b>Use como app</b><span>Abre sem internet.</span></p>
+    <button type="button" class="go" data-act="install">Instalar</button><button type="button" class="icon-btn" data-act="installClose" aria-label="Fechar aviso">${ICON.close}</button></div>` : ''
 function render(focus = true) {
   const v = V[st.view](), df = DISPLAY_FIELD[st.view], i = idx()
   const raw = df && (st.view[0] === 'a' ? st.mini.raw[df[0]] : st.s.raw[df[0]])
@@ -228,7 +239,7 @@ function render(focus = true) {
     : '<output class="value" data-out="dValue"></output>'
   const showLive = !v.wide && st.view !== 'a3'
   app.className = 'calc' + (v.wide ? ' wide' : '')
-  app.innerHTML = `${header()}
+  app.innerHTML = `${header()}${installBar()}
     <section class="band"><div class="q"><span class="eyebrow">${STEPS.includes(st.view) ? `Etapa ${i + 1} de 5` : st.view[0] === 'a' ? 'Estimar valor por hora' : 'Proposta'}</span><h1 tabindex="-1">${v.title}</h1><p class="support">${v.support}</p></div>
 <!-- ponytail: sem publicidade por enquanto (2026-10-28); slots voltam no resultado/prévia quando houver rede de anúncios --><div class="display" aria-live="off"><span class="label" data-out="dLabel"></span>${value}<span class="formula" data-out="dFormula"></span><span class="accent"><span data-out="dAccent"></span>${st.view === 'a2' ? tip('Por que 4,33?', WEEKS) : ''}</span></div></section>
     <div class="cols">${rail()}<div class="device">${v.body}</div><aside class="receipt desk" aria-label="Orçamento ao vivo">${showLive ? liveTicket() : ''}</aside></div>`
@@ -405,6 +416,11 @@ const MODALS = {
     <p class="error" role="alert" hidden></p>
     <button type="button" class="cta" data-m="historySend">Quero ser avisado</button>
     <div class="actions"><button type="button" class="link" data-m="close">Agora não</button></div>`,
+  install: () => `<h2 id="modal-title">Instalar no iPhone</h2>
+    <p class="hint">No Safari, siga 3 passos:</p>
+    <ol class="steps"><li><span class="ic">${ICON.share}</span>Toque em Compartilhar, na barra do Safari.</li>
+      <li><span class="ic">${ICON.plus}</span>Escolha "Adicionar à Tela de Início".</li><li><span class="ic">3</span>Toque em Adicionar.</li></ol>
+    <button type="button" class="cta" data-m="close" autofocus>Entendi</button>`,
   historyDone: () => `<h2 id="modal-title">Pronto</h2>
     <p class="hint">Seu e-mail está na lista. Você recebe só 1 aviso, quando o histórico lançar.</p>
     <button type="button" class="cta" data-m="close" autofocus>Fechar</button>`,
@@ -499,6 +515,13 @@ dlg.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches
 
 // ---------- ações ----------
 const actions = {
+  install() {
+    track('install_clicked')
+    if (!installEvt) return openModal('install') // iPhone: o Safari não tem janela de instalar
+    const e = installEvt; installEvt = null // prompt() só vale uma vez por evento
+    e.prompt(); e.userChoice.then(r => { track('install_prompt', { outcome: r.outcome }); render(false) })
+  },
+  installClose() { store('local', x => x.setItem(KEY.install, '1')); render(false); $('h1').focus({ preventScroll: true }) },
   next() {
     const i = STEPS.indexOf(st.view), errs = C.stepErrors(i + 1, st.s)
     if (Object.keys(errs).length) return firstInvalid(errs)
@@ -622,5 +645,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && !t.matches?.('textarea')) actions.back()
 })
 
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (st.view === 'step1' && canInstall()) render(false) })
+window.addEventListener('appinstalled', () => { installEvt = null; track('app_installed'); if (st.view === 'step1') render(false) })
 render(false)
 consent('privacidade/')
