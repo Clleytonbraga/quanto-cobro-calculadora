@@ -1,7 +1,7 @@
 # Fiz a Conta · Decision Log (antes "Quanto Cobro?")
 
-**Versão:** 2.6 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 040 acrescentadas ao final)  
-**Atualizado em:** 09/11/2026 (v2.5 preservada em `historico/versoes-anteriores/decision-log_v2.5.md`)  
+**Versão:** 2.7 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 041 acrescentadas ao final)  
+**Atualizado em:** 09/11/2026 (v2.6 preservada em `historico/versoes-anteriores/decision-log_v2.6.md`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -374,3 +374,11 @@ Aprovação explícita do responsável nesta conversa, em 10/11/2026 (respostas 
 | ID | Status | Decisão |
 | --- | --- | --- |
 | QC-DEC-040 | APROVADA | **Pendências 1 a 5 da business-rules §17.** (1) Horas com vírgula em campo de horas viram minutos com arredondamento ("1,33" vira 1 h 20 min). É exceção à QC-DEC-007, porque o visor mostra o valor convertido na hora. (2) "Apagar valor salvo" apaga a chave do aparelho e limpa o campo (comportamento do código; substitui a regra v1.1). (3) No teclado físico, mais de 2 dígitos depois do h ("1h300") mostram o erro "Depois do h, use de 0 a 59 minutos.". (4) Fechar a pesquisa de 5 estrelas sem responder (fundo ou Esc) conta como "Agora não". (5) Período com data de fim no passado: já coberto pelo aviso da data de início, porque o app ordena o período (início ≤ fim); sem mudança de código. **Favicon:** ícone do Figma (frame 136:28 com a marca 136:44, seção "Marca · Fechô! (produto)"), em SVG e PNGs 180, 192, 512 e maskable; o mesmo ícone aparece no topo do app no celular (commit `311f492`, publicado em 10/11/2026). Limpezas: privacidade cita o botão "Histórico"; o botão "Recusar" do aviso perdeu a classe `sm` sem estilo. Cache `fiz-v34`. |
+
+## Guias 2 e 3 e índice de guias · v2.7 (10/11/2026)
+
+Aprovação explícita do responsável nesta conversa, em 10/11/2026 ("pode começar pelos guias 2 e 3").
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-041 | APROVADA | **Guias de SEO 2 e 3 e índice `/guias/`**, conforme o plano de guias (§5, §8 e §11). Guia 2 "Como calcular seu valor por hora como freelancer" (`/guias/como-calcular-valor-hora-freelancer/`): meta mensal ÷ (horas faturáveis por semana × 4,33), a mesma conta do "Estimar" (exemplo hipotético R$ 6.000 e 30 h por semana = R$ 46,19, conferido com `calc.js`), e o que a conta não inclui. Guia 3 "Como cobrar revisões de um projeto" (`/guias/como-cobrar-revisoes-de-um-projeto/`): rodada, revisão × mudança de escopo, tempo por rodada e regras na proposta (exemplo hipotético R$ 80 por hora, 12 h e rodadas de 1 h 30 min, conferido com `calc.js`). Índice `/guias/` com os 3 guias. Estilo das páginas de guia em `guias/guia.css` (sai do `<style>` do guia 1). Sitemap e `sw.js` incluem as páginas novas. Cache `fiz-v35`. Sem preço de mercado, impostos ou dados inventados. |

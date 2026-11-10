@@ -1,9 +1,9 @@
 # Fiz a Conta · Architecture
 
-**Versão documental:** 2.2 · **Atualizado:** 09/11/2026
-**Versão anterior:** v2.1 (09/11/2026), em `historico/versoes-anteriores/architecture_v2.1.md`.
-**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.5), `PRD.md` v2.3 e `business-rules.md` v2.2.
-**Código de referência:** branch `edicao`, cache `fiz-v32`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
+**Versão documental:** 2.3 · **Atualizado:** 10/11/2026
+**Versão anterior:** v2.2 (09/11/2026), em `historico/versoes-anteriores/architecture_v2.2.md`.
+**Base:** QC-DEC-001 a QC-DEC-041 (`decision-log.md` v2.7), `PRD.md` v2.4 e `business-rules.md` v2.2.
+**Código de referência:** branch `edicao`, cache `fiz-v35`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
 
 Nome anterior do produto: "Quanto Cobro?". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` e o namespace `FazAConta` do design system não mudam.
 
@@ -255,7 +255,10 @@ sessionStorage:
 | --- | --- |
 | `/` | Calculadora |
 | `/privacidade/` | Privacidade (LGPD) |
-| `/guias/como-fazer-orcamento-freelancer/` | Guia de SEO |
+| `/guias/` | Índice dos guias |
+| `/guias/como-fazer-orcamento-freelancer/` | Guia 1 de SEO |
+| `/guias/como-calcular-valor-hora-freelancer/` | Guia 2 de SEO |
+| `/guias/como-cobrar-revisoes-de-um-projeto/` | Guia 3 de SEO |
 
 - Site: `https://fizaconta.com/` (QC-DEC-039). Canonical, `og:url`, `og:image` 1200×630, `sitemap.xml` e o arquivo `CNAME` usam esse endereço. O endereço antigo do GitHub Pages redireciona para ele.
 - Rota antiga `/calculadora`: Pendente. Depende do inventário de URLs.
@@ -320,7 +323,7 @@ Se a publicidade voltar:
 
 - `manifest.webmanifest`: nome "Fiz a Conta", `display: standalone`, ícones 192, 512 e maskable 512.
 - `index.html` registra `sw.js`.
-- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v32`.
+- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v35`.
 - Ao publicar CSS ou JS novo: suba o `?v=` nas 3 páginas e o `CACHE` em `sw.js` juntos.
 
 Estratégia do `sw.js`:

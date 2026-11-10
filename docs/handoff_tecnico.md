@@ -1,10 +1,10 @@
 # Fiz a Conta · Handoff Técnico
 
-**Versão documental:** 2.2 · **Atualizado:** 09/11/2026
-**Versão anterior:** v2.1 (09/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.1.md`.
-**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.5) e `PRD.md` v2.3.
+**Versão documental:** 2.3 · **Atualizado:** 10/11/2026
+**Versão anterior:** v2.2 (09/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.2.md`.
+**Base:** QC-DEC-001 a QC-DEC-041 (`decision-log.md` v2.7) e `PRD.md` v2.4.
 **Regras de cálculo e validação:** `business-rules.md` v2.0 e `calc.js`. **Arquitetura:** `architecture.md` v2.0. **Visual:** `design-system.md` v2.0.
-**Código de referência:** branch `edicao`, cache `fiz-v32`.
+**Código de referência:** branch `edicao`, cache `fiz-v35`.
 **Regra de conflito:** o Decision Log vence. Registros novos superam os antigos.
 
 Nomes anteriores do produto: "Quanto Cobro?" e "Faz a Conta". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` não mudam.
@@ -54,7 +54,7 @@ Vanilla HTML, CSS e JS (módulos ES). Sem build, sem framework, sem dependência
 | `sw.js` | Service worker. Cache `fiz-vN` |
 | `manifest.webmanifest` | PWA: nome, cores `#111315`, ícones 192, 512 e maskable |
 | `privacidade/index.html` | Página de privacidade (LGPD). Botão para refazer a escolha de consentimento |
-| `guias/como-fazer-orcamento-freelancer/index.html` | Guia de SEO. Chama `consent()` |
+| `guias/index.html` e `guias/*/index.html` | Índice e guias de SEO (HTML estático). Chamam `consent()`. Estilo em `guias/guia.css` |
 | `assets/` | Ícones e logos (claro e escuro), ícones PWA, `apple-touch-icon.png`, `og-image.png` |
 | `test.mjs` | Testes do domínio (`node:assert`) |
 | `package.json` | Só `{"type":"module"}` para o Node rodar `test.mjs` |
@@ -111,7 +111,7 @@ Ao mudar `styles.css`, `app.js`, `calc.js` ou `analytics.js`:
 3. Em `sw.js`, mude os itens `?v=N` da lista `FILES`.
 4. Em `index.html`, mude `styles.css?v=N` e `app.js?v=N`.
 5. Em `privacidade/index.html`, mude `?v=N`.
-6. Em `guias/como-fazer-orcamento-freelancer/index.html`, mude `?v=N` (CSS e `analytics.js`).
+6. Em `guias/index.html` e em cada `guias/*/index.html`, mude `?v=N` (CSS, `guia.css` e `analytics.js`).
 7. Confira com `grep -rn "?v=" --include=*.html .` e `grep -n "fiz-v" sw.js`.
 
 Comportamento do `sw.js`:

@@ -1,8 +1,8 @@
 # Fiz a Conta · PRD
 
-**Versão documental:** 2.3 · **Atualizado:** 09/11/2026 (v2.2, v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
-**Decisões aprovadas:** QC-DEC-001 a QC-DEC-039 (ver `decision-log.md` v2.5).
-**Código de referência:** commit `859474f` (09/11/2026), cache `fiz-v32`. Publicado na `main` em 09/11/2026.
+**Versão documental:** 2.4 · **Atualizado:** 10/11/2026 (v2.3, v2.2, v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
+**Decisões aprovadas:** QC-DEC-001 a QC-DEC-041 (ver `decision-log.md` v2.7).
+**Código de referência:** commit `859474f` (09/11/2026), cache `fiz-v35`. Publicado na `main` em 09/11/2026.
 **Regras de validação, precisão e estados:** `business-rules.md` v2.2. Quando houver conflito, vale o Decision Log (ver §23).
 **Recurso Briefing:** contrato separado em `PRD-briefing.md` v1.1.
 
@@ -323,7 +323,7 @@ Os limites são só tetos técnicos (QC-DEC-014). Campos opcionais não penaliza
 - O resultado permite editar qualquer etapa e recalcula o valor.
 - **Criar proposta** é um ramo depois do resultado. Não é etapa obrigatória.
 - Cada tela cabe em uma dobra (QC-DEC-019).
-- Páginas de conteúdo ficam fora do fluxo: `/guias/como-fazer-orcamento-freelancer/` e `/privacidade/`.
+- Páginas de conteúdo ficam fora do fluxo: `/guias/`, `/guias/como-fazer-orcamento-freelancer/`, `/guias/como-calcular-valor-hora-freelancer/`, `/guias/como-cobrar-revisoes-de-um-projeto/` e `/privacidade/`.
 
 ## 15. Persistência
 
@@ -395,14 +395,12 @@ O formulário do cliente do Briefing **nunca** mostra anúncio (QC-DEC-025).
 
 A calculadora é o núcleo. As páginas de conteúdo ajudam no SEO.
 
-- Publicado: guia "Como fazer orçamento freelancer" (`/guias/como-fazer-orcamento-freelancer/`).
+- Publicados: índice `/guias/` e 3 guias: "Como fazer orçamento freelancer", "Como calcular seu valor por hora como freelancer" e "Como cobrar revisões de um projeto" (QC-DEC-041).
 - Search Console verificado.
 - Imagem de compartilhamento (og:image 1200×630).
 
 Temas possíveis para os próximos guias:
 
-- como calcular valor por hora;
-- como estimar horas de revisão;
 - como cobrar urgência sem percentual arbitrário;
 - exemplos de orçamento por tipo de projeto;
 - como lidar com alteração de escopo;
@@ -437,7 +435,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 **Estado:** implementado (commit `0e4c5c4`) e publicado no site em 09/11/2026 (QC-DEC-038). O APK não é publicado em loja.
 
 - **PWA:** o site é instalável na tela inicial (`manifest.webmanifest`, ícones 192, 512 e maskable).
-- **Offline:** o service worker (`sw.js`, cache `fiz-v32`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
+- **Offline:** o service worker (`sw.js`, cache `fiz-v35`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
 - O valor do cache segue o `?v=` dos arquivos CSS e JS nas 3 páginas.
 - **APK Android de teste:** projeto local `fiz-a-conta-android` (WebView). Não publicado em loja.
 
