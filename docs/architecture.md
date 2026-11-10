@@ -1,9 +1,9 @@
 # Fiz a Conta · Architecture
 
-**Versão documental:** 2.1 · **Atualizado:** 09/11/2026
-**Versão anterior:** v2.0 (09/11/2026), em `historico/versoes-anteriores/architecture_v2.0.md`.
-**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.4), `PRD.md` v2.2 e `business-rules.md` v2.0.
-**Código de referência:** branch `edicao`, cache `fiz-v31`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
+**Versão documental:** 2.2 · **Atualizado:** 09/11/2026
+**Versão anterior:** v2.1 (09/11/2026), em `historico/versoes-anteriores/architecture_v2.1.md`.
+**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.5), `PRD.md` v2.3 e `business-rules.md` v2.2.
+**Código de referência:** branch `edicao`, cache `fiz-v32`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
 
 Nome anterior do produto: "Quanto Cobro?". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` e o namespace `FazAConta` do design system não mudam.
 
@@ -320,7 +320,7 @@ Se a publicidade voltar:
 
 - `manifest.webmanifest`: nome "Fiz a Conta", `display: standalone`, ícones 192, 512 e maskable 512.
 - `index.html` registra `sw.js`.
-- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v31`.
+- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v32`.
 - Ao publicar CSS ou JS novo: suba o `?v=` nas 3 páginas e o `CACHE` em `sw.js` juntos.
 
 Estratégia do `sw.js`:
@@ -432,7 +432,7 @@ Sem testes automáticos de interface. Teste manual: fluxo completo, voltar e edi
 | # | Tema | Pergunta |
 | --- | --- | --- |
 | 1 | Domínio final | **Resolvido (QC-DEC-039):** `fizaconta.com`. |
-| 2 | Texto da pesquisa | **Decidido (QC-DEC-039):** Google Forms. Falta implementar |
+| 2 | Texto da pesquisa | **Resolvido (QC-DEC-039):** Google Forms, implementado |
 | 3 | Dupla confirmação no Brevo | Ativar depois de verificar o telefone? |
 | 4 | CSP | Adicionar Content-Security-Policy que permita GA4 e Brevo? |
 | 5 | Rota `/calculadora` | Qual destino, depois do inventário de URLs? |

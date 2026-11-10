@@ -1,8 +1,8 @@
 # Fiz a Conta · Business Rules
 
-**Versão:** 2.1 · **Data:** 09/11/2026
-**Versão anterior:** v2.0 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.0.md`.
-**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.4) e `PRD.md` v2.2.
+**Versão:** 2.2 · **Data:** 09/11/2026
+**Versão anterior:** v2.1 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.1.md`.
+**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.5) e `PRD.md` v2.3.
 **Código de referência:** branch `edicao`, `calc.js` (regras puras) e `app.js` (telas e estado).
 **Precedência:** este documento detalha validação, precisão, valores iniciais e estados. Em conflito, vale o Decision Log. Depois, este documento. Depois, PRD, Architecture, Design System e Handoff.
 
@@ -348,7 +348,8 @@ Linhas, nesta ordem:
 - Regra de exibição: `!done` e mais de 30 dias desde `last` e (`!skipped` ou `since ≥ 3`).
 - Cada prévia gerada soma 1 em `since`.
 - "Enviar" sem estrela: erro "Toque numa estrela para dar a nota."
-- "Enviar": grava `done = true`. A pessoa não vê mais a pesquisa.
+- Depois da estrela: "N de 5 · Ruim/Fraco/Ok/Bom/Ótimo"; pergunta "O que você mais gostou?" (4 ou 5) ou "O que faltou para ser 5?" (1 a 3); comentário opcional (até 2.000 caracteres).
+- "Enviar": manda a nota e o comentário para o Google Forms (sem resposta; se falhar, a pesquisa fecha igual), manda a nota para o GA4 e grava `done = true`. A pessoa não vê mais a pesquisa.
 - "Agora não": grava `last = agora`, `skipped = true`, `since = 0`.
 - Fechar o modal sem responder não grava nada [CÓDIGO]. Pendente: ver §17, item 4.
 
@@ -456,7 +457,7 @@ Itens sem decisão no Decision Log. Cada um tem uma pergunta.
 | 5 | Data de fim no passado | Sem aviso | Avisar também pela data de fim? |
 | 6 | Domínio do Fiz a Conta | Site em `https://fizaconta.com/` | **Resolvido (QC-DEC-039)** |
 | 7 | E-mail de contato LGPD | Página de privacidade mostra `contato@fizaconta.com` | **Resolvido (QC-DEC-039)** |
-| 8 | Texto da pesquisa | Só a nota vai para o GA4 | **Decidido (QC-DEC-039):** Google Forms. Falta implementar |
+| 8 | Texto da pesquisa | Nota e comentário vão para o Google Forms | **Resolvido (QC-DEC-039)** |
 | 9 | Dupla confirmação no Brevo | Desligada | Ativar depois de verificar o telefone? |
 | 10 | Rota antiga `/calculadora` | Sem tratamento | Depende do inventário de URLs |
 

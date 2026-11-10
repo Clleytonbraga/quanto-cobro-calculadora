@@ -1,9 +1,9 @@
 # Fiz a Conta · PRD
 
-**Versão documental:** 2.2 · **Atualizado:** 09/11/2026 (v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
-**Decisões aprovadas:** QC-DEC-001 a QC-DEC-039 (ver `decision-log.md` v2.4).
-**Código de referência:** commit `0e4c5c4` (28/10/2026), cache `fiz-v31`. Publicado na `main` em 09/11/2026.
-**Regras de validação, precisão e estados:** `business-rules.md` v2.0. Quando houver conflito, vale o Decision Log (ver §23).
+**Versão documental:** 2.3 · **Atualizado:** 09/11/2026 (v2.2, v2.1, v2.0 e v1.3 preservadas em `historico/versoes-anteriores/`)
+**Decisões aprovadas:** QC-DEC-001 a QC-DEC-039 (ver `decision-log.md` v2.5).
+**Código de referência:** commit `859474f` (09/11/2026), cache `fiz-v32`. Publicado na `main` em 09/11/2026.
+**Regras de validação, precisão e estados:** `business-rules.md` v2.2. Quando houver conflito, vale o Decision Log (ver §23).
 **Recurso Briefing:** contrato separado em `PRD-briefing.md` v1.1.
 
 **v2.1:** registra a QC-DEC-038 (app no celular), a publicação na `main` e as versões 2.0 dos documentos técnicos.
@@ -359,7 +359,8 @@ Regras:
   - no máximo 1 vez a cada 30 dias por aparelho;
   - "Agora não" volta só depois de 3 propostas;
   - quem respondeu não vê mais;
-  - a nota vai para o GA4 (`rating_submitted`).
+  - depois da estrela, mostra a pergunta "O que você mais gostou?" (4 ou 5) ou "O que faltou para ser 5?" (1 a 3) e um comentário opcional;
+  - a nota vai para o GA4 (`rating_submitted`); a nota e o comentário vão para o Google Forms (QC-DEC-039).
 - Página `/privacidade/`.
 
 ### Fase 1 · Testar interesse (implementada)
@@ -436,7 +437,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 **Estado:** implementado (commit `0e4c5c4`) e publicado no site em 09/11/2026 (QC-DEC-038). O APK não é publicado em loja.
 
 - **PWA:** o site é instalável na tela inicial (`manifest.webmanifest`, ícones 192, 512 e maskable).
-- **Offline:** o service worker (`sw.js`, cache `fiz-v31`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
+- **Offline:** o service worker (`sw.js`, cache `fiz-v32`) guarda o app, a página de privacidade e o guia. GA4 e Brevo usam só a rede.
 - O valor do cache segue o `?v=` dos arquivos CSS e JS nas 3 páginas.
 - **APK Android de teste:** projeto local `fiz-a-conta-android` (WebView). Não publicado em loja.
 
@@ -483,7 +484,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 | --- | --- |
 | Domínio do Fiz a Conta | **Resolvido (QC-DEC-039):** `https://fizaconta.com/`. Falta a propriedade no Search Console |
 | E-mail de contato LGPD na página de privacidade | **Resolvido (QC-DEC-039):** `contato@fizaconta.com` |
-| Destino do texto da pesquisa de 5 estrelas | **Decidido (QC-DEC-039):** Google Forms. Falta implementar |
+| Destino do texto da pesquisa de 5 estrelas | **Resolvido (QC-DEC-039):** Google Forms, implementado |
 | Cupom V1 no resultado desktop do canvas | Aplicar no canvas |
 | Dupla confirmação no Brevo (exige telefone verificado) | Ativar depois de verificar o telefone |
 | Implementar o Briefing (`PRD-briefing.md`) | Aprovado (QC-DEC-022 a QC-DEC-025), ainda não implementado |
@@ -494,7 +495,7 @@ O cupom ao vivo mostra subtotais durante o fluxo. Enquanto faltam variáveis fin
 Ordem de precedência em caso de conflito:
 
 1. `decision-log.md` v2.3;
-2. `business-rules.md` v2.0;
+2. `business-rules.md` v2.2;
 3. este PRD v2.1;
 4. `architecture.md` v2.0, `design-system.md` v2.0 e `handoff_tecnico.md` v2.0.
 
