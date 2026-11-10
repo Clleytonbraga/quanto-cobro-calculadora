@@ -1,7 +1,7 @@
 // Mantenha CACHE igual ao ?v= dos <link>/<script> nos 3 HTML (index, privacidade, guia).
-const CACHE = 'fiz-v30'
+const CACHE = 'fiz-v31'
 const FILES = ['./', 'privacidade/', 'guias/como-fazer-orcamento-freelancer/',
-  'styles.css?v=30', 'app.js?v=30', 'calc.js', 'analytics.js', 'analytics.js?v=30', 'manifest.webmanifest',
+  'styles.css?v=31', 'app.js?v=31', 'calc.js', 'analytics.js', 'analytics.js?v=31', 'manifest.webmanifest',
   'assets/icon-light.svg', 'assets/icon-dark.svg', 'assets/logo-light.svg', 'assets/logo-dark.svg',
   'assets/apple-touch-icon.png', 'assets/icon-192.png', 'assets/icon-512.png', 'assets/icon-maskable-512.png']
 
