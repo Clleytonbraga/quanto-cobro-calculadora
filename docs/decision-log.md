@@ -1,7 +1,7 @@
 # Fiz a Conta · Decision Log (antes "Quanto Cobro?")
 
-**Versão:** 2.8 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 042 acrescentadas ao final)  
-**Atualizado em:** 09/11/2026 (v2.7 preservada em `historico/versoes-anteriores/decision-log_v2.7.md`)  
+**Versão:** 2.9 (registro acumulado; QC-DEC-001 a 004 inalteradas; QC-DEC-005 a 043 acrescentadas ao final)  
+**Atualizado em:** 10/11/2026 (v2.8 preservada em `historico/versoes-anteriores/decision-log_v2.8.md`)  
 **Fonte da aprovação:** confirmação explícita do responsável pelo produto nesta conversa, em 12/10/2026.  
 **Leitura rápida (v1.5):** o estado atual está na seção final "Decisões de Business Rules — v1.5". As seções intermediárias são histórico acumulado e foram preservadas sem edição.  
 **Escopo do registro:** decisões aprovadas e histórico acumulado de alterações. PRD, Architecture, Design System e Handoff já sincronizados na documentação; Figma tem versões candidatas v1.3 e FigJam dispõe do mapa organizado v1.4. Estados antigos mantidos abaixo são registros históricos, não status atual.
@@ -390,3 +390,11 @@ Aprovação explícita do responsável nesta conversa, em 10/11/2026 (respostas 
 | ID | Status | Decisão |
 | --- | --- | --- |
 | QC-DEC-042 | APROVADA | **Publicidade volta com Google AdSense, depois da aprovação do Google.** Supera a QC-DEC-034 e o lugar "prévia da proposta" da QC-DEC-020. Lugar: só a tela de resultado (mobile: abaixo de "Novo orçamento", depois do fim da tela, 300×250 ou 320×100; desktop: coluna da direita, bloco responsivo × 250) e os guias (1 bloco 300×250 no meio do texto e 1 depois das dúvidas; no desktop a mesma coluna, sem laterais). Nunca: etapas 1 a 4, prévia da proposta, PDF, texto enviado ao cliente e formulário do Briefing (QC-DEC-025 continua). Cada bloco tem o rótulo "Publicidade", espaço fixo reservado e pelo menos 24 px de distância de botões. **Consentimento:** um aviso só; "Aceitar" libera GA4 e anúncios personalizados; "Recusar" bloqueia o GA4 e mostra anúncios não personalizados. Europa e Reino Unido: ferramenta certificada do Google (AdSense, Privacidade e mensagens). Textos do aviso e da privacidade prontos na `edicao` (commit `dfd4fb0`), publicados só junto com o pedido do AdSense. Ordem: indexação dos guias, pedido do AdSense, código dos blocos com o ID da conta. |
+
+## Botão Instalar app · v2.9 (10/11/2026)
+
+Aprovação explícita do responsável nesta conversa, em 10/11/2026 (opção "B · Faixa no topo da etapa 1" no canvas, fileira "Botão Instalar app · opções de posição"; "desktop deixa sem por enquanto"; "2" = publicar só a faixa, sem o rascunho do AdSense).
+
+| ID | Status | Decisão |
+| --- | --- | --- |
+| QC-DEC-043 | APROVADA | **Faixa "Instalar app" na etapa 1.** Complementa a QC-DEC-038. Lugar: entre o cabeçalho e o visor, só na etapa 1. Texto: "Use como app" / "Abre sem internet.", botão "Instalar" e X para fechar. Aparece só no celular (largura < 1024 px), fora do app instalado e se o navegador permite instalar. **Android e Chrome:** "Instalar" abre a janela de instalação do navegador (`beforeinstallprompt`). **iPhone:** o Safari não tem essa janela; "Instalar" abre o modal "Instalar no iPhone" com 3 passos (Compartilhar, "Adicionar à Tela de Início", Adicionar). **X:** a faixa não volta mais naquele aparelho (chave `quantoCobro.installDismissed`). Abaixo de 360 px o ícone some para o texto caber. Eventos GA4 (só com aceite): `install_clicked`, `install_prompt` (resultado da janela) e `app_installed`. No APK de teste a faixa não aparece. Desktop sem botão por enquanto. Opções não escolhidas (A ícone no cabeçalho, C convite após a proposta, D link discreto, E desktop) ficam no canvas como histórico. Cache `fiz-v36`. Publicado em 10/11/2026 (main `fe3ee74`), sem as mudanças do AdSense (QC-DEC-042). |

@@ -1,9 +1,9 @@
 # Fiz a Conta · Architecture
 
-**Versão documental:** 2.4 · **Atualizado:** 10/11/2026
-**Versão anterior:** v2.3 (10/11/2026), em `historico/versoes-anteriores/architecture_v2.3.md`.
-**Base:** QC-DEC-001 a QC-DEC-042 (`decision-log.md` v2.8), `PRD.md` v2.5 e `business-rules.md` v2.2.
-**Código de referência:** branch `edicao`, cache `fiz-v35`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
+**Versão documental:** 2.5 · **Atualizado:** 10/11/2026
+**Versão anterior:** v2.4 (10/11/2026), em `historico/versoes-anteriores/architecture_v2.4.md`.
+**Base:** QC-DEC-001 a QC-DEC-043 (`decision-log.md` v2.9), `PRD.md` v2.5 e `business-rules.md` v2.2.
+**Código de referência:** branch `edicao`, cache `fiz-v36`. Implementação de referência das regras numéricas: `docs/calc-reference.mjs`.
 
 Nome anterior do produto: "Quanto Cobro?". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` e o namespace `FazAConta` do design system não mudam.
 
@@ -323,7 +323,7 @@ sessionStorage:
 
 - `manifest.webmanifest`: nome "Fiz a Conta", `display: standalone`, ícones 192, 512 e maskable 512.
 - `index.html` registra `sw.js`.
-- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v35`.
+- Cache: `fiz-vN`. **Regra:** o N é igual ao `?v=N` dos arquivos CSS e JS nas 3 páginas (`index.html`, `privacidade/`, `guias/…`). Hoje: `fiz-v36`.
 - Ao publicar CSS ou JS novo: suba o `?v=` nas 3 páginas e o `CACHE` em `sw.js` juntos.
 
 Estratégia do `sw.js`:
@@ -336,6 +336,14 @@ Estratégia do `sw.js`:
 | Métodos diferentes de GET | Não intercepta |
 
 - `activate` apaga caches com outro nome.
+
+Faixa "Instalar app" (QC-DEC-043), em `app.js`:
+
+- `installBar()` desenha a faixa logo depois do `header()`, só em `step1` e só se `canInstall()`.
+- `canInstall()`: (evento `beforeinstallprompt` guardado **ou** iPhone) **e** largura < 1024 px **e** fora de `display-mode: standalone` e `navigator.standalone` **e** sem a chave `quantoCobro.installDismissed`.
+- `beforeinstallprompt`: `preventDefault()`, guarda o evento e redesenha a etapa 1. `appinstalled`: limpa o evento e redesenha.
+- Ação `install`: com evento, chama `prompt()` uma vez e descarta o evento; sem evento (iPhone), abre o modal `install`.
+- Ação `installClose`: grava `quantoCobro.installDismissed = 1` no `localStorage`.
 
 ## 17. APK Android de teste (QC-DEC-038)
 

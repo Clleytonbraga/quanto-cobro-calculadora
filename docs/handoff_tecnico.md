@@ -1,10 +1,10 @@
 # Fiz a Conta · Handoff Técnico
 
-**Versão documental:** 2.4 · **Atualizado:** 10/11/2026
-**Versão anterior:** v2.3 (10/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.3.md`.
-**Base:** QC-DEC-001 a QC-DEC-042 (`decision-log.md` v2.8) e `PRD.md` v2.5.
+**Versão documental:** 2.5 · **Atualizado:** 10/11/2026
+**Versão anterior:** v2.4 (10/11/2026) em `docs/historico/versoes-anteriores/handoff_tecnico_v2.4.md`.
+**Base:** QC-DEC-001 a QC-DEC-043 (`decision-log.md` v2.9) e `PRD.md` v2.5.
 **Regras de cálculo e validação:** `business-rules.md` v2.0 e `calc.js`. **Arquitetura:** `architecture.md` v2.0. **Visual:** `design-system.md` v2.0.
-**Código de referência:** branch `edicao`, cache `fiz-v35`.
+**Código de referência:** branch `edicao`, cache `fiz-v36`.
 **Regra de conflito:** o Decision Log vence. Registros novos superam os antigos.
 
 Nomes anteriores do produto: "Quanto Cobro?" e "Faz a Conta". O nome atual é **Fiz a Conta** (QC-DEC-026). As chaves `quantoCobro.*` não mudam.
@@ -282,6 +282,11 @@ O histórico real não existe. O modal é um teste de interesse.
 - `manifest.webmanifest`: `display: standalone`, `start_url` e `scope` = `./`, cor `#111315`.
 - Ícones: `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`. iOS: `apple-touch-icon.png` e metas `apple-mobile-web-app-*`.
 - Offline: `sw.js` (§5).
+- Faixa "Instalar app" na etapa 1, só no celular (QC-DEC-043; detalhes em `architecture.md` §16). Para testar:
+  1. Android (Chrome, em `https://`): a faixa aparece depois que o Chrome libera a instalação; "Instalar" abre a janela do Chrome.
+  2. iPhone (Safari): "Instalar" abre o modal com 3 passos.
+  3. X: a faixa some e não volta depois de recarregar. Para ver de novo, apague `quantoCobro.installDismissed` no `localStorage`.
+  4. App instalado, desktop e APK de teste: sem faixa.
 
 ### APK Android de teste
 
