@@ -28,7 +28,7 @@ export function consent(privacyHref) {
   bar.className = 'consent'
   bar.setAttribute('role', 'region')
   bar.setAttribute('aria-label', 'Aviso de privacidade')
-  bar.innerHTML = `<p>Usamos o Google Analytics para saber como o app é usado. Seus valores e textos não são enviados. <a href="${privacyHref}">Privacidade</a></p>
+  bar.innerHTML = `<p>Usamos o Google Analytics para medir o uso e o Google AdSense para mostrar anúncios. Se você aceitar, os anúncios podem ser personalizados. Seus valores e textos nunca são enviados. <a href="${privacyHref}">Privacidade</a></p>
     <div class="split"><button type="button" class="secondary" data-c="denied">Recusar</button><button type="button" class="cta" data-c="granted">Aceitar</button></div>`
   bar.addEventListener('click', e => {
     const v = e.target.closest('[data-c]')?.dataset.c
