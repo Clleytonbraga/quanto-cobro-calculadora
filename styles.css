@@ -55,11 +55,13 @@ button, summary, label.opt { cursor: pointer; -webkit-tap-highlight-color: trans
 
 .install { display: flex; align-items: center; gap: 8px; padding: 6px 4px 6px 12px; border-radius: 12px; background: var(--bg-surface); border: 1px solid var(--border); }
 .install > svg { width: 20px; height: 20px; flex: none; color: var(--action); }
-.install p { margin: 0; flex: 1; min-width: 0; font-size: 13px; line-height: 1.3; color: var(--text-secondary); }
+.install p { margin: 0; flex: 1; min-width: 0; font-size: 13px; line-height: 1.25; color: var(--text-secondary); }
+.install b, .install p span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .install b { color: var(--text-primary); }
 .install .go { flex: none; min-height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: var(--action); color: var(--on-action); font-weight: 600; font-size: 14px; }
 .install .icon-btn { width: 36px; height: 36px; flex: none; }
 .install .icon-btn svg { width: 18px; height: 18px; }
+@media (max-width: 359px) { .install > svg { display: none; } } /* iPhone SE: texto cabe sem cortar */
 .steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 15px; }
 .steps li { display: flex; align-items: center; gap: 12px; }
 .steps .ic { width: 40px; height: 40px; flex: none; border-radius: 14px; background: var(--bg-raised); display: grid; place-items: center; font-weight: 700; }
