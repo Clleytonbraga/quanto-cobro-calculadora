@@ -1,8 +1,8 @@
 # Fiz a Conta · Business Rules
 
-**Versão:** 2.3 · **Data:** 09/11/2026
-**Versão anterior:** v2.2 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.2.md`.
-**Base:** QC-DEC-001 a QC-DEC-039 (`decision-log.md` v2.6) e `PRD.md` v2.3.
+**Versão:** 2.4 · **Data:** 10/11/2026
+**Versão anterior:** v2.3 (09/11/2026), em `historico/versoes-anteriores/business-rules_v2.3.md`.
+**Base:** QC-DEC-001 a QC-DEC-042 (`decision-log.md` v2.8) e `PRD.md` v2.5.
 **Código de referência:** branch `edicao`, `calc.js` (regras puras) e `app.js` (telas e estado).
 **Precedência:** este documento detalha validação, precisão, valores iniciais e estados. Em conflito, vale o Decision Log. Depois, este documento. Depois, PRD, Architecture, Design System e Handoff.
 
@@ -29,7 +29,7 @@ Convenções:
 | Termos | Referência, valor comercial | Valor calculado, Valor da proposta | QC-DEC-021, 032 |
 | Custos | Linhas na etapa | Modal com "Aplicar". Excluir só na edição | QC-DEC-019 |
 | Proposta | Copiar e imprimir | Compartilhar V2. Marca "Feito com Fiz a Conta" | QC-DEC-036, 037 |
-| Publicidade | Slot no resultado | Removida | QC-DEC-034 (supera 020) |
+| Publicidade | Slot no resultado | Resultado e guias, com AdSense depois da aprovação | QC-DEC-042 (supera 034) |
 | Medição | Não definida | GA4 só após aceite. Pesquisa de 5 estrelas | QC-DEC-036 |
 | Persistência | 3 chaves | 5 chaves. Rascunho no formato v3 | QC-DEC-036 |
 | App | Site | PWA instalável e offline. APK de teste | QC-DEC-038 |
