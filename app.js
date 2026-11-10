@@ -61,7 +61,9 @@ const SITE = 'https://fizaconta.com/'
 const shareText = () => `${C.proposal(st.s, st.p).text}\n\nFeito com Fiz a Conta: ${SITE}` // marca na proposta (freemium, decisão C de 2026-10-28)
 const BREVO_FORM = 'https://98ff90b3.sibforms.com/serve/MUIFAKZJ0iqwhfxnwXQQwzDIoHjyQuTQ-fcfKwrwnUiUIFqVvcih4-EobB0PpAkJeCEtkue9cHIjkg9OrgtYlifp_w__PjwUHIKgKPKQuK6Pw-3Y28R5le7nY_kM4kzgMYh0xkT5LratyTY0m4cWO4jVTOJwmYlZgUc9xhCYVDFN3FCV4PIuvbLEDrsnQJyQu5wjTVZYmi2XyRTIAw==' // formulário Brevo "Fiz a Conta · aviso de lançamento" (lista #3)
 // Pesquisa 5 estrelas (Fase 0, regra aprovada em 2026-10-28): no máximo 1 vez a cada 30 dias por aparelho;
-// "Agora não" só volta depois de 3 propostas; quem respondeu não vê mais. ponytail: texto do feedback entra quando houver destino.
+// "Agora não" só volta depois de 3 propostas; quem respondeu não vê mais. Nota e texto vão para o Google Forms (QC-DEC-039).
+const FEEDBACK_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdh7cNSZGAJyvf1SVp9P6Zq5G4f-GhO2dI94m1eUnvpM1SWnw/formResponse'
+const RATING_NAMES = ['Ruim', 'Fraco', 'Ok', 'Bom', 'Ótimo']
 const SURVEY = 'quantoCobro.survey', DAY = 864e5
 const surveyGet = () => store('local', s => JSON.parse(s.getItem(SURVEY))) || { done: false, last: 0, skipped: false, since: 0 }
 const surveySet = patch => store('local', s => s.setItem(SURVEY, JSON.stringify({ ...surveyGet(), ...patch })))
@@ -382,6 +384,12 @@ const MODALS = {
   survey: () => `<h2 id="modal-title">O Fiz a Conta ajudou você?</h2>
     <p class="hint">Seu PDF foi salvo. Dê uma nota de 1 a 5.</p>
     <div class="stars" role="group" aria-label="Nota de 1 a 5 estrelas">${[1, 2, 3, 4, 5].map(k => `<button type="button" data-m="star" data-v="${k}" aria-pressed="false" aria-label="${k} de 5 estrelas">${ICON.star}</button>`).join('')}</div>
+    <div class="field" id="m-fb" hidden>
+      <p class="hint center" id="m-rate"></p>
+      <label for="m-text" id="m-q"></label>
+      <textarea id="m-text" maxlength="${L.longText}" placeholder="Escreva aqui (opcional)" aria-describedby="m-text-hint"></textarea>
+      <p class="hint" id="m-text-hint">Não inclua nomes nem dados de clientes.</p>
+    </div>
     <p class="error" role="alert" hidden></p>
     <button type="button" class="cta" data-m="surveySend">Enviar</button>
     <div class="actions"><button type="button" class="link" data-m="surveySkip">Agora não</button></div>`,
@@ -451,9 +459,17 @@ const MODAL_ACTS = {
     track('proposal_printed'); print(); MODAL_ACTS.resetYes()
     if (surveyDue()) openModal('survey')
   },
-  star(b) { for (const s of dlg.querySelectorAll('[data-m="star"]')) s.setAttribute('aria-pressed', +s.dataset.v <= +b.dataset.v); modalCtx.rating = +b.dataset.v },
+  star(b) { for (const s of dlg.querySelectorAll('[data-m="star"]')) s.setAttribute('aria-pressed', +s.dataset.v <= +b.dataset.v); modalCtx.rating = +b.dataset.v
+    const n = modalCtx.rating
+    dlg.querySelector('#m-rate').textContent = `${n} de 5 · ${RATING_NAMES[n - 1]}`
+    dlg.querySelector('#m-q').textContent = n >= 4 ? 'O que você mais gostou?' : 'O que faltou para ser 5?'
+    dlg.querySelector('#m-fb').hidden = false
+  },
   surveySend() {
     if (!modalCtx.rating) return modalErr('Toque numa estrela para dar a nota.')
+    const body = new FormData() // ponytail: envio sem retorno (no-cors); se falhar, a nota ainda vai para o GA4
+    body.append('entry.1121698133', String(modalCtx.rating)); body.append('entry.1615756564', dlg.querySelector('#m-text').value.trim())
+    fetch(FEEDBACK_FORM, { method: 'POST', mode: 'no-cors', body }).catch(() => {})
     track('rating_submitted', { rating: modalCtx.rating }); surveySet({ done: true }); closeModal()
   },
   surveySkip() { surveySet({ last: Date.now(), skipped: true, since: 0 }); track('rating_skipped'); closeModal() },
