@@ -230,7 +230,7 @@ function header() {
     <div class="progress"><span>${label}</span><div class="bar" aria-hidden="true">${Array.from({ length: total }, (_, k) => `<i class="${k < n ? 'on' : ''}"></i>`).join('')}</div></div>
     <button type="button" class="icon-btn theme" data-act="theme" aria-label="Alternar tema claro/escuro">${ICON.theme}</button></header>`
 }
-const installBar = () => st.view === 'step1' && canInstall() ? `<div class="install" role="region" aria-label="Instalar o app">${ICON.install}<p><b>Use como app.</b> Abre sem internet.</p>
+const installBar = () => st.view === 'step1' && canInstall() ? `<div class="install" role="region" aria-label="Instalar o app">${ICON.install}<p><b>Use como app</b><span>Abre sem internet.</span></p>
     <button type="button" class="go" data-act="install">Instalar</button><button type="button" class="icon-btn" data-act="installClose" aria-label="Fechar aviso">${ICON.close}</button></div>` : ''
 function render(focus = true) {
   const v = V[st.view](), df = DISPLAY_FIELD[st.view], i = idx()
