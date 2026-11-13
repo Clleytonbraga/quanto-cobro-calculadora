@@ -35,6 +35,10 @@ const STEPS = ['step1', 'step2', 'step3', 'step4', 'step5']
 const STEP_NAMES = ['Valor por hora', 'Execução', 'Prazo e revisões', 'Ajustes', 'Resultado']
 const STEP_OF = { a1: 0, a2: 0, a3: 0, proposalForm: 4, preview: 4 }
 const coarse = matchMedia('(pointer: coarse)').matches, canShare = !!navigator.share
+// Anúncio só no resultado (QC-DEC-042): celular abaixo de "Novo orçamento", desktop na coluna da direita.
+// ponytail: o lugar é escolhido no render; girar a tela entre 1023/1024 px só muda no próximo render
+const desk = () => matchMedia('(min-width: 1024px)').matches
+const AD = '<div class="ad" role="complementary" aria-label="Publicidade"><span>Publicidade</span><ins class="adsbygoogle" data-ad-client="ca-pub-2694640174796183" data-ad-slot="8048602637"></ins></div>'
 // Instalar (faixa B, aprovada 2026-11-10): só celular, só etapa 1. Android = janela do Chrome; iPhone = instruções.
 let installEvt = null
 const IOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
@@ -150,7 +154,7 @@ const V = {
   step5: () => ({ wide: true, title: 'Sua estimativa está pronta', support: 'Veja o valor calculado e ajuste quanto deseja cobrar.', body: `
     ${resultTicket()}
     <div class="bottom">${cta('createProposal', 'Criar proposta')}
-    <div class="actions"><button type="button" class="link" data-act="resetModal">Novo orçamento</button></div></div>` }),
+    <div class="actions"><button type="button" class="link" data-act="resetModal">Novo orçamento</button></div></div>${desk() ? '' : AD}` }),
   a1: () => ({ title: 'Quanto você quer faturar por mês?', support: 'Valor antes de descontar impostos e despesas.', body: `
     ${miniSwitch}${keypad('mini')}` }),
   a2: () => ({ title: 'Quantas horas por semana você consegue cobrar?', support: 'Conte apenas as horas que você consegue cobrar de clientes.', body: `
@@ -242,7 +246,8 @@ function render(focus = true) {
   app.innerHTML = `${header()}${installBar()}
     <section class="band"><div class="q"><span class="eyebrow">${STEPS.includes(st.view) ? `Etapa ${i + 1} de 5` : st.view[0] === 'a' ? 'Estimar valor por hora' : 'Proposta'}</span><h1 tabindex="-1">${v.title}</h1><p class="support">${v.support}</p></div>
 <!-- ponytail: sem publicidade por enquanto (2026-10-28); slots voltam no resultado/prévia quando houver rede de anúncios --><div class="display" aria-live="off"><span class="label" data-out="dLabel"></span>${value}<span class="formula" data-out="dFormula"></span><span class="accent"><span data-out="dAccent"></span>${st.view === 'a2' ? tip('Por que 4,33?', WEEKS) : ''}</span></div></section>
-    <div class="cols">${rail()}<div class="device">${v.body}</div><aside class="receipt desk" aria-label="Orçamento ao vivo">${showLive ? liveTicket() : ''}</aside></div>`
+    <div class="cols">${rail()}<div class="device">${v.body}</div><aside class="receipt desk" aria-label="Orçamento ao vivo">${showLive ? liveTicket() : st.view === 'step5' && desk() ? AD : ''}</aside></div>`
+  for (const ins of app.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])')) try { (window.adsbygoogle ||= []).push({}) } catch {}
   refresh()
   const dv = $('#dv')
   if (focus) { if (dv && !coarse) dv.focus({ preventScroll: true }); else $('h1').focus({ preventScroll: true }); scrollTo(0, 0) }
