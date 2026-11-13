@@ -1,7 +1,7 @@
 // Mantenha CACHE igual ao ?v= dos <link>/<script> em todos os HTML (index, privacidade, guias).
-const CACHE = 'fiz-v38'
-const FILES = ['./', 'privacidade/', 'guias/como-fazer-orcamento-freelancer/', 'guias/', 'guias/como-calcular-valor-hora-freelancer/', 'guias/como-cobrar-revisoes-de-um-projeto/', 'guias/guia.css?v=38',
-  'styles.css?v=38', 'app.js?v=38', 'calc.js', 'analytics.js', 'analytics.js?v=38', 'manifest.webmanifest',
+const CACHE = 'fiz-v39'
+const FILES = ['./', 'privacidade/', 'guias/como-fazer-orcamento-freelancer/', 'guias/', 'guias/como-calcular-valor-hora-freelancer/', 'guias/como-cobrar-revisoes-de-um-projeto/', 'guias/guia.css?v=39',
+  'styles.css?v=39', 'app.js?v=39', 'calc.js', 'analytics.js', 'analytics.js?v=39', 'manifest.webmanifest',
   'assets/icon-light.svg', 'assets/icon-dark.svg', 'assets/logo-light.svg', 'assets/logo-dark.svg',
   'assets/apple-touch-icon.png', 'assets/icon-192.png', 'assets/icon-512.png', 'assets/icon-maskable-512.png']
 
