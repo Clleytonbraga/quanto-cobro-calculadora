@@ -7,6 +7,7 @@ let on = false
 function load() {
   if (on) return
   on = true
+  if (window.adsbygoogle) window.adsbygoogle.requestNonPersonalizedAds = 0 // aceitou: anúncios podem ser personalizados
   window.dataLayer = window.dataLayer || []
   window.gtag = function () { window.dataLayer.push(arguments) }
   window.gtag('js', new Date())
