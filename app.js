@@ -106,7 +106,7 @@ const stepperRow = (name, label, sub) => `
   <input id="f-${name}" data-field="${name}" inputmode="decimal" autocomplete="off" value="${esc(st.s.raw[name] ?? fieldRaw(name))}" aria-describedby="e-${name}">
   <button type="button" data-act="inc" data-name="${name}" data-dir="1" aria-label="Aumentar ${label}">+</button></div></div>${errP(name)}`
 const keypad = (ok, hrs) => `<div class="pad"><div class="keypad" role="group" aria-label="Teclado numérico">${ // hrs: tecla h no lugar da vírgula (1, h, 3, 0 = 1 h 30 min)
-  [['1'], ['2'], ['3'], ['del', 'fn', 'Corrigir', ICON.del], ['4'], ['5'], ['6'], ['clear', 'fn', 'Limpar', 'C'], ['7'], ['8'], ['9'],
+  [['7'], ['8'], ['9'], ['del', 'fn', 'Corrigir', ICON.del], ['4'], ['5'], ['6'], ['clear', 'fn', 'Limpar', 'C'], ['1'], ['2'], ['3'], // ordem de calculadora (7-8-9 em cima)
    ['ok', 'ok', 'Confirmar', '✓'], ['00'], ['0'], hrs ? ['h', 'hkey', 'Separar horas e minutos'] : [',', '', 'Vírgula']]
   .map(([k, cls = '', label, txt]) => `<button type="button" class="key ${cls}" data-key="${k}" data-ok="${ok}" ${label ? `aria-label="${label}"` : ''}>${txt ?? k}</button>`).join('')}</div></div>`
 const cta = (act, label) => `<button type="button" class="cta" data-act="${act}">${label}</button>`
