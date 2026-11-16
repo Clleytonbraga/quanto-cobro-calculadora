@@ -15,9 +15,9 @@ Em vez de planilha ou preço no improviso, você informa valor por hora, horas d
 Sem login, sem cadastro, sem backend: tudo roda no navegador. O produto é gratuito e monetizado por publicidade, sempre fora da tarefa principal.
 
 <p align="center">
-  <img src="docs/screenshots/v2/mobile-1-valor-hora.png" width="200" alt="Etapa 1: valor por hora com teclado de calculadora">
-  <img src="docs/screenshots/v2/mobile-5-resultado.png" width="200" alt="Resultado em formato de cupom, com valor calculado e valor da proposta">
-  <img src="docs/screenshots/v2/mobile-7-proposta-pronta.png" width="200" alt="Proposta pronta com compartilhar, PDF, WhatsApp e copiar">
+  <img src="screenshots/v2/mobile-1-valor-hora.png" width="200" alt="Etapa 1: valor por hora com teclado de calculadora">
+  <img src="screenshots/v2/mobile-5-resultado.png" width="200" alt="Resultado em formato de cupom, com valor calculado e valor da proposta">
+  <img src="screenshots/v2/mobile-7-proposta-pronta.png" width="200" alt="Proposta pronta com compartilhar, PDF, WhatsApp e copiar">
 </p>
 
 ---
@@ -61,31 +61,31 @@ Depois do resultado, você preenche nome do projeto, o que será entregue e cond
 
 | Valor por hora | Estimar valor por hora | Execução | Prazo e revisões |
 | --- | --- | --- | --- |
-| <img src="docs/screenshots/v2/mobile-1-valor-hora.png" width="180"> | <img src="docs/screenshots/v2/mobile-1b-estimativa.png" width="180"> | <img src="docs/screenshots/v2/mobile-2-execucao.png" width="180"> | <img src="docs/screenshots/v2/mobile-3-prazo-revisoes.png" width="180"> |
+| <img src="screenshots/v2/mobile-1-valor-hora.png" width="180"> | <img src="screenshots/v2/mobile-1b-estimativa.png" width="180"> | <img src="screenshots/v2/mobile-2-execucao.png" width="180"> | <img src="screenshots/v2/mobile-3-prazo-revisoes.png" width="180"> |
 
 | Ajustes | Resultado (cupom) | Dados da proposta | Proposta pronta |
 | --- | --- | --- | --- |
-| <img src="docs/screenshots/v2/mobile-4-ajustes.png" width="180"> | <img src="docs/screenshots/v2/mobile-5-resultado.png" width="180"> | <img src="docs/screenshots/v2/mobile-6-proposta-dados.png" width="180"> | <img src="docs/screenshots/v2/mobile-7-proposta-pronta.png" width="180"> |
+| <img src="screenshots/v2/mobile-4-ajustes.png" width="180"> | <img src="screenshots/v2/mobile-5-resultado.png" width="180"> | <img src="screenshots/v2/mobile-6-proposta-dados.png" width="180"> | <img src="screenshots/v2/mobile-7-proposta-pronta.png" width="180"> |
 
 | Calendário (modal) | Adicionar custo (modal) | Valor da proposta (modal) | Guia |
 | --- | --- | --- | --- |
-| <img src="docs/screenshots/v2/mobile-modal-calendario.png" width="180"> | <img src="docs/screenshots/v2/mobile-modal-custo.png" width="180"> | <img src="docs/screenshots/v2/mobile-modal-valor-proposta.png" width="180"> | <img src="docs/screenshots/v2/mobile-guia.png" width="180"> |
+| <img src="screenshots/v2/mobile-modal-calendario.png" width="180"> | <img src="screenshots/v2/mobile-modal-custo.png" width="180"> | <img src="screenshots/v2/mobile-modal-valor-proposta.png" width="180"> | <img src="screenshots/v2/mobile-guia.png" width="180"> |
 
 Tema claro:
 
-<img src="docs/screenshots/v2/mobile-5-resultado-claro.png" width="180" alt="Resultado no tema claro"> <img src="docs/screenshots/v2/mobile-7-proposta-pronta-claro.png" width="180" alt="Proposta no tema claro">
+<img src="screenshots/v2/mobile-5-resultado-claro.png" width="180" alt="Resultado no tema claro"> <img src="screenshots/v2/mobile-7-proposta-pronta-claro.png" width="180" alt="Proposta no tema claro">
 
 ### Desktop
 Trilha de etapas à esquerda, calculadora no centro e **orçamento impresso ao vivo** à direita.
 
-<img src="docs/screenshots/v2/desktop-2-execucao.png" alt="Desktop: etapa de execução com cupom ao vivo">
-<img src="docs/screenshots/v2/desktop-5-resultado.png" alt="Desktop: resultado">
-<img src="docs/screenshots/v2/desktop-7-proposta-pronta.png" alt="Desktop: proposta pronta">
-<img src="docs/screenshots/v2/desktop-guia.png" alt="Desktop: guia de orçamento">
+<img src="screenshots/v2/desktop-2-execucao.png" alt="Desktop: etapa de execução com cupom ao vivo">
+<img src="screenshots/v2/desktop-5-resultado.png" alt="Desktop: resultado">
+<img src="screenshots/v2/desktop-7-proposta-pronta.png" alt="Desktop: proposta pronta">
+<img src="screenshots/v2/desktop-guia.png" alt="Desktop: guia de orçamento">
 
 Atalhos no desktop: dígitos, `,` e `00` para digitar, `↑ ↓` somam/subtraem 1, `Enter` confirma, `Backspace` corrige e `Esc` volta.
 
-*Prints anteriores (marca provisória "Quanto Cobro?") ficam em `docs/screenshots/` como histórico.*
+*Prints anteriores (marca provisória "Quanto Cobro?") ficam em `screenshots/` como histórico.*
 
 ---
 
@@ -113,7 +113,6 @@ Qualquer servidor estático serve (`npx serve`, GitHub Pages, Vercel, Netlify). 
 
 ```bash
 node test.mjs                 # regras de cálculo, entrada, proposta e datas
-node docs/calc-reference.mjs  # casos contratuais do Business Rules
 ```
 
 ---
@@ -131,9 +130,7 @@ sw.js               service worker: guarda o app para abrir offline
 assets/             logo e ícones da marca (claro/escuro), apple-touch-icon e imagem de compartilhamento
 guias/              conteúdo editorial estático (SEO), sem depender de JavaScript
 sitemap.xml         páginas publicadas, enviado ao Google Search Console
-docs/               PRD, arquitetura, Business Rules, Design System, handoff e decision log
-docs/screenshots/v2 imagens deste README (versão atual)
-docs/historico      versões anteriores dos documentos e materiais de apoio
+screenshots/v2      imagens deste README (versão atual)
 ```
 
 HTML, CSS e JavaScript puros, sem framework nem dependências. O desenho de ícones vem do [Lucide](https://lucide.dev) (ISC) e do [Simple Icons](https://simpleicons.org) (CC0).
@@ -142,17 +139,7 @@ HTML, CSS e JavaScript puros, sem framework nem dependências. O desenho de íco
 
 ## Documentação
 
-| Documento | Para quê |
-| --- | --- |
-| [Decision Log](docs/decision-log.md) | Decisões aprovadas QC-DEC-001 a 021 e histórico; **fonte de verdade** em caso de conflito |
-| [Business Rules](docs/business-rules.md) | Validações, obrigatórios, arredondamento, limites, persistência e casos-teste |
-| [PRD](docs/PRD.md) | Escopo do MVP, jornadas e métricas |
-| [Arquitetura](docs/architecture.md) | Modelo de dados, função de cálculo e rotas |
-| [Design System](docs/design-system.md) | Tokens, componentes, estados e vocabulário de interface |
-| [Handoff técnico](docs/handoff_tecnico.md) | Contratos e critérios de aceite |
-| [Leia primeiro](docs/LEIA_PRIMEIRO.md) | Guia de leitura do pacote (nesta pasta, `atuais/` = `docs/`) |
-
-Os documentos em `docs/` ainda usam o nome de trabalho "Quanto Cobro?" e a nomenclatura anterior da interface.
+PRD, regras de negócio, arquitetura e decision log ficam em repositório privado.
 
 ### Design
 
@@ -184,4 +171,4 @@ Os arquivos do Figma são privados; o acesso depende de convite.
 - ⏳ Rede de anúncios: espaços já reservados (mobile 320×50 no resultado/proposta; desktop 300×250 na lateral).
 - ⏳ Domínio próprio (ou novo caminho `/fazaconta/`), com redirecionamento do endereço atual.
 - ⏳ Guias 2 e 3 (valor por hora, revisões) e o índice `/guias/` quando houver três guias.
-- ⏳ Limite máximo específico por campo nas mensagens de erro; atualizar a documentação em `docs/` para a marca e a copy novas.
+- ⏳ Limite máximo específico por campo nas mensagens de erro.

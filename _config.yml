@@ -1,0 +1,2 @@
+# ponytail: o GitHub Pages roda Jekyll; isto só tira do site arquivos que não são páginas
+exclude: [README.md, test.mjs, package.json, screenshots]
